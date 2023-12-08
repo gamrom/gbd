@@ -1,6 +1,10 @@
 import { ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { DateCalendar } from '@mui/x-date-pickers';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import Button from '@mui/material/Button';
+import Link from 'next/link';
+import { CreateEvent } from './createEvent';
+import dayjs, { Dayjs } from 'dayjs';
 
 function createData(
   date: string,
@@ -28,6 +32,10 @@ export const CalendarComponent = () => {
     setToggleFilter(newToggle)
   };
 
+
+  const [isOpenCreateEvent, setIsOpenCreateEvent] = useState<boolean>(false);
+  const [pickDate, setPickDate] = useState<Dayjs | null>(dayjs());
+
   return (
     <div>
       <ToggleButtonGroup
@@ -48,7 +56,20 @@ export const CalendarComponent = () => {
         </ToggleButton>
       </ToggleButtonGroup>
 
-      <DateCalendar />
+      <div className="flex items-center justify-center">
+        <Button
+          variant="contained"
+          className="mt-4 mx-auto text-center"
+          color="success"
+          onClick={() => setIsOpenCreateEvent(true)}
+        >번개 생성</Button>
+      </div>
+
+      {isOpenCreateEvent && pickDate && (
+        <CreateEvent pickDate={pickDate} />
+      )}
+
+      <DateCalendar value={pickDate} onChange={(newValue) => setPickDate(newValue)} />
 
       <div className="flex flex-col space-y-2">
         {rows.map((row, index) => {
