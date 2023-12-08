@@ -1,10 +1,14 @@
-import { ToggleButton, ToggleButtonGroup } from '@mui/material';
-import { DateCalendar } from '@mui/x-date-pickers';
+import { TextField, ToggleButton, ToggleButtonGroup } from '@mui/material';
+import { DateCalendar, DateTimePicker } from '@mui/x-date-pickers';
 import { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
 import Link from 'next/link';
-import { CreateEvent } from './createEvent';
+import Modal from '@mui/material/Modal';
 import dayjs, { Dayjs } from 'dayjs';
+import Box from '@mui/material/Box';
+import Slider from '@mui/material/Slider';
+import { modalStyle } from './style';
+
 
 function createData(
   date: string,
@@ -36,6 +40,14 @@ export const CalendarComponent = () => {
   const [isOpenCreateEvent, setIsOpenCreateEvent] = useState<boolean>(false);
   const [pickDate, setPickDate] = useState<Dayjs | null>(dayjs());
 
+  const [capacity, setCapacity] = useState<number | undefined>(1);
+
+
+  const [isEventDetailOpen, setIsEventDetailOpen] = useState<boolean>(false);
+  const seeDetail = () => {
+    setIsEventDetailOpen(true);
+  }
+
   return (
     <div>
       <ToggleButtonGroup
@@ -65,16 +77,41 @@ export const CalendarComponent = () => {
         >번개 생성</Button>
       </div>
 
-      {isOpenCreateEvent && pickDate && (
-        <CreateEvent pickDate={pickDate} />
-      )}
+      <Modal
+        open={isOpenCreateEvent}
+        onClose={() => setIsOpenCreateEvent(false)}
+        aria-labelledby="parent-modal-title"
+        aria-describedby="parent-modal-description"
+      >
+        <Box sx={modalStyle}>
+          <div className="flex flex-col space-y-4">
+            <div className="font-bold text-lg">일정 생성</div>
+            <TextField autoComplete='off' label="일정 제목" variant="outlined" />
+            <TextField autoComplete='off' label="일정 장소" variant="outlined" defaultValue="아지트" />
+            <TextField autoComplete='off' label="벙주/호스트" variant="outlined" defaultValue="김은식" />
+            <TextField autoComplete='off' label="일정 내용" variant="outlined" multiline placeholder='번개 상세한 설명을 적어주세요.' />
+            <DateTimePicker label="시작 시간" defaultValue={dayjs()} />
+            <DateTimePicker label="종료 시간" defaultValue={dayjs()} />
+            <TextField
+              label="모집 인원 (벙주/호스트 포함)"
+              type="number"
+              InputLabelProps={{
+                shrink: true,
+              }}
+              variant="standard"
+            />
+            <Button variant='contained' color="success">완료하기</Button>
+            <Button color="error">취소</Button>
+          </div>
+        </Box>
+      </Modal>
 
       <DateCalendar value={pickDate} onChange={(newValue) => setPickDate(newValue)} />
 
       <div className="flex flex-col space-y-2">
         {rows.map((row, index) => {
           return (
-            <div key={index} className={`hover:cursor-pointer hover:font-bold hover:opacity-100 opacity-90 drop-shadow py-2 px-4 flex flex-col justify-between mt-2 text-sm rounded-[5px] ${row.currentMember >= row.maxMember ? "bg-[#e57373]" : "bg-[#81c784]"}`}>
+            <div onClick={seeDetail} key={index} className={`hover:cursor-pointer hover:font-bold hover:opacity-100 opacity-90 drop-shadow py-2 px-4 flex flex-col justify-between mt-2 text-sm rounded-[5px] ${row.currentMember >= row.maxMember ? "bg-[#e57373]" : "bg-[#81c784]"}`}>
               <div className="flex justify-between w-full">
                 <div className="flex space-x-4 w-full">
                   <div>{row.date}</div>
@@ -89,6 +126,24 @@ export const CalendarComponent = () => {
         )}
       </div>
 
+      <Modal
+        open={isEventDetailOpen}
+        onClose={() => setIsEventDetailOpen(false)}
+        aria-labelledby="parent-modal-title"
+        aria-describedby="parent-modal-description"
+      >
+        <Box sx={modalStyle}>
+          <div className="flex flex-col space-y-4">
+            <div className="font-bold">{
+              noticeLists.find((notice) => notice.id === openModalId)?.title
+            }</div>
+            <div>{
+              noticeLists.find((notice) => notice.id === openModalId)?.content
+            }</div>
+            <Button color="error" onClick={() => setIsModalOpen(false)}>닫기</Button>
+          </div>
+        </Box>
+      </Modal>
     </div>
   )
 }
