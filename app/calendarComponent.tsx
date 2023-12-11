@@ -8,6 +8,7 @@ import dayjs, { Dayjs } from 'dayjs';
 import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
 import { modalStyle } from './style';
+import { eventLists } from "./seed";
 
 
 function createData(
@@ -41,12 +42,6 @@ export const CalendarComponent = () => {
   const [pickDate, setPickDate] = useState<Dayjs | null>(dayjs());
 
   const [capacity, setCapacity] = useState<number | undefined>(1);
-
-
-  const [isEventDetailOpen, setIsEventDetailOpen] = useState<boolean>(false);
-  const seeDetail = () => {
-    setIsEventDetailOpen(true);
-  }
 
   return (
     <div>
@@ -109,41 +104,25 @@ export const CalendarComponent = () => {
       <DateCalendar value={pickDate} onChange={(newValue) => setPickDate(newValue)} />
 
       <div className="flex flex-col space-y-2">
-        {rows.map((row, index) => {
+        {eventLists.map((event, index) => {
           return (
-            <div onClick={seeDetail} key={index} className={`hover:cursor-pointer hover:font-bold hover:opacity-100 opacity-90 drop-shadow py-2 px-4 flex flex-col justify-between mt-2 text-sm rounded-[5px] ${row.currentMember >= row.maxMember ? "bg-[#e57373]" : "bg-[#81c784]"}`}>
-              <div className="flex justify-between w-full">
-                <div className="flex space-x-4 w-full">
-                  <div>{row.date}</div>
-                  <div>{row.currentMember}/{row.maxMember}</div>
+            <Link key={index} href={`/events/${event.id}`} className="no-underline text-black">
+              {/* <div className={`hover:cursor-pointer hover:font-bold hover:opacity-100 opacity-90 drop-shadow py-2 px-4 flex flex-col justify-between mt-2 text-sm rounded-[5px] ${row.currentMember >= row.maxMember ? "bg-[#e57373]" : "bg-[#81c784]"}`}> */}
+              <div className={`hover:cursor-pointer hover:font-bold hover:opacity-100 opacity-90 drop-shadow py-2 px-4 flex flex-col justify-between mt-2 text-sm rounded-[5px]`}>
+                <div className="flex justify-between w-full">
+                  <div className="flex space-x-4 w-full">
+                    <div>{dayjs(event.start_time).format('YY/MM/DD')}</div>
+                    <div>아직/{event.max_members_count}</div>
+                  </div>
+                  <div className="shrink-0">아직</div>
                 </div>
-                <div className="shrink-0">{row.partyCreator}</div>
+                <div className="truncate">{event.title}</div>
               </div>
-              <div className="truncate">{row.title}</div>
-            </div>
+            </Link>
           )
         }
         )}
       </div>
-
-      <Modal
-        open={isEventDetailOpen}
-        onClose={() => setIsEventDetailOpen(false)}
-        aria-labelledby="parent-modal-title"
-        aria-describedby="parent-modal-description"
-      >
-        <Box sx={modalStyle}>
-          <div className="flex flex-col space-y-4">
-            <div className="font-bold">{
-              noticeLists.find((notice) => notice.id === openModalId)?.title
-            }</div>
-            <div>{
-              noticeLists.find((notice) => notice.id === openModalId)?.content
-            }</div>
-            <Button color="error" onClick={() => setIsModalOpen(false)}>닫기</Button>
-          </div>
-        </Box>
-      </Modal>
     </div>
   )
 }

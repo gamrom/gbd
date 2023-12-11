@@ -84,8 +84,8 @@ export default function Register() {
 
         signInWithEmailAndPassword(auth, values.email, values.pw)
           .then((userCredential: any) => {
-            //메인페이지로 이동
-            router.push('/');
+            //승인대기중 페이지로 이동 
+            router.push('/waitApprove');
           })
           .catch((error: any) => {
             swal.fire({
