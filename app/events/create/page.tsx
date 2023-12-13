@@ -5,9 +5,13 @@ import axios from "axios";
 import { DateTimePicker } from "@mui/x-date-pickers";
 import { DISCORD_WEBHOOK_URL } from "../../../constants";
 import { postCreateEvent } from "../../api";
+import { useRouter, useSearchParams } from "next/navigation";
+import dayjs from "dayjs";
 
 
 export default function CreateEvent() {
+  const router = useRouter();
+  const pickDate = useSearchParams().get('pickDate');
   //discord
   // const pushDiscord = ({ text }: { text: string }) => {
   //   axios.post(DISCORD_WEBHOOK_URL, {
@@ -23,11 +27,12 @@ export default function CreateEvent() {
       title: "",
       location: "아지트",
       description: "",
-      start_time: "",
-      end_time: "",
+      start_time: dayjs(pickDate),
+      end_time: dayjs(pickDate),
       max_members_count: 4,
       owner_name: "감롬",
     },
+    enableReinitialize: true,
     onSubmit: (values) => {
       postCreateEvent({
         title: values.title,
@@ -38,9 +43,11 @@ export default function CreateEvent() {
         max_members_count: values.max_members_count,
         user_id: 1,
       }).then((res) => {
-        pushDiscord({
-          text: `새로운 번개가 생성되었습니다. \n 제목: ${values.title} \n 장소: ${values.location} \n 설명: ${values.description} \n 시작시간: ${values.start_time} \n 종료시간: ${values.end_time} \n 최대인원: ${values.max_members_count} \n 호스트: ${values.owner_name}`
-        });
+        // pushDiscord({
+        //   text: `새로운 번개가 생성되었습니다. \n 제목: ${values.title} \n 장소: ${values.location} \n 설명: ${values.description} \n 시작시간: ${values.start_time} \n 종료시간: ${values.end_time} \n 최대인원: ${values.max_members_count} \n 호스트: ${values.owner_name}`
+        // });
+        // router.push('/');
+        //정모생성 id response
       }).catch((error) => {
         console.log(error);
       })

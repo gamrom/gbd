@@ -54,8 +54,8 @@ export const postCreateEvent = ({ title, location, description, start_time, end_
   title: string,
   location: string,
   description: string,
-  start_time: string,
-  end_time: string,
+  start_time: any,
+  end_time: any,
   max_members_count: number,
   user_id: number,
 }) => {
