@@ -18,7 +18,7 @@ AuthAPI.interceptors.request.use(
   async (config) => {
     try {
       const user: any = await new Promise((resolve, reject) => {
-        auth.onAuthStateChanged((user) => {
+        onAuthStateChanged((user) => {
           resolve(user);
         }, reject);
       });
@@ -97,4 +97,22 @@ export const patchEvent = ({ event_id, title, location, description, start_time,
 
 export const getActiveUsers = () => {
   return AuthAPI.get(`/users/`);
+}
+
+export const postJoinEvent = ({ event_id: eventId }: { event_id: string }) => {
+  return (
+    AuthAPI.post(`/events/${eventId}/attendances/apply`)
+  )
+}
+
+export const deleteCancelEvent = ({ event_id: eventId }: { event_id: string }) => {
+  return (
+    AuthAPI.delete(`/events/${eventId}/attendances/cancel`)
+  )
+}
+
+export const getEventAttendances = ({ event_id: eventId }: { event_id: string }) => {
+  return (
+    AuthAPI.get(`/events/${eventId}/attendances`)
+  )
 }
