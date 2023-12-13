@@ -15,6 +15,7 @@ import { auth } from "../../firebase";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import swal from 'sweetalert2';
+import { postSignUp } from "../api";
 
 
 const funnelsArray = [
@@ -68,36 +69,48 @@ export default function Register() {
       setIsRegisterProceeding(true);
 
       //회원가입
-
-      console.log(values.email)
-      console.log(values.pw)
-      console.log(values.pwConfirm)
-      console.log(values.name)
-      console.log(values.phone)
-      console.log(values.gender);
-      console.log(values.funnels);
+      // console.log(values.email)
+      // console.log(values.pw)
+      // console.log(values.pwConfirm)
+      // console.log(values.name)
+      // console.log(values.phone)
+      // console.log(values.gender);
+      // console.log(values.funnels);
 
 
       createUserWithEmailAndPassword(auth, values.email, values.pw).then((authUser) => {
         console.log("success");
         console.log(authUser);
-
-        signInWithEmailAndPassword(auth, values.email, values.pw)
-          .then((userCredential: any) => {
-            //승인대기중 페이지로 이동 
-            router.push('/waitApprove');
-          })
-          .catch((error: any) => {
-            swal.fire({
-              title: '회원가입 성공 && 로그인 실패',
-              text: '다시 로그인 해주세요. 계속 반복되면 감롬에게 문의주세요.',
-              icon: 'error',
-              confirmButtonText: '확인',
-              willClose: () => {
-                router.push('/login');
-              }
+      
+  
+        postSignUp({
+          email: values.email,
+          name: values.name,
+          gender: values.gender,
+          phone: values.phone,
+          referrer_path: values.funnels,
+          uid: authUser.user.uid,
+        }).then((res) => {
+          signInWithEmailAndPassword(auth, values.email, values.pw)
+            .then((userCredential: any) => {
+              //승인대기중 페이지로 이동 
+              router.push('/wait_approve');
             })
-          });
+            .catch((error: any) => {
+              swal.fire({
+                title: '회원가입 성공 && 로그인 실패',
+                text: '다시 로그인 해주세요. 계속 반복되면 감롬에게 문의주세요.',
+                icon: 'error',
+                confirmButtonText: '확인',
+                willClose: () => {
+                  router.push('/login');
+                }
+              })
+            });
+        }).catch((err) => {
+          console.log(err)
+        })
+
       }).catch((error) => {
         if (error.code === "auth/email-already-in-use") {
           swal.fire({
@@ -127,7 +140,7 @@ export default function Register() {
   const [funnels, setFunnels] = useState<string>('');
   const [confirmRule, setConfirmRule] = useState<boolean>(false);
 
-  const [gender, setGender] = useState<string | null>('left');
+  const [gender, setGender] = useState<string | null>();
   const handleGender = (
     event: React.MouseEvent<HTMLElement>,
     newGender: string | null,
@@ -174,10 +187,10 @@ export default function Register() {
         onChange={handleGender}
         color="primary"
       >
-        <ToggleButton className="w-full" value="man">
+        <ToggleButton className="w-full" value="male">
           남자
         </ToggleButton>
-        <ToggleButton className="w-full" value="woman">
+        <ToggleButton className="w-full" value="female">
           여자
         </ToggleButton>
       </ToggleButtonGroup>
