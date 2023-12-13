@@ -9,6 +9,8 @@ import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
 import { modalStyle } from './style';
 import { eventLists } from "./seed";
+import axios from 'axios';
+import { BACKEND_URL } from '@/constants';
 
 
 function createData(
@@ -38,10 +40,22 @@ export const CalendarComponent = () => {
   };
 
 
+  const pushDiscord = () => {
+    const DISCORD_WEBHOOK_URL = 'https://discord.com/api/webhooks/1184078170375323688/HPKeG3xbr9MwwMKKV6Cj11rLP-Z-W-U2YD5kJd2Am-AORyZN9GBUTGDZt-_n6FKLJ_mo';
+    axios.post(DISCORD_WEBHOOK_URL, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      },
+      content: "메시지발송성공"
+    })
+  }
+
   const [isOpenCreateEvent, setIsOpenCreateEvent] = useState<boolean>(false);
   const [pickDate, setPickDate] = useState<Dayjs | null>(dayjs());
 
   const [capacity, setCapacity] = useState<number | undefined>(1);
+
+
 
   return (
     <div>
@@ -71,6 +85,8 @@ export const CalendarComponent = () => {
           onClick={() => setIsOpenCreateEvent(true)}
         >번개 생성</Button>
       </div>
+
+      <Button onClick={pushDiscord}>버튼만들기</Button>
 
       <Modal
         open={isOpenCreateEvent}
