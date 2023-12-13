@@ -3,15 +3,8 @@ import { DateCalendar, DateTimePicker } from '@mui/x-date-pickers';
 import { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
 import Link from 'next/link';
-import Modal from '@mui/material/Modal';
 import dayjs, { Dayjs } from 'dayjs';
-import Box from '@mui/material/Box';
-import Slider from '@mui/material/Slider';
-import { modalStyle } from './style';
-import { eventLists } from "./seed";
 import axios from 'axios';
-import { BACKEND_URL } from '@/constants';
-import { useFormik } from 'formik';
 
 
 function createData(
@@ -54,7 +47,6 @@ export const CalendarComponent = () => {
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   useEffect(() => {
-    console.log("call")
     setIsLoading(true);
     axios.get("http://172.30.1.47:3000/events", {
       params: {
@@ -68,48 +60,6 @@ export const CalendarComponent = () => {
       console.log(error);
     })
   }, [pickDate.year(), pickDate.month()])
-
-  //번개생성
-  const [startTime, setStartTime] = useState<any>(dayjs());
-  const [endTime, setEndTime] = useState<any>(dayjs());
-
-  const formik = useFormik({
-    initialValues: {
-      title: "",
-      location: "아지트",
-      description: "",
-      start_time: "",
-      end_time: "",
-      max_members_count: 4,
-      owner_name: "감롬",
-    },
-    onSubmit: (values) => {
-      axios.post(`${BACKEND_URL}/events`, {
-        title: values.title,
-        location: values.location,
-        description: values.description,
-        start_time: values.start_time,
-        end_time: values.end_time,
-        max_members_count: values.max_members_count,
-        user_id: 1,
-      }).then((res) => {
-        console.log(res);
-      }).catch((error) => {
-        console.log(error);
-      })
-    },
-  })
-
-
-  const pushDiscord = () => {
-    const DISCORD_WEBHOOK_URL = 'https://discord.com/api/webhooks/1184078170375323688/HPKeG3xbr9MwwMKKV6Cj11rLP-Z-W-U2YD5kJd2Am-AORyZN9GBUTGDZt-_n6FKLJ_mo';
-    axios.post(DISCORD_WEBHOOK_URL, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      },
-      content: "메시지발송성공"
-    })
-  }
 
   return (
     <div>
@@ -132,47 +82,16 @@ export const CalendarComponent = () => {
       </ToggleButtonGroup>
 
       <div className="flex items-center justify-center">
-        <Button
-          variant="contained"
-          className="mt-4 mx-auto text-center"
-          color="success"
-          onClick={() => setIsOpenCreateEvent(true)}
-        >번개 생성</Button>
+        <Link href="/events/create" >
+          <Button
+            variant="contained"
+            className="mt-4 mx-auto text-center"
+            color="success"
+            type="button"
+          >번개 생성</Button>
+        </Link>
       </div>
 
-      <Button onClick={pushDiscord}>버튼만들기</Button>
-
-      <Modal
-        open={isOpenCreateEvent}
-        onClose={() => setIsOpenCreateEvent(false)}
-        aria-labelledby="parent-modal-title"
-        aria-describedby="parent-modal-description"
-      >
-        <Box sx={modalStyle}>
-          <form onSubmit={formik.handleSubmit} className="flex flex-col space-y-4">
-            <div className="font-bold text-lg">일정 생성</div>
-            <TextField name="title" value={formik.values.title} onChange={formik.handleChange} autoComplete='off' label="일정 제목" variant="outlined" />
-            <TextField name="location" value={formik.values.location} onChange={formik.handleChange} autoComplete='off' label="일정 장소" variant="outlined" defaultValue="아지트" />
-            <TextField name="owner_name" value={formik.values.owner_name} onChange={formik.handleChange} autoComplete='off' label="벙주/호스트" variant="outlined" defaultValue="김은식" />
-            <TextField name="description" value={formik.values.description} onChange={formik.handleChange} autoComplete='off' label="일정 내용" variant="outlined" multiline placeholder='번개 상세한 설명을 적어주세요.' />
-            <DateTimePicker label="시작 시간" value={startTime} onChange={(newValue) => formik.setFieldValue("start_time", newValue)} />
-            <DateTimePicker label="종료 시간" value={endTime} onChange={(newValue) => formik.setFieldValue("end_time", newValue)} />
-            <TextField
-              label="모집 인원 (벙주/호스트 포함)"
-              type="number"
-              InputLabelProps={{
-                shrink: true,
-              }}
-              variant="standard"
-              value={formik.values.max_members_count}
-              onChange={formik.handleChange}
-              name="max_members_count"
-            />
-            <Button type="submit" variant='contained' color="success">완료하기</Button>
-            <Button color="error">취소</Button>
-          </form>
-        </Box>
-      </Modal>
 
       <DateCalendar value={pickDate} onChange={(newValue) => setPickDate(newValue)} />
 
