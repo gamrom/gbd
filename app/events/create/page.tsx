@@ -1,22 +1,22 @@
+'use client';
 import { Box, Button, Modal, TextField } from "@mui/material";
 import { useFormik } from "formik";
 import axios from "axios";
-import { BACKEND_URL } from "@/constants";
 import { DateTimePicker } from "@mui/x-date-pickers";
-import { modalStyle } from "../../style";
+import { DISCORD_WEBHOOK_URL } from "../../../constants";
+import { postCreateEvent } from "../../api";
 
 
 export default function CreateEvent() {
   //discord
-  const pushDiscord = ({ text }: { text: string }) => {
-    const DISCORD_WEBHOOK_URL = 'https://discord.com/api/webhooks/1184078170375323688/HPKeG3xbr9MwwMKKV6Cj11rLP-Z-W-U2YD5kJd2Am-AORyZN9GBUTGDZt-_n6FKLJ_mo';
-    axios.post(DISCORD_WEBHOOK_URL, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      },
-      content: text
-    })
-  }
+  // const pushDiscord = ({ text }: { text: string }) => {
+  //   axios.post(DISCORD_WEBHOOK_URL, {
+  //     headers: {
+  //       'Content-Type': 'multipart/form-data'
+  //     },
+  //     content: text
+  //   })
+  // }
 
   const formik = useFormik({
     initialValues: {
@@ -29,7 +29,7 @@ export default function CreateEvent() {
       owner_name: "감롬",
     },
     onSubmit: (values) => {
-      axios.post(`${BACKEND_URL}/events`, {
+      postCreateEvent({
         title: values.title,
         location: values.location,
         description: values.description,
@@ -70,6 +70,5 @@ export default function CreateEvent() {
       <Button type="submit" variant='contained' color="success">완료하기</Button>
       <Button color="error">취소</Button>
     </form>
-
   )
 }

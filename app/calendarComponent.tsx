@@ -88,7 +88,7 @@ export const CalendarComponent = () => {
             className="mt-4 mx-auto text-center"
             color="success"
             type="button"
-          >성</Button>
+          >번개 생성</Button>
         </Link>
       </div>
 
