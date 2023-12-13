@@ -55,7 +55,7 @@ export default function CreateEvent() {
         start_time: values.start_time,
         end_time: values.end_time,
         max_members_count: values.max_members_count,
-        owner_id: Number(values.owner_id),
+        uid: Number(values.uid),
       }).then((res) => {
         // pushDiscord({
         //   text: `새로운 번개가 생성되었습니다. \n 제목: ${values.title} \n 장소: ${values.location} \n 설명: ${values.description} \n 시작시간: ${values.start_time} \n 종료시간: ${values.end_time} \n 최대인원: ${values.max_members_count} \n 호스트: ${values.owner_name}`
@@ -79,13 +79,13 @@ export default function CreateEvent() {
           <InputLabel id="demo-simple-select-label">벙주</InputLabel>
           <Select
             name="owner_id"
-            value={formik.values.owner_id}
+            value={formik.values.uid}
             label="벙주"
             onChange={formik.handleChange}
           >
             {activeUsers.map((user: any) => {
               return (
-                <MenuItem key={user.id} value={user.id}>{user.name}</MenuItem>
+                <MenuItem key={user.uid} value={user.uid}>{user.name}</MenuItem>
               )
             })}
           </Select>

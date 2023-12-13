@@ -9,6 +9,8 @@ import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import { modalStyle } from "../../style";
 import { auth } from "@/firebase";
+import { useGetUser } from "@/app/useGetUser";
+import { elapsedTime } from "@/app/tools";
 
 export default function Event({ params }: { params: { event: string } }) {
   const [event, setEvent] = useState<any>(null);
@@ -40,21 +42,21 @@ export default function Event({ params }: { params: { event: string } }) {
     })
   }
 
+  const { user } = useGetUser();
+
   useEffect(() => {
-    attendances && auth.onAuthStateChanged((user) => {
-      if (user) {
-        const userId = user.uid;
-        const isJoined = attendances.filter((attendance: any) => {
-          return attendance.user_uid === userId;
-        })
-        if (isJoined.length > 0) {
-          setCanJoin(false);
-        } else {
-          setCanJoin(true);
-        }
+    if (user && attendances) {
+      const userId = user?.uid;
+      const isJoined = attendances.filter((attendance: any) => {
+        return attendance.user_uid === userId;
+      })
+      if (isJoined.length > 0) {
+        setCanJoin(false);
+      } else {
+        setCanJoin(true);
       }
-    })
-  }, [attendances])
+    }
+  }, [attendances, user])
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const openModal = () => {
@@ -75,7 +77,10 @@ export default function Event({ params }: { params: { event: string } }) {
     })
   }, [params])
 
-  console.log(attendances);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
+  const openDeleteModal = () => {
+    setIsDeleteModalOpen(true);
+  }
 
   return !isLoading && event ? (
     <div className="flex flex-col px-4 mt-[50px]">
@@ -100,7 +105,7 @@ export default function Event({ params }: { params: { event: string } }) {
 
       <div className="mt-4 flex justify-between">
         <div className="flex">
-          <Button variant="contained" color="error">삭제하기</Button>
+          {user.uid === event.owenr_uid && <Button variant="contained" color="error">삭제하기</Button>}
           <Link href={`/events/${params.event}/edit`}>
             <Button variant="contained" color="success" className="ml-2">수정하기</Button>
           </Link>
@@ -109,9 +114,7 @@ export default function Event({ params }: { params: { event: string } }) {
           <Button variant="contained" onClick={() => openModal()}>
             {event?.current_members_count} / {event?.max_members_count}
           </Button>
-          {/* attendences 안에 내 아이디가 있다면, 불참하기. 내 아이디가 없다면 참가하기 */}
-
-          {canJoin ? <Button onClick={() => joinEvent()} variant="contained" color="info" className="ml-2">참가하기</Button> : <Button onClick={() => cancelEvent()} variant="contained" color="error" className="ml-2">불참하기</Button>}
+          {user.uid !== event.owner_uid && (canJoin ? <Button onClick={() => joinEvent()} variant="contained" color="info" className="ml-2">참가하기</Button> : <Button onClick={() => cancelEvent()} variant="contained" color="error" className="ml-2">불참하기</Button>)}
         </div>
       </div>
 
@@ -127,7 +130,10 @@ export default function Event({ params }: { params: { event: string } }) {
             {
               attendances && attendances.map((attendance: any) => {
                 return (
-                  <div key={attendance.id}>{attendance.name}</div>
+                  <div key={attendance.id} className="flex justify-between">
+                    <div>{attendance.user_name}</div>
+                    <div>{elapsedTime(attendance.created_at)}</div>
+                  </div>
                 )
               })
             }

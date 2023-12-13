@@ -50,14 +50,14 @@ export const postSignUp = ({ email, name, gender, phone, referrer_path, uid }: {
   });
 };
 
-export const postCreateEvent = ({ title, location, description, start_time, end_time, max_members_count, owner_id }: {
+export const postCreateEvent = ({ title, location, description, start_time, end_time, max_members_count, uid }: {
   title: string,
   location: string,
   description: string,
   start_time: any,
   end_time: any,
   max_members_count: number,
-  owner_id: number,
+  uid: number,
 }) => {
   return AuthAPI.post('/events', {
     title: title,
@@ -66,7 +66,7 @@ export const postCreateEvent = ({ title, location, description, start_time, end_
     start_time: start_time,
     end_time: end_time,
     max_members_count: max_members_count,
-    user_id: owner_id,
+    uid: uid,
   })
 }
 
