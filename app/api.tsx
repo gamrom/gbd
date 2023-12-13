@@ -18,7 +18,7 @@ AuthAPI.interceptors.request.use(
   async (config) => {
     try {
       const user: any = await new Promise((resolve, reject) => {
-        onAuthStateChanged((user) => {
+        auth.onAuthStateChanged((user) => {
           resolve(user);
         }, reject);
       });

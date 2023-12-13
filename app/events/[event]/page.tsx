@@ -22,11 +22,7 @@ export default function Event({ params }: { params: { event: string } }) {
     postJoinEvent({ event_id: params.event }).then(() => {
       getEvent({ event_id: params.event }).then((res) => {
         setEvent(res.data);
-        auth.onAuthStateChanged((user) => {
-          if (attendances.find((attendance: any) => attendance.user_id === user?.uid)) {
-            setCanJoin(false);
-          }
-        })
+        setCanJoin(false);
       }).catch((err) => {
         console.log(err);
       })
@@ -37,11 +33,28 @@ export default function Event({ params }: { params: { event: string } }) {
     deleteCancelEvent({ event_id: params.event }).then(() => {
       getEvent({ event_id: params.event }).then((res) => {
         setEvent(res.data);
+        setCanJoin(true);
       }).catch((err) => {
         console.log(err);
       })
     })
   }
+
+  useEffect(() => {
+    attendances && auth.onAuthStateChanged((user) => {
+      if (user) {
+        const userId = user.uid;
+        const isJoined = attendances.filter((attendance: any) => {
+          return attendance.user_uid === userId;
+        })
+        if (isJoined.length > 0) {
+          setCanJoin(false);
+        } else {
+          setCanJoin(true);
+        }
+      }
+    })
+  }, [attendances])
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const openModal = () => {
@@ -98,10 +111,7 @@ export default function Event({ params }: { params: { event: string } }) {
           </Button>
           {/* attendences 안에 내 아이디가 있다면, 불참하기. 내 아이디가 없다면 참가하기 */}
 
-          <Button onClick={() => cancelEvent()} variant="contained" color="error" className="ml-2">불참하기</Button>
-
-          <Button onClick={() => joinEvent()} variant="contained" color="info" className="ml-2">참가하기</Button>
-
+          {canJoin ? <Button onClick={() => joinEvent()} variant="contained" color="info" className="ml-2">참가하기</Button> : <Button onClick={() => cancelEvent()} variant="contained" color="error" className="ml-2">불참하기</Button>}
         </div>
       </div>
 
