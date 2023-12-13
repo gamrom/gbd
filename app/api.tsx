@@ -50,14 +50,14 @@ export const postSignUp = ({ email, name, gender, phone, referrer_path, uid }: {
   });
 };
 
-export const postCreateEvent = ({ title, location, description, start_time, end_time, max_members_count, owner_id }: {
+export const postCreateEvent = ({ title, location, description, start_time, end_time, max_members_count, uid }: {
   title: string,
   location: string,
   description: string,
   start_time: any,
   end_time: any,
   max_members_count: number,
-  owner_id: number,
+  uid: string,
 }) => {
   return AuthAPI.post('/events', {
     title: title,
@@ -66,7 +66,7 @@ export const postCreateEvent = ({ title, location, description, start_time, end_
     start_time: start_time,
     end_time: end_time,
     max_members_count: max_members_count,
-    user_id: owner_id,
+    uid: uid,
   })
 }
 
@@ -97,4 +97,22 @@ export const patchEvent = ({ event_id, title, location, description, start_time,
 
 export const getActiveUsers = () => {
   return AuthAPI.get(`/users/`);
+}
+
+export const postJoinEvent = ({ event_id: eventId }: { event_id: string }) => {
+  return (
+    AuthAPI.post(`/events/${eventId}/attendances/apply`)
+  )
+}
+
+export const deleteCancelEvent = ({ event_id: eventId }: { event_id: string }) => {
+  return (
+    AuthAPI.delete(`/events/${eventId}/attendances/cancel`)
+  )
+}
+
+export const getEventAttendances = ({ event_id: eventId }: { event_id: string }) => {
+  return (
+    AuthAPI.get(`/events/${eventId}/attendances`)
+  )
 }
