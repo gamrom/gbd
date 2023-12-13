@@ -57,7 +57,7 @@ export const postCreateEvent = ({ title, location, description, start_time, end_
   start_time: any,
   end_time: any,
   max_members_count: number,
-  uid: number,
+  uid: string,
 }) => {
   return AuthAPI.post('/events', {
     title: title,
