@@ -69,3 +69,28 @@ export const postCreateEvent = ({ title, location, description, start_time, end_
     user_id: user_id,
   })
 }
+
+export const getEvent = ({ event_id }: { event_id: string }) => {
+  return AuthAPI.get(`/events/${event_id}`);
+}
+
+export const patchEvent = ({ event_id, title, location, description, start_time, end_time, max_members_count, user_id }: {
+  event_id: string,
+  title: string,
+  location: string,
+  description: string,
+  start_time: any,
+  end_time: any,
+  max_members_count: number,
+  user_id: number,
+}) => {
+  return AuthAPI.patch(`/events/${event_id}`, {
+    title: title,
+    location: location,
+    description: description,
+    start_time: start_time,
+    end_time: end_time,
+    max_members_count: max_members_count,
+    user_id: user_id,
+  })
+}
