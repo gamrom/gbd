@@ -73,16 +73,13 @@ export const CalendarComponent = () => {
         <ToggleButton className="w-full text-xs" color="secondary" value="monthAll" aria-label="left aligned">
           이번달 모든 번개
         </ToggleButton>
-        <ToggleButton className="w-full text-xs" color="secondary" value="canJoin" aria-label="left aligned">
-          참석가능 번개
-        </ToggleButton>
         <ToggleButton className="w-full text-xs" color="secondary" value="alreadyJoin" aria-label="centered">
           참가중인 번개
         </ToggleButton>
       </ToggleButtonGroup>
 
       <div className="flex items-center justify-center">
-        <Link href="/events/create" >
+        <Link href={`/events/create?pickDate=${pickDate}`} >
           <Button
             variant="contained"
             className="mt-4 mx-auto text-center"

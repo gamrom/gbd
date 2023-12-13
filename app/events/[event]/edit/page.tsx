@@ -1,60 +1,60 @@
 'use client';
-import { Box, Button, Modal, TextField } from "@mui/material";
-import { useFormik } from "formik";
-import axios from "axios";
-import { DateTimePicker } from "@mui/x-date-pickers";
-import { DISCORD_WEBHOOK_URL } from "../../../constants";
-import { postCreateEvent } from "../../api";
-import { useRouter, useSearchParams } from "next/navigation";
+import { Button } from "@mui/material";
+import { useState, useEffect } from "react";
+import { getEvent, patchEvent } from "../../../api";
 import dayjs from "dayjs";
+import Link from "next/link";
+import { useFormik } from "formik";
+import { TextField } from "@mui/material";
+import { DateTimePicker } from "@mui/x-date-pickers";
 
-
-export default function CreateEvent() {
-  const router = useRouter();
-  const pickDate = useSearchParams().get('pickDate');
-  //discord
-  // const pushDiscord = ({ text }: { text: string }) => {
-  //   axios.post(DISCORD_WEBHOOK_URL, {
-  //     headers: {
-  //       'Content-Type': 'multipart/form-data'
-  //     },
-  //     content: text
-  //   })
-  // }
+export default function Event({ params }: { params: { event: string } }) {
+  const [event, setEvent] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const formik = useFormik({
     initialValues: {
-      title: "",
-      location: "아지트",
-      description: "",
-      start_time: dayjs(pickDate),
-      end_time: dayjs(pickDate),
-      max_members_count: 4,
-      owner_name: "감롬",
+      title: event?.title,
+      location: event?.location,
+      description: event?.description,
+      start_time: dayjs(event?.start_time),
+      end_time: dayjs(event?.end_time),
+      max_members_count: event?.max_members_count,
+      user_id: event?.user_id,
+      owner_name: event?.owner_name,
     },
     enableReinitialize: true,
     onSubmit: (values) => {
-      postCreateEvent({
+      patchEvent({
+        event_id: params.event,
         title: values.title,
         location: values.location,
         description: values.description,
         start_time: values.start_time,
         end_time: values.end_time,
         max_members_count: values.max_members_count,
-        user_id: 1,
+        user_id: values.user_id,
       }).then((res) => {
-        // pushDiscord({
-        //   text: `새로운 번개가 생성되었습니다. \n 제목: ${values.title} \n 장소: ${values.location} \n 설명: ${values.description} \n 시작시간: ${values.start_time} \n 종료시간: ${values.end_time} \n 최대인원: ${values.max_members_count} \n 호스트: ${values.owner_name}`
-        // });
-        // router.push('/');
-        //정모생성 id response
+        console.log(res);
       }).catch((error) => {
         console.log(error);
       })
-    },
+    }
   })
 
-  return (
+  useEffect(() => {
+    setIsLoading(true);
+    params.event && getEvent({ event_id: params.event }).then((res) => {
+      setEvent(res.data);
+      setIsLoading(false);
+      console.log();
+    }).catch((err) => {
+      setIsLoading(false);
+      console.log(err);
+    })
+  }, [params])
+
+  return !isLoading && event ? (
     <form onSubmit={formik.handleSubmit} className="flex flex-col space-y-4">
       <div className="font-bold text-lg">일정 생성</div>
       <TextField name="title" value={formik.values.title} onChange={formik.handleChange} autoComplete='off' label="일정 제목" variant="outlined" />
@@ -77,5 +77,8 @@ export default function CreateEvent() {
       <Button type="submit" variant='contained' color="success">완료하기</Button>
       <Button color="error">취소</Button>
     </form>
+  ) : (
+    <div></div>
   )
 }
+
