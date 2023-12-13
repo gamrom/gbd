@@ -56,7 +56,7 @@ export default function Event({ params }: { params: { event: string } }) {
 
   return !isLoading && event ? (
     <form onSubmit={formik.handleSubmit} className="flex flex-col space-y-4">
-      <div className="font-bold text-lg">일정 생성</div>
+      <div className="font-bold text-lg">일정 수정</div>
       <TextField name="title" value={formik.values.title} onChange={formik.handleChange} autoComplete='off' label="일정 제목" variant="outlined" />
       <TextField name="location" value={formik.values.location} onChange={formik.handleChange} autoComplete='off' label="일정 장소" variant="outlined" defaultValue="아지트" />
       <TextField name="owner_name" value={formik.values.owner_name} onChange={formik.handleChange} autoComplete='off' label="벙주/호스트" variant="outlined" defaultValue="김은식" />

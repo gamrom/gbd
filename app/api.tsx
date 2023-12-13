@@ -50,14 +50,14 @@ export const postSignUp = ({ email, name, gender, phone, referrer_path, uid }: {
   });
 };
 
-export const postCreateEvent = ({ title, location, description, start_time, end_time, max_members_count, user_id }: {
+export const postCreateEvent = ({ title, location, description, start_time, end_time, max_members_count, owner_id }: {
   title: string,
   location: string,
   description: string,
   start_time: any,
   end_time: any,
   max_members_count: number,
-  user_id: number,
+  owner_id: number,
 }) => {
   return AuthAPI.post('/events', {
     title: title,
@@ -66,7 +66,7 @@ export const postCreateEvent = ({ title, location, description, start_time, end_
     start_time: start_time,
     end_time: end_time,
     max_members_count: max_members_count,
-    user_id: user_id,
+    user_id: owner_id,
   })
 }
 
@@ -93,4 +93,8 @@ export const patchEvent = ({ event_id, title, location, description, start_time,
     max_members_count: max_members_count,
     user_id: user_id,
   })
+}
+
+export const getActiveUsers = () => {
+  return AuthAPI.get(`/users/`);
 }
