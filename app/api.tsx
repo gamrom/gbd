@@ -1,9 +1,8 @@
 import axios from 'axios';
-import { BACKEND_URL } from "../constants";
 import { auth } from '../firebase';
 
 const AuthAPI = axios.create({
-  baseURL: BACKEND_URL,
+  baseURL: process.env.NEXT_PUBLIC_BACKEND_URL,
   headers: {
     Accept: "application/json",
     "Content-Type": "application/json",
