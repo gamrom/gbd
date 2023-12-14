@@ -18,11 +18,11 @@ export default function MightyPage() {
 
   const nameFormik = useFormik({
     initialValues: {
-      p1: sessionStorage.getItem('p1') || '',
-      p2: sessionStorage.getItem('p2') || '',
-      p3: sessionStorage.getItem('p3') || '',
-      p4: sessionStorage.getItem('p4') || '',
-      p5: sessionStorage.getItem('p5') || '',
+      p1: (typeof window !== 'undefined') ? (sessionStorage.getItem('p1') || '') : '',
+      p2: (typeof window !== 'undefined') ? (sessionStorage.getItem('p2') || '') : '',
+      p3: (typeof window !== 'undefined') ? (sessionStorage.getItem('p3') || '') : '',
+      p4: (typeof window !== 'undefined') ? (sessionStorage.getItem('p4') || '') : '',
+      p5: (typeof window !== 'undefined') ? (sessionStorage.getItem('p5') || '') : '',
     },
     enableReinitialize: true,
     onSubmit: (values) => {
