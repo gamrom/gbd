@@ -10,40 +10,46 @@ import * as Yup from 'yup';
 import Swal from "sweetalert2";
 import Modal from '@mui/material/Modal';
 import { modalStyle } from "../style";
+import { useSessionStorage } from "react-use";
 
 
 export default function MightyPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userEditMode, setUserEditMode] = useState<boolean>(false);
+  const [p1, setP1] = useSessionStorage('p1', "");
+  const [p2, setP2] = useSessionStorage('p2', "");
+  const [p3, setP3] = useSessionStorage('p3', "");
+  const [p4, setP4] = useSessionStorage('p4', "");
+  const [p5, setP5] = useSessionStorage('p5', "");
+
+  const [allItem, setAllItem] = useSessionStorage<any>('allItem', []);
+  const [nogiruda, setNogiruda] = useState<boolean>(false);
 
   const nameFormik = useFormik({
     initialValues: {
-      p1: (typeof window !== 'undefined') ? (sessionStorage.getItem('p1') || '') : '',
-      p2: (typeof window !== 'undefined') ? (sessionStorage.getItem('p2') || '') : '',
-      p3: (typeof window !== 'undefined') ? (sessionStorage.getItem('p3') || '') : '',
-      p4: (typeof window !== 'undefined') ? (sessionStorage.getItem('p4') || '') : '',
-      p5: (typeof window !== 'undefined') ? (sessionStorage.getItem('p5') || '') : '',
+      p1: "",
+      p2: "",
+      p3: "",
+      p4: "",
+      p5: "",
     },
-    enableReinitialize: true,
     onSubmit: (values) => {
-      sessionStorage.setItem('p1', values.p1);
-      sessionStorage.setItem('p2', values.p2);
-      sessionStorage.setItem('p3', values.p3);
-      sessionStorage.setItem('p4', values.p4);
-      sessionStorage.setItem('p5', values.p5);
+      setP1(values.p1);
+      setP2(values.p2);
+      setP3(values.p3);
+      setP4(values.p4);
+      setP5(values.p5);
       setUserEditMode(false);
     }
-  })
-
-  const [nogiruda, setNogiruda] = useState<boolean>(false);
+  });
 
   const calFormik = useFormik({
     initialValues: {
-      king: sessionStorage.getItem('king') || '',
-      friend: sessionStorage.getItem('friend') || '',
-      winPoint: sessionStorage.getItem('winPoint') || '13',
-      betPoint: sessionStorage.getItem('betPoint') || '13',
-      noGiruda: sessionStorage.getItem('noGiruda') || false,
+      king: "",
+      friend: "",
+      winPoint: 13,
+      betPoint: 13,
+      noGiruda: false,
     },
     validationSchema: Yup.object({
       king: Yup.string().required('주공을 선택해주세요'),
@@ -385,18 +391,9 @@ export default function MightyPage() {
 
       }
 
-
-      const allItem = sessionStorage.getItem('allItem');
-      if (allItem) {
-        const allItemJson = JSON.parse(allItem);
-        allItemJson.push(score);
-        sessionStorage.setItem('allItem', JSON.stringify(allItemJson));
-      } else {
-        sessionStorage.setItem('allItem', JSON.stringify([score]));
-      }
-
-      window.location.reload();
-
+      const prevItem = allItem;
+      const newItem = [...prevItem, score];
+      setAllItem(newItem);
     }
   })
 
@@ -417,12 +414,12 @@ export default function MightyPage() {
               cancelButtonText: '취소'
             }).then((result) => {
               if (result.isConfirmed) {
-                sessionStorage.removeItem('p1');
-                sessionStorage.removeItem('p2');
-                sessionStorage.removeItem('p3');
-                sessionStorage.removeItem('p4');
-                sessionStorage.removeItem('p5');
-                sessionStorage.removeItem('allItem');
+                setP1("");
+                setP2("");
+                setP3("");
+                setP4("");
+                setP5("");
+                setAllItem([]);
                 window.location.reload();
               }
             })
@@ -441,11 +438,11 @@ export default function MightyPage() {
 
         {!userEditMode ? (
           <div className="grid grid-cols-6 gap-2">
-            <Box className="flex items-center justify-center" component="section" sx={{ border: '1px dashed grey' }}>{sessionStorage.getItem('p1')}</Box>
-            <Box className="flex items-center justify-center" component="section" sx={{ border: '1px dashed grey' }}>{sessionStorage.getItem('p2')}</Box>
-            <Box className="flex items-center justify-center" component="section" sx={{ border: '1px dashed grey' }}>{sessionStorage.getItem('p3')}</Box>
-            <Box className="flex items-center justify-center" component="section" sx={{ border: '1px dashed grey' }}>{sessionStorage.getItem('p4')}</Box>
-            <Box className="flex items-center justify-center" component="section" sx={{ border: '1px dashed grey' }}>{sessionStorage.getItem('p5')}</Box>
+            <Box className="flex items-center justify-center bg-[#d3d3d3]" component="section" sx={{ border: '1px dashed grey' }}>{p1}</Box>
+            <Box className="flex items-center justify-center bg-[#d3d3d3]" component="section" sx={{ border: '1px dashed grey' }}>{p2}</Box>
+            <Box className="flex items-center justify-center bg-[#d3d3d3]" component="section" sx={{ border: '1px dashed grey' }}>{p3}</Box>
+            <Box className="flex items-center justify-center bg-[#d3d3d3]" component="section" sx={{ border: '1px dashed grey' }}>{p4}</Box>
+            <Box className="flex items-center justify-center bg-[#d3d3d3]" component="section" sx={{ border: '1px dashed grey' }}>{p5}</Box>
             <Button type="button" variant="outlined" color="primary" onClick={() => setUserEditMode(true)}>수정</Button>
           </div>
         ) : (
@@ -463,7 +460,7 @@ export default function MightyPage() {
         }
 
         {
-          (sessionStorage.getItem('p1') && sessionStorage.getItem('p2') && sessionStorage.getItem('p3') && sessionStorage.getItem('p4') && sessionStorage.getItem('p5')) ? (
+          (
             <div>
               <form onSubmit={calFormik.handleSubmit} className="mt-8">
                 <div className="grid grid-cols-[1fr_5fr] gap-2">
@@ -477,19 +474,19 @@ export default function MightyPage() {
                     className="w-full"
                   >
                     <ToggleButton value="p1" className="w-full" color="info">
-                      {sessionStorage.getItem('p1')}
+                      {p1}
                     </ToggleButton>
                     <ToggleButton value="p2" className="w-full" color="info">
-                      {sessionStorage.getItem('p2')}
+                      {p2}
                     </ToggleButton>
                     <ToggleButton value="p3" className="w-full" color="info">
-                      {sessionStorage.getItem('p3')}
+                      {p3}
                     </ToggleButton>
                     <ToggleButton value="p4" className="w-full" color="info">
-                      {sessionStorage.getItem('p4')}
+                      {p4}
                     </ToggleButton>
                     <ToggleButton value="p5" className="w-full" color="info">
-                      {sessionStorage.getItem('p5')}
+                      {p5}
                     </ToggleButton>
                   </ToggleButtonGroup>
                 </div>
@@ -510,19 +507,19 @@ export default function MightyPage() {
                     className="w-full"
                   >
                     <ToggleButton value="p1" className="w-full" color="info">
-                      {sessionStorage.getItem('p1')}
+                      {p1}
                     </ToggleButton>
                     <ToggleButton value="p2" className="w-full" color="info">
-                      {sessionStorage.getItem('p2')}
+                      {p2}
                     </ToggleButton>
                     <ToggleButton value="p3" className="w-full" color="info">
-                      {sessionStorage.getItem('p3')}
+                      {p3}
                     </ToggleButton>
                     <ToggleButton value="p4" className="w-full" color="info">
-                      {sessionStorage.getItem('p4')}
+                      {p4}
                     </ToggleButton>
                     <ToggleButton value="p5" className="w-full" color="info">
-                      {sessionStorage.getItem('p5')}
+                      {p5}
                     </ToggleButton>
                   </ToggleButtonGroup>
                 </div>
@@ -571,44 +568,94 @@ export default function MightyPage() {
               <div className="flex flex-col mt-8">
                 <div className="grid grid-cols-7 w-full">
                   <div className="flex items-center justify-center font-bold">라운드</div>
-                  <Box className="flex items-center justify-center" component="section" sx={{ border: '1px solid grey' }}>{sessionStorage.getItem("p1")}</Box>
-                  <Box className="flex items-center justify-center" component="section" sx={{ border: '1px solid grey' }}>{sessionStorage.getItem("p2")}</Box>
-                  <Box className="flex items-center justify-center" component="section" sx={{ border: '1px solid grey' }}>{sessionStorage.getItem("p3")}</Box>
-                  <Box className="flex items-center justify-center" component="section" sx={{ border: '1px solid grey' }}>{sessionStorage.getItem("p4")}</Box>
-                  <Box className="flex items-center justify-center" component="section" sx={{ border: '1px solid grey' }}>{sessionStorage.getItem("p5")}</Box>
+                  <Box className="flex items-center justify-center" component="section" sx={{ border: '1px solid grey' }}>{p1}</Box>
+                  <Box className="flex items-center justify-center" component="section" sx={{ border: '1px solid grey' }}>{p2}</Box>
+                  <Box className="flex items-center justify-center" component="section" sx={{ border: '1px solid grey' }}>{p3}</Box>
+                  <Box className="flex items-center justify-center" component="section" sx={{ border: '1px solid grey' }}>{p4}</Box>
+                  <Box className="flex items-center justify-center" component="section" sx={{ border: '1px solid grey' }}>{p5}</Box>
                   <div></div>
                 </div>
 
                 <div className="my-2 grid grid-cols-7 w-full">
                   <div className="flex items-center justify-center font-bold">총합</div>
                   <Box className="flex items-center justify-center" component="section" sx={{ border: '1px solid grey' }}>
-                    {sessionStorage.getItem('allItem') && JSON.parse(sessionStorage.getItem('allItem') || '').reduce((acc: number, cur: any) => {
-                      return acc + cur.find((item: any) => item.name === "p1")["point"];
-                    }, 0)}
+                    {
+                      (allItem.length > 0) && allItem.reduce((acc: any, arr: any) => {
+                        // Find the object corresponding to 'p1'
+                        const p1Object = arr.find((obj: any) => obj.name === 'p1');
+
+                        // If 'p1' object is found, add its 'point' value to the accumulator
+                        if (p1Object) {
+                          acc += p1Object.point;
+                        }
+
+                        return acc;
+                      }, 0)
+                    }
                   </Box>
                   <Box className="flex items-center justify-center" component="section" sx={{ border: '1px solid grey' }}>
-                    {sessionStorage.getItem('allItem') && JSON.parse(sessionStorage.getItem('allItem') || '').reduce((acc: number, cur: any) => {
-                      return acc + cur.find((item: any) => item.name === "p2")["point"];
-                    }, 0)}
+                    {
+                      (allItem.length > 0) && allItem.reduce((acc: any, arr: any) => {
+                        // Find the object corresponding to 'p2'
+                        const p2Object = arr.find((obj: any) => obj.name === 'p2');
+
+                        // If 'p2' object is found, add its 'point' value to the accumulator
+                        if (p2Object) {
+                          acc += p2Object.point;
+                        }
+
+                        return acc;
+                      }, 0)
+                    }
                   </Box>
                   <Box className="flex items-center justify-center" component="section" sx={{ border: '1px solid grey' }}>
-                    {sessionStorage.getItem('allItem') && JSON.parse(sessionStorage.getItem('allItem') || '').reduce((acc: number, cur: any) => {
-                      return acc + cur.find((item: any) => item.name === "p3")["point"];
-                    }, 0)}
+                    {
+                      (allItem.length > 0) && allItem.reduce((acc: any, arr: any) => {
+                        // Find the object corresponding to 'p3'
+                        const p3Object = arr.find((obj: any) => obj.name === 'p3');
+
+                        // If 'p3' object is found, add its 'point' value to the accumulator
+                        if (p3Object) {
+                          acc += p3Object.point;
+                        }
+
+                        return acc;
+                      }, 0)
+                    }
                   </Box>
                   <Box className="flex items-center justify-center" component="section" sx={{ border: '1px solid grey' }}>
-                    {sessionStorage.getItem('allItem') && JSON.parse(sessionStorage.getItem('allItem') || '').reduce((acc: number, cur: any) => {
-                      return acc + cur.find((item: any) => item.name === "p4")["point"];
-                    }, 0)}
+                    {
+                      (allItem.length > 0) && allItem.reduce((acc: any, arr: any) => {
+                        // Find the object corresponding to 'p4'
+                        const p4Object = arr.find((obj: any) => obj.name === 'p4');
+
+                        // If 'p4' object is found, add its 'point' value to the accumulator
+                        if (p4Object) {
+                          acc += p4Object.point;
+                        }
+
+                        return acc;
+                      }, 0)
+                    }
                   </Box>
                   <Box className="flex items-center justify-center" component="section" sx={{ border: '1px solid grey' }}>
-                    {sessionStorage.getItem('allItem') && JSON.parse(sessionStorage.getItem('allItem') || '').reduce((acc: number, cur: any) => {
-                      return acc + cur.find((item: any) => item.name === "p5")["point"];
-                    }, 0)}
+                    {
+                      (allItem.length > 0) && allItem.reduce((acc: any, arr: any) => {
+                        // Find the object corresponding to 'p5'
+                        const p5Object = arr.find((obj: any) => obj.name === 'p5');
+
+                        // If 'p5' object is found, add its 'point' value to the accumulator
+                        if (p5Object) {
+                          acc += p5Object.point;
+                        }
+
+                        return acc;
+                      }, 0)
+                    }
                   </Box>
                 </div>
 
-                {sessionStorage.getItem('allItem') && JSON.parse(sessionStorage.getItem('allItem') || '').map((item: any, index: number) => {
+                {(allItem.length > 0) && allItem.map((item: any, index: number) => {
                   return (
                     <div key={`round_${index}`} className="grid grid-cols-7 w-full">
                       <div className="flex items-center justify-center font-bold">{index + 1}</div>
@@ -618,10 +665,7 @@ export default function MightyPage() {
                       <Box className="flex items-center justify-center" component="section" sx={{ border: '1px solid grey' }}>{item.find((item: any) => item.name === "p4")["point"]}</Box>
                       <Box className="flex items-center justify-center" component="section" sx={{ border: '1px solid grey' }}>{item.find((item: any) => item.name === "p5")["point"]}</Box>
                       <button type="button" onClick={() => {
-                        const allItem = JSON.parse(sessionStorage.getItem('allItem') || '');
-                        allItem.splice(index, 1);
-                        sessionStorage.setItem('allItem', JSON.stringify(allItem));
-                        window.location.reload();
+                        setAllItem(allItem.filter((item: any, i: number) => i !== index))
                       }}>삭제</button>
                     </div>
                   )
@@ -629,8 +673,6 @@ export default function MightyPage() {
 
               </div>
             </div>
-          ) : (
-            <div className="mt-4 items-center justify-center">수정 버튼을 눌러 이름을 모두 입력해주세요.</div>
           )
         }
 
