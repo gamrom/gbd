@@ -33,7 +33,13 @@ export const Header = () => {
           <Image src={logo} alt="logo" width={40} height={40} />
         </Link>
 
-        <Button variant='outlined' className="ml-4">활동 사진 보러가기 <Instagram sx={{ fontSize: 16 }} color="secondary" /></Button>
+        <a href="https://www.instagram.com/gamrom.board.club" target="_blank">
+          <Button variant='outlined' className="ml-4">활동 사진 <Instagram sx={{ fontSize: 16 }} color="secondary" /></Button>
+        </a>
+
+        <Link href="/mighty">
+          <Button variant='contained' className="ml-4">마이티계산기</Button>
+        </Link>
       </div>
 
       <div className="flex space-x-2">

@@ -121,8 +121,6 @@ export default function Event({ params }: { params: { event: string } }) {
       <Modal
         open={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        aria-labelledby="parent-modal-title"
-        aria-describedby="parent-modal-description"
       >
         <Box sx={modalStyle}>
           <div className="flex flex-col space-y-4">

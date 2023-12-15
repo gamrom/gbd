@@ -3,7 +3,6 @@ import { Box, Button, Modal, TextField } from "@mui/material";
 import { useFormik } from "formik";
 import axios from "axios";
 import { DateTimePicker } from "@mui/x-date-pickers";
-import { DISCORD_WEBHOOK_URL } from "../../../constants";
 import { getActiveUsers, postCreateEvent } from "../../api";
 import { useRouter, useSearchParams } from "next/navigation";
 import dayjs from "dayjs";
