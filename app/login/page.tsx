@@ -29,6 +29,7 @@ export default function Login() {
     onSubmit: (values) => {
       console.log(values.email)
       console.log(values.pw)
+      console.log(process.env.NEXT_PUBLIC_FIREBASE_API_KEY)
 
       signInWithEmailAndPassword(auth, values.email, values.pw)
         .then((userCredential: any) => {
@@ -56,7 +57,7 @@ export default function Login() {
 
         <TextField id="email" name="email" value={formik.values.email} onChange={formik.handleChange} label="아이디" variant="outlined" />
         <TextField id="pw" name="pw" type="password" value={formik.values.pw} onChange={formik.handleChange} label="비밀번호" variant="outlined" className="mt-4" />
-        <Link href="#" className="text-xs text-right mt-8 ">비밀번호를 잊으셨나요?</Link>
+        <Link href="/find_pw" className="text-xs text-right mt-8 ">비밀번호를 잊으셨나요?</Link>
         <Button type="submit" variant="contained" className="mt-4">로그인</Button>
       </div>
     </form>
