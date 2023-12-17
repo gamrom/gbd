@@ -46,24 +46,59 @@ export const Header = () => {
       onClick={toggleDrawer(anchor, false)}
       onKeyDown={toggleDrawer(anchor, false)}
     >
-      <List>
-       <div>회원가입</div>
-      </List>
-      <Divider />
-      <List>
-        {/* {['All mail', 'Trash', 'Spam'].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))} */}
-        <div>
-          리스트1
-        </div>
+      <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
+        {!isLogin ? (
+          <>
+            <Link href="/register" className="no-underline text-black">
+              <ListItem key="회원가입" disablePadding>
+                <ListItemButton>
+                  <ListItemText primary="회원가입" />
+                </ListItemButton>
+              </ListItem>
+            </Link>
+            <Link href="/login" className="no-underline text-black">
+              <ListItemButton>
+                <ListItemText>
+                  로그인
+                </ListItemText>
+              </ListItemButton>
+            </Link>
+          </>
+        ) : (
+          <ListItemButton onClick={() => signOut()}>
+            <ListItemText>
+              로그아웃
+            </ListItemText>
+          </ListItemButton>
+        )}
+
+        <Divider flexItem />
+
+        <Link href="/mighty" className="no-underline text-black">
+          <ListItemButton>
+            <ListItemText>
+              마이티 계산기
+            </ListItemText>
+          </ListItemButton>
+        </Link>
+
+        <a href="https://www.instagram.com/gamrom.board.club" target="_blank" className="text-black no-underline">
+          <ListItemButton>
+            <ListItemText>
+              인스타그램 가기
+            </ListItemText>
+          </ListItemButton>
+        </a>
+
+        <Divider flexItem />
+
+        <Link href="/admin_page" className="no-underline text-black">
+          <ListItemButton>
+            <ListItemText>
+              회원 관리
+            </ListItemText>
+          </ListItemButton>
+        </Link>
       </List>
     </Box>
   );
@@ -90,34 +125,11 @@ export const Header = () => {
         <Link href="/">
           <Image src={logo} alt="logo" width={40} height={40} />
         </Link>
-
-        <a href="https://www.instagram.com/gamrom.board.club" target="_blank">
-          <Button variant='outlined' className="ml-4">활동 사진 <Instagram sx={{ fontSize: 16 }} color="secondary" /></Button>
-        </a>
-
-        <Link href="/mighty">
-          <Button variant='contained' className="ml-4">마이티계산기</Button>
-        </Link>
-      </div>
-
-      <div className="flex space-x-2">
-        {!isLogin ? (
-          <>
-            <Link href="/register">
-              <Button variant="text">회원가입</Button>
-            </Link>
-            <Link href="/login">
-              <Button variant="contained">로그인</Button>
-            </Link>
-          </>
-        ) : (
-          <Button variant="text" type="button" onClick={() => signOut()}>로그아웃</Button>
-        )}
       </div>
 
 
       <div key={"right"}>
-        <Button onClick={toggleDrawer("right", true)}>{"right"}</Button>
+        <MenuIcon onClick={toggleDrawer("right", true)} className="cursor-pointer" />
         <Drawer
           anchor={"right"}
           open={state["right"]}
