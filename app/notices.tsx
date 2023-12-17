@@ -12,16 +12,13 @@ export const Notices = () => {
   const [openModalId, setOpenModalId] = useState<number | null>(null);
 
   return (
-    <div className="flex flex-col w-full mt-4 space-y-2">
+    <div className="grid grid-cols-2 gap-2">
       {noticeLists.map((notice) => {
         return (
-
           <Button key={notice.id} onClick={() => {
             setOpenModalId(notice.id);
             setIsModalOpen(true);
           }} variant="contained" color="info" size="small">{notice.title}</Button>
-
-
         )
       })}
 
@@ -36,9 +33,9 @@ export const Notices = () => {
             <div className="font-bold">{
               noticeLists.find((notice) => notice.id === openModalId)?.title
             }</div>
-            <div>{
-              noticeLists.find((notice) => notice.id === openModalId)?.content
-            }</div>
+            <div dangerouslySetInnerHTML={{
+              __html: noticeLists.find((notice) => notice.id === openModalId)?.content || ""
+            }} className="whitespace-pre-wrap"></div>
             <Button color="error" onClick={() => setIsModalOpen(false)}>닫기</Button>
           </div>
         </Box>
