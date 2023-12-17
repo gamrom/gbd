@@ -27,6 +27,5 @@ export default function RootLayout({
         </body>
       </LocalizationProvider>
     </html>
-
   )
 }

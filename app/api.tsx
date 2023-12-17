@@ -73,7 +73,7 @@ export const getEvent = ({ event_id }: { event_id: string }) => {
   return AuthAPI.get(`/events/${event_id}`);
 }
 
-export const patchEvent = ({ event_id, title, location, description, start_time, end_time, max_members_count, user_id }: {
+export const patchEvent = ({ event_id, title, location, description, start_time, end_time, max_members_count, uid }: {
   event_id: string,
   title: string,
   location: string,
@@ -81,7 +81,7 @@ export const patchEvent = ({ event_id, title, location, description, start_time,
   start_time: any,
   end_time: any,
   max_members_count: number,
-  user_id: number,
+  uid: string,
 }) => {
   return AuthAPI.patch(`/events/${event_id}`, {
     title: title,
@@ -90,7 +90,7 @@ export const patchEvent = ({ event_id, title, location, description, start_time,
     start_time: start_time,
     end_time: end_time,
     max_members_count: max_members_count,
-    user_id: user_id,
+    uid: uid,
   })
 }
 
@@ -123,6 +123,21 @@ export const getEvents = ({ year, month }: { year: string, month: string }) => {
         year: year,
         month: month,
       }
+    })
+  )
+}
+
+export const getUsers = () => {
+  return (
+    AuthAPI.get(`/admin/users`)
+  )
+}
+
+export const patchRole = ({ uid, role }: { uid: string, role: string }) => {
+  return (
+    AuthAPI.patch("/admin/users/change_role", {
+      uid: uid,
+      role: role,
     })
   )
 }

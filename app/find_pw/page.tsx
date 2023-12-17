@@ -13,7 +13,6 @@ export default function FindPwPage() {
       email: '',
     },
     onSubmit: (values) => {
-      console.log(values.email)
       sendPasswordResetEmail(auth, values.email)
         .then(() => {
           Swal.fire({
@@ -26,6 +25,7 @@ export default function FindPwPage() {
           })
         })
         .catch((error) => {
+          //아이디 틀렸을 경우 체크해야함
           const errorCode = error.code;
           const errorMessage = error.message;
           console.log(errorCode, errorMessage)

@@ -1,21 +1,15 @@
-import { TextField, ToggleButton, ToggleButtonGroup } from '@mui/material';
-import { DateCalendar, DateTimePicker } from '@mui/x-date-pickers';
+import { ToggleButton, ToggleButtonGroup } from '@mui/material';
+import { DateCalendar } from '@mui/x-date-pickers';
 import { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
 import Link from 'next/link';
 import dayjs, { Dayjs } from 'dayjs';
 import { getEvents } from './api';
+import { DayCalendarSkeleton } from '@mui/x-date-pickers/DayCalendarSkeleton';
+import { Badge } from '@mui/material';
+import { PickersDay, PickersDayProps } from '@mui/x-date-pickers/PickersDay';
 
 
-function createData(
-  date: string,
-  currentMember: number,
-  maxMember: number,
-  partyCreator: string,
-  title: string,
-) {
-  return { date, currentMember, maxMember, partyCreator, title };
-}
 
 export const CalendarComponent = () => {
   const [toggleFilter, setToggleFilter] = useState<string | null>('monthAll');
@@ -27,12 +21,7 @@ export const CalendarComponent = () => {
     setToggleFilter(newToggle)
   };
 
-
-
-  const [isOpenCreateEvent, setIsOpenCreateEvent] = useState<boolean>(false);
   const [pickDate, setPickDate] = useState<Dayjs | any>(dayjs());
-
-  const [capacity, setCapacity] = useState<number | undefined>(1);
 
   const [events, setEvents] = useState<Array<{
     id: number,
@@ -54,10 +43,48 @@ export const CalendarComponent = () => {
     }).then((res) => {
       setEvents(res.data);
       setIsLoading(false);
-    }).catch((error) => {
-      console.log(error);
     })
   }, [pickDate.year(), pickDate.month()])
+
+  const [eventsDay, setEventsDay] = useState<Array<number>>([]);
+  useEffect(() => {
+    //모든 이벤트의 시작날짜와 끝날짜 사이의 모든 날짜를 구한다.
+    const allDays: number[] = [];
+    events && events.forEach((event) => {
+      console.log("event", event)
+      const startDay = dayjs(event.start_time).date();
+      console.log(event.start_time)
+      console.log(startDay)
+      const endDay = dayjs(event.end_time).date();
+      console.log(event.end_time)
+      console.log(endDay)
+      for (let i = startDay; i <= endDay; i++) {
+        allDays.push(i);
+      }
+    })
+    //중복된 날짜를 제거한다.
+    const uniqueDays = Array.from(new Set(allDays));
+    //중복된 날짜를 제거한 날짜들을 eventsDay에 넣는다.
+
+    console.log(uniqueDays)
+    uniqueDays && setEventsDay(uniqueDays);
+  }, [events])
+
+  function ServerDay(props: PickersDayProps<Dayjs> & { eventsDay?: number[] }) {
+    const { eventsDay = [], day, outsideCurrentMonth, ...other } = props;
+
+    const isSelected = eventsDay.indexOf(props.day.date()) >= 0;
+
+    return (
+      <Badge
+        key={props.day.toString()}
+        overlap="circular"
+        badgeContent={isSelected ? '🔴' : undefined}
+      >
+        <PickersDay {...other} outsideCurrentMonth={outsideCurrentMonth} day={day} />
+      </Badge>
+    );
+  }
 
   return (
     <div>
@@ -88,7 +115,17 @@ export const CalendarComponent = () => {
       </div>
 
 
-      <DateCalendar value={pickDate} onChange={(newValue) => setPickDate(newValue)} />
+      <DateCalendar
+        value={pickDate}
+        slots={{
+          day: ServerDay,
+        }}
+        slotProps={{
+          day: {
+            eventsDay,
+          } as any,
+        }}
+        onChange={(newValue) => setPickDate(newValue)} renderLoading={() => <DayCalendarSkeleton />} />
 
       {!isLoading && <div className="flex flex-col space-y-2">
         {events && events.map((event: any, index: number) => {
