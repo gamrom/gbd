@@ -22,21 +22,23 @@ import Switch from '@mui/material/Switch';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
+import { useEffect } from 'react';
+import { getUsers } from '../api';
 
-function createData(id, grade, name, phone) {
+function createData(id, role, name, phone) {
   return {
     id,
-    grade,
+    role,
     name,
     phone
   };
 }
 
-const rows = [
-  createData(1, "정회원", 'Cupcake', "01044445555"),
-  createData(2, "정회원", 'Donut', "01056663434"),
-  createData(3, "정회원", 'Eclair', "01024243232"),
-];
+// const rows = [
+//   createData(1, "정회원", 'Cupcake', "01044445555"),
+//   createData(2, "정회원", 'Donut', "01056663434"),
+//   createData(3, "정회원", 'Eclair', "01024243232"),
+// ];
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -72,7 +74,7 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
-    id: 'grade',
+    id: 'role',
     numeric: false,
     disablePadding: true,
     label: '회원등급',
@@ -205,6 +207,9 @@ export default function EnhancedTable() {
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
+  const [rows, setRows] = React.useState([]);
+
+
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -264,7 +269,7 @@ export default function EnhancedTable() {
         page * rowsPerPage,
         page * rowsPerPage + rowsPerPage,
       ),
-    [order, orderBy, page, rowsPerPage],
+    [order, orderBy, page, rowsPerPage, rows],
   );
 
   const [clickedRowId, setClickedRowId] = React.useState(null);
@@ -283,6 +288,12 @@ export default function EnhancedTable() {
     }
   };
 
+
+  useEffect(() => {
+    getUsers().then((res) => {
+      setRows(res.data);
+    })
+  }, [])
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -332,7 +343,7 @@ export default function EnhancedTable() {
                       padding="none"
                       width="20%"
                     >
-                      {row.grade}
+                      {row.role}
                     </TableCell>
                     {
                       clickedRowId === row.id ?
@@ -361,7 +372,7 @@ export default function EnhancedTable() {
           </Table>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
+          rowsPerPageOptions={[5, 25, 100]}
           component="div"
           count={rows.length}
           rowsPerPage={rowsPerPage}

@@ -126,3 +126,9 @@ export const getEvents = ({ year, month }: { year: string, month: string }) => {
     })
   )
 }
+
+export const getUsers = () => {
+  return (
+    AuthAPI.get(`/admin/users`)
+  )
+}
