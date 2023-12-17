@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
 import Link from 'next/link';
 import dayjs, { Dayjs } from 'dayjs';
-import axios from 'axios';
+import { getEvents } from './api';
 
 
 function createData(
@@ -48,11 +48,9 @@ export const CalendarComponent = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   useEffect(() => {
     setIsLoading(true);
-    axios.get("http://172.30.1.47:3000/events", {
-      params: {
-        year: pickDate?.year(),
-        month: pickDate?.month() + 1,
-      }
+    getEvents({
+      year: pickDate.year(),
+      month: pickDate.month() + 1,
     }).then((res) => {
       setEvents(res.data);
       setIsLoading(false);
