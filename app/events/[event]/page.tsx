@@ -8,9 +8,9 @@ import { postJoinEvent, deleteCancelEvent, getEventAttendances } from "../../api
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import { modalStyle } from "../../style";
-import { auth } from "@/firebase";
 import { useGetUser } from "@/app/useGetUser";
 import { elapsedTime } from "@/app/tools";
+import toast, { Toaster } from 'react-hot-toast';
 
 export default function Event({ params }: { params: { event: string } }) {
   const [event, setEvent] = useState<any>(null);
@@ -25,8 +25,6 @@ export default function Event({ params }: { params: { event: string } }) {
       getEvent({ event_id: params.event }).then((res) => {
         setEvent(res.data);
         setCanJoin(false);
-      }).catch((err) => {
-        console.log(err);
       })
     })
   }
@@ -73,20 +71,26 @@ export default function Event({ params }: { params: { event: string } }) {
       })
     }).catch((err) => {
       setIsLoading(false);
-      console.log(err);
     })
   }, [params])
 
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
-  const openDeleteModal = () => {
-    setIsDeleteModalOpen(true);
+  const handleClickAdvertise = () => {
+    const url = window.location.href;
+    const tempInput = document.createElement('input');
+    tempInput.value = url;
+    document.body.appendChild(tempInput);
+    tempInput.select();
+    document.execCommand('copy');
+    document.body.removeChild(tempInput);
+    toast('번개 복사 완료!')
   }
 
   return !isLoading && event ? (
     <div className="flex flex-col px-4 mt-[50px]">
       <div className="flex justify-between">
         <span className="font-bold text-lg">{event?.title}</span>
-        <Button size="small">홍보하기</Button>
+        <Button size="small" onClick={() => handleClickAdvertise()}>홍보하기</Button>
+        <Toaster />
       </div>
       <div className="mt-4">📆 {dayjs(event?.start_time).format(
         "YY년 MM월 DD일 HH시 mm분"
@@ -107,7 +111,7 @@ export default function Event({ params }: { params: { event: string } }) {
         <div className="flex">
           {user.uid === event.owenr_uid && <Button variant="contained" color="error">삭제하기</Button>}
           <Link href={`/events/${params.event}/edit`}>
-            <Button variant="contained" color="success" className="ml-2">수정하기</Button>
+            <Button variant="contained" color="success">수정하기</Button>
           </Link>
         </div>
         <div className="flex items-center">
@@ -130,7 +134,7 @@ export default function Event({ params }: { params: { event: string } }) {
                 return (
                   <div key={attendance.id} className="flex justify-between">
                     <div>{attendance.user_name}</div>
-                    <div>{elapsedTime(attendance.created_at)}</div>
+                    <div className="ml-2">{elapsedTime(attendance.created_at)}</div>
                   </div>
                 )
               })

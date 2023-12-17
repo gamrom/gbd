@@ -92,6 +92,25 @@ export const Header = () => {
 
         <Divider flexItem />
 
+        <a href="https://gamromboard.notion.site/290766405fa14166bcd829f3afa8a9ba?pvs=4" target="_blank" className="text-black no-underline">
+          <ListItemButton>
+            <ListItemText>
+              회칙 보러가기
+            </ListItemText>
+          </ListItemButton>
+        </a>
+
+
+        <a href="https://gamromboard.notion.site/a4261df53fc54fc5a403d6a0d8e408e5?pvs=74" target="_blank" className="text-black no-underline">
+          <ListItemButton>
+            <ListItemText>
+              보유 보드게임
+            </ListItemText>
+          </ListItemButton>
+        </a>
+
+        <Divider flexItem />
+
         <Link href="/admin_page" className="no-underline text-black">
           <ListItemButton>
             <ListItemText>

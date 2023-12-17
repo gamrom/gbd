@@ -15,30 +15,11 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
-import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
-import DeleteIcon from '@mui/icons-material/Delete';
-import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
-import { useEffect } from 'react';
-import { getUsers } from '../api';
-
-function createData(id, role, name, phone) {
-  return {
-    id,
-    role,
-    name,
-    phone
-  };
-}
-
-// const rows = [
-//   createData(1, "정회원", 'Cupcake', "01044445555"),
-//   createData(2, "정회원", 'Donut', "01056663434"),
-//   createData(3, "정회원", 'Eclair', "01024243232"),
-// ];
+import { useEffect, useState } from 'react';
+import { getUsers, patchRole } from '../api';
+import Button from '@mui/material/Button';
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -93,6 +74,8 @@ const headCells = [
   },
 ];
 
+
+
 function EnhancedTableHead(props) {
   const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
     props;
@@ -110,7 +93,7 @@ function EnhancedTableHead(props) {
             checked={rowCount > 0 && numSelected === rowCount}
             onChange={onSelectAllClick}
             inputProps={{
-              'aria-label': 'select all desserts',
+              'aria-label': 'select all',
             }}
           />
         </TableCell>
@@ -151,7 +134,36 @@ EnhancedTableHead.propTypes = {
 };
 
 function EnhancedTableToolbar(props) {
-  const { numSelected } = props;
+  const { numSelected, selected } = props;
+  const [selectedRole, setSelectedRole] = useState("");
+
+  const handleClickEditRole = () => {
+    //role "admin manage member guest"
+    if (selectedRole === null) {
+      return;
+    }
+    if (selectedRole === "") {
+      alert("회원등급을 선택하세요");
+      return;
+    }
+
+    selected.map((item) => {
+      patchRole({ uid: item, role: selectedRole }).then((res) => {
+        if (res.status === 200) {
+          alert("회원등급이 변경되었습니다.");
+          window.location.reload();
+        }
+      })
+    })
+  }
+
+  const handleRoleChange = (
+    event,
+  ) => {
+    setSelectedRole(event.target.value);
+  }
+
+
 
   return (
     <Toolbar
@@ -184,12 +196,20 @@ function EnhancedTableToolbar(props) {
         </Typography>
       )}
 
+
+
       {numSelected > 0 && (
-        <Tooltip title="Delete">
-          <IconButton>
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
+        <>
+          <select value={selectedRole} onChange={handleRoleChange}>
+            <option value="">등급 선택</option>
+            <option value="manager">매니저</option>
+            <option value="member">멤버</option>
+            <option value="guest">게스트</option>
+          </select>
+          <Tooltip title="Edit">
+            <Button variant="contained" color="primary" onClick={() => handleClickEditRole()} className="shrink-0">수정하기</Button>
+          </Tooltip>
+        </>
       )}
     </Toolbar>
   );
@@ -204,7 +224,6 @@ export default function EnhancedTable() {
   const [orderBy, setOrderBy] = React.useState('calories');
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
-  const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   const [rows, setRows] = React.useState([]);
@@ -218,7 +237,7 @@ export default function EnhancedTable() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelected = rows.map((n) => n.id);
+      const newSelected = rows.map((n) => n.uid);
       setSelected(newSelected);
       return;
     }
@@ -241,6 +260,7 @@ export default function EnhancedTable() {
         selected.slice(selectedIndex + 1),
       );
     }
+
     setSelected(newSelected);
   };
 
@@ -251,10 +271,6 @@ export default function EnhancedTable() {
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
-  };
-
-  const handleChangeDense = (event) => {
-    setDense(event.target.checked);
   };
 
   const isSelected = (id) => selected.indexOf(id) !== -1;
@@ -298,12 +314,11 @@ export default function EnhancedTable() {
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
-        <EnhancedTableToolbar numSelected={selected.length} />
+        <EnhancedTableToolbar numSelected={selected.length} selected={selected} />
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
             aria-labelledby="tableTitle"
-            size={dense ? 'small' : 'medium'}
           >
             <EnhancedTableHead
               numSelected={selected.length}
@@ -315,7 +330,7 @@ export default function EnhancedTable() {
             />
             <TableBody>
               {visibleRows.map((row, index) => {
-                const isItemSelected = isSelected(row.id);
+                const isItemSelected = isSelected(row.uid);
                 const labelId = `enhanced-table-checkbox-${index}`;
 
                 return (
@@ -323,11 +338,11 @@ export default function EnhancedTable() {
                     role="checkbox"
                     aria-checked={isItemSelected}
                     tabIndex={-1}
-                    key={row.id}
+                    key={row.uid}
                     selected={isItemSelected}
                     sx={{ cursor: 'pointer' }}
                   >
-                    <TableCell padding="checkbox" onClick={(event) => handleClick(event, row.id)}>
+                    <TableCell padding="checkbox" onClick={(event) => handleClick(event, row.uid)}>
                       <Checkbox
                         color="primary"
                         checked={isItemSelected}
@@ -343,15 +358,18 @@ export default function EnhancedTable() {
                       padding="none"
                       width="20%"
                     >
-                      {row.role}
+                      {row.role === "admin" && "관리자"}
+                      {row.role === "manager" && "매니저"}
+                      {row.role === "member" && "멤버"}
+                      {row.role === "guest" && "게스트"}
                     </TableCell>
                     {
-                      clickedRowId === row.id ?
+                      clickedRowId === row.uid ?
                         <TableCell width="20%">
-                          <input type="text" defaultValue={row.name} onKeyDown={(e) => handleKeyDown(e, row.id)} />
+                          <input type="text" defaultValue={row.name} onKeyDown={(e) => handleKeyDown(e, row.uid)} />
                         </TableCell>
                         :
-                        <TableCell width="20%" onClick={() => handleClickName(row.id)}>
+                        <TableCell width="20%" onClick={() => handleClickName(row.uid)}>
                           {row.name}
                         </TableCell>
                     }
@@ -362,7 +380,7 @@ export default function EnhancedTable() {
               {emptyRows > 0 && (
                 <TableRow
                   style={{
-                    height: (dense ? 33 : 53) * emptyRows,
+                    height: (53) * emptyRows,
                   }}
                 >
                   <TableCell colSpan={6} />

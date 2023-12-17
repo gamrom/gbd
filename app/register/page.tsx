@@ -68,21 +68,7 @@ export default function Register() {
     onSubmit: (values) => {
       setIsRegisterProceeding(true);
 
-      //회원가입
-      // console.log(values.email)
-      // console.log(values.pw)
-      // console.log(values.pwConfirm)
-      // console.log(values.name)
-      // console.log(values.phone)
-      // console.log(values.gender);
-      // console.log(values.funnels);
-
-
       createUserWithEmailAndPassword(auth, values.email, values.pw).then((authUser) => {
-        console.log("success");
-        console.log(authUser);
-      
-  
         postSignUp({
           email: values.email,
           name: values.name,
@@ -107,8 +93,6 @@ export default function Register() {
                 }
               })
             });
-        }).catch((err) => {
-          console.log(err)
         })
 
       }).catch((error) => {
@@ -153,13 +137,11 @@ export default function Register() {
     // setFunnels(event.target.value as string);
     setFunnels(event.target.value as string);
     formik.setFieldValue("funnels", event.target.value as string);
-    console.log(event.target.value as string)
   };
 
   const handleConfirmRule = (event: React.ChangeEvent<HTMLInputElement>) => {
     setConfirmRule(event.target.checked as boolean);
     formik.setFieldValue("confirmRule", event.target.checked);
-    console.log(event.target.checked)
   }
 
   return (
