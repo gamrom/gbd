@@ -115,3 +115,14 @@ export const getEventAttendances = ({ event_id: eventId }: { event_id: string })
     AuthAPI.get(`/events/${eventId}/attendances`)
   )
 }
+
+export const getEvents = ({ year, month }: { year: string, month: string }) => {
+  return (
+    AuthAPI.get(`/events`, {
+      params: {
+        year: year,
+        month: month,
+      }
+    })
+  )
+}
