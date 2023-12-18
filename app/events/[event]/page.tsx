@@ -11,6 +11,7 @@ import { modalStyle } from "../../style";
 import { useGetUser } from "@/app/useGetUser";
 import { elapsedTime } from "@/app/tools";
 import toast, { Toaster } from 'react-hot-toast';
+import Swal from "sweetalert2";
 
 export default function Event({ params }: { params: { event: string } }) {
   const [event, setEvent] = useState<any>(null);
@@ -109,7 +110,25 @@ export default function Event({ params }: { params: { event: string } }) {
 
       <div className="mt-4 flex justify-between">
         <div className="flex">
-          {user.uid === event.owenr_uid && <Button variant="contained" color="error">삭제하기</Button>}
+          {user?.uid === event.owenr_uid && <Button variant="contained" color="error" className="mr-2" onClick={() => {
+            Swal.fire({
+              title: '정말로 삭제하시겠습니까?',
+              text: "삭제하시면 복구할 수 없습니다.",
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonText: '삭제하기',
+              cancelButtonText: '취소하기'
+            }).then((result) => {
+              if (result.isConfirmed) {
+                Swal.fire(
+                  '삭제되었습니다!',
+                  '해당 번개가 삭제되었습니다.',
+                  'success'
+                )
+                //삭제하기
+              }
+            })
+          }}>삭제하기</Button>}
           <Link href={`/events/${params.event}/edit`}>
             <Button variant="contained" color="success">수정하기</Button>
           </Link>
@@ -118,7 +137,7 @@ export default function Event({ params }: { params: { event: string } }) {
           <Button variant="contained" onClick={() => openModal()}>
             {event?.current_members_count} / {event?.max_members_count}
           </Button>
-          {user.uid !== event.owner_uid && (canJoin ? <Button onClick={() => joinEvent()} variant="contained" color="info" className="ml-2">참가하기</Button> : <Button onClick={() => cancelEvent()} variant="contained" color="error" className="ml-2">불참하기</Button>)}
+          {user?.uid !== event.owner_uid && (canJoin ? <Button onClick={() => joinEvent()} variant="contained" color="info" className="ml-2">참가하기</Button> : <Button onClick={() => cancelEvent()} variant="contained" color="error" className="ml-2">불참하기</Button>)}
         </div>
       </div>
 

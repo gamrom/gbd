@@ -18,9 +18,9 @@ export default function FindPwPage() {
           Swal.fire({
             icon: 'success',
             title: '비밀번호 재설정 메일을 전송했습니다.',
-            showConfirmButton: false,
+            showConfirmButton: true,
             willClose: () => {
-              location.href = '/'
+              location.href = '/login'
             }
           })
         })

@@ -8,6 +8,7 @@ import { useFormik } from "formik";
 import React from 'react';
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import Swal from "sweetalert2";
 
 export default function Login() {
 
@@ -27,10 +28,6 @@ export default function Login() {
       pw: '',
     },
     onSubmit: (values) => {
-      console.log(values.email)
-      console.log(values.pw)
-      console.log(process.env.NEXT_PUBLIC_FIREBASE_API_KEY)
-
       signInWithEmailAndPassword(auth, values.email, values.pw)
         .then((userCredential: any) => {
           // Signed in
@@ -57,7 +54,15 @@ export default function Login() {
 
         <TextField id="email" name="email" value={formik.values.email} onChange={formik.handleChange} label="아이디" variant="outlined" />
         <TextField id="pw" name="pw" type="password" value={formik.values.pw} onChange={formik.handleChange} label="비밀번호" variant="outlined" className="mt-4" />
-        <Link href="/find_pw" className="text-xs text-right mt-8 ">비밀번호를 잊으셨나요?</Link>
+        <div onClick={() =>
+          Swal.fire({
+            icon: 'success',
+            title: '아이디를 잊으셨나요?',
+            text: '아이디를 잊으셨다면, 관리자에게 문의해주세요.',
+            showConfirmButton: true,
+          })
+        } className="text-xs text-right ml-auto mt-4 cursor-pointer w-fit">아이디를 잊으셨나요?</div>
+        <Link href="/find_pw" className="text-xs ml-auto text-right mt-[2px] no-underline cursor-pointer text-black w-fit">비밀번호를 잊으셨나요?</Link>
         <Button type="submit" variant="contained" className="mt-4">로그인</Button>
       </div>
     </form>
