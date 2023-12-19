@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { getEvent } from "../../api";
 import dayjs from "dayjs";
 import Link from "next/link";
-import { postJoinEvent, deleteCancelEvent, getEventAttendances } from "../../api";
+import { postJoinEvent, deleteCancelEvent, getEventAttendances, deleteEvent } from "../../api";
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import { modalStyle } from "../../style";
@@ -17,8 +17,6 @@ export default function Event({ params }: { params: { event: string } }) {
   const [event, setEvent] = useState<any>(null);
   const [attendances, setAttendances] = useState<any>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
-
   const [canJoin, setCanJoin] = useState(false);
 
   const joinEvent = () => {
@@ -120,12 +118,15 @@ export default function Event({ params }: { params: { event: string } }) {
               cancelButtonText: '취소하기'
             }).then((result) => {
               if (result.isConfirmed) {
-                Swal.fire(
-                  '삭제되었습니다!',
-                  '해당 번개가 삭제되었습니다.',
-                  'success'
-                )
-                //삭제하기
+                deleteEvent({ eventId: params.event }).then(() => {
+                  Swal.fire({
+                    title: '삭제되었습니다.',
+                    icon: 'success',
+                    confirmButtonText: '확인',
+                  }).then(() => {
+                    window.location.href = '/events'
+                  })
+                })
               }
             })
           }}>삭제하기</Button>}
