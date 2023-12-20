@@ -26,7 +26,7 @@ export const roleText = (role: string): string => {
     case 'member':
       return '회원';
     case 'guest':
-      return '손님';
+      return '게스트';
     default:
       return '';
   }
