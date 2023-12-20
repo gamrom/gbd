@@ -1,8 +1,10 @@
 'use client'
 
 import { Notices } from "./notices"
-import { useState, useEffect } from "react";
-import { CalendarComponent } from "./calendarComponent"
+import { useState, useEffect, useContext } from "react";
+import { CalendarComponent } from "./calendarComponent";
+import useSWR from 'swr'
+import { fetcher } from './api';
 
 export default function Home() {
   const [isClient, setIsClient] = useState(false);
@@ -10,6 +12,8 @@ export default function Home() {
   useEffect(() => {
     setIsClient(true);
   }, [])
+
+
 
   return (
     <div>

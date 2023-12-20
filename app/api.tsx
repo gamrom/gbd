@@ -1,5 +1,7 @@
 import axios from 'axios';
 import { auth } from '../firebase';
+import { url } from 'inspector';
+import useSWR, { SWRConfig } from 'swr'
 
 const AuthAPI = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BACKEND_URL,
@@ -148,8 +150,18 @@ export const deleteEvent = ({ eventId }: { eventId: string }) => {
   )
 }
 
-export const getMe = () => {
-  return (
-    AuthAPI.get(`/me`)
-  )
+export const fetcher = ({
+  url: url,
+  method: method,
+  data: data,
+}: {
+  url: string,
+  method: string,
+  data?: any,
+}) => {
+  return AuthAPI({
+    url: url,
+    method: method,
+    data: data,
+  })
 }

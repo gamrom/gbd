@@ -4,22 +4,32 @@ import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import { noticeLists } from "./noticeLists";
 import { modalStyle } from "./style";
-import { useGetUser } from "./useGetUser";
+import { useGetUser } from "./hooks/useGetUser";
+import { LoadingComp } from "./loadingComp";
+import axios from "axios";
 
 export const Notices = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [openModalId, setOpenModalId] = useState<number | null>(null);
 
-  const currentUser = useGetUser();
+  const { data: currentUser, isLoading: isLoading } = useGetUser();
 
-  return (
+  const handleClickNotice = ({ noticeId }: { noticeId: number }) => {
+    if (currentUser && (currentUser.data.role !== "guest")) {
+      setOpenModalId(noticeId);
+      setIsModalOpen(true);
+    } else {
+      alert("회원만 이용 가능합니다.");
+    }
+  }
+
+
+
+  return !isLoading ? (
     <div className="grid grid-cols-2 gap-2">
       {noticeLists.map((notice) => {
         return (
-          <Button key={notice.id} onClick={() => {
-            setOpenModalId(notice.id);
-            setIsModalOpen(true);
-          }} variant="contained" color="info" size="small">{notice.title}</Button>
+          <Button key={notice.id} onClick={() => handleClickNotice({ noticeId: notice.id })} variant="contained" color="info" size="small">{notice.title}</Button>
         )
       })}
 
@@ -42,5 +52,7 @@ export const Notices = () => {
         </Box>
       </Modal>
     </div>
+  ) : (
+    <LoadingComp />
   )
 }
