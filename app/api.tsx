@@ -141,3 +141,15 @@ export const patchRole = ({ uid, role }: { uid: string, role: string }) => {
     })
   )
 }
+
+export const deleteEvent = ({ eventId }: { eventId: string }) => {
+  return (
+    AuthAPI.delete(`/events/${eventId}`)
+  )
+}
+
+export const getMe = () => {
+  return (
+    AuthAPI.get(`/me`)
+  )
+}
