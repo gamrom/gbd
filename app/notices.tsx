@@ -1,18 +1,17 @@
 import { Button } from "@mui/material"
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import { noticeLists } from "./noticeLists";
 import { modalStyle } from "./style";
-import { useGetUser } from "./hooks/useGetUser";
+import { useGetCurrentUser } from "./hooks/useGetCurrentUser";
 import { LoadingComp } from "./loadingComp";
-import axios from "axios";
 
 export const Notices = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [openModalId, setOpenModalId] = useState<number | null>(null);
 
-  const { data: currentUser, isLoading: isLoading } = useGetUser();
+  const { data: currentUser, isLoading: isLoading } = useGetCurrentUser();
 
   const handleClickNotice = ({ noticeId }: { noticeId: number }) => {
     if (currentUser && (currentUser.data.role !== "guest")) {
@@ -22,8 +21,6 @@ export const Notices = () => {
       alert("회원만 이용 가능합니다.");
     }
   }
-
-
 
   return !isLoading ? (
     <div className="grid grid-cols-2 gap-2">

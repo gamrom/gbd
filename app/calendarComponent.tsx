@@ -8,8 +8,21 @@ import { getEvents } from './api';
 import { DayCalendarSkeleton } from '@mui/x-date-pickers/DayCalendarSkeleton';
 import { Badge } from '@mui/material';
 import { PickersDay, PickersDayProps } from '@mui/x-date-pickers/PickersDay';
+import useSWR from 'swr'
+import { fetcher } from "./api";
+import { LoadingComp } from './loadingComp';
+import { useGetCurrentUser } from './hooks/useGetCurrentUser';
 
-
+type EventProps = {
+  id: number,
+  start_time: any,
+  end_time: any,
+  title: string
+  location: string,
+  owner_name: string,
+  max_members_count: number,
+  current_members_count: number,
+}
 
 export const CalendarComponent = () => {
   const [toggleFilter, setToggleFilter] = useState<string | null>('monthAll');
@@ -23,41 +36,24 @@ export const CalendarComponent = () => {
 
   const [pickDate, setPickDate] = useState<Dayjs | any>(dayjs());
 
-  const [events, setEvents] = useState<Array<{
-    id: number,
-    start_time: any,
-    end_time: any,
-    title: string
-    location: string,
-    owner_name: string,
-    max_members_count: number,
-    current_members_count: number,
-  }>>();
+  const { data: currentUser } = useGetCurrentUser();
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  useEffect(() => {
-    setIsLoading(true);
-    getEvents({
+  const { data: events, isLoading: eventsIsLoading } = useSWR("/events", (url) => fetcher({
+    url: url,
+    method: 'GET',
+    data: {
       year: pickDate.year(),
       month: pickDate.month() + 1,
-    }).then((res) => {
-      setEvents(res.data);
-      setIsLoading(false);
-    })
-  }, [pickDate.year(), pickDate.month()])
+    }
+  }));
 
   const [eventsDay, setEventsDay] = useState<Array<number>>([]);
   useEffect(() => {
     //모든 이벤트의 시작날짜와 끝날짜 사이의 모든 날짜를 구한다.
     const allDays: number[] = [];
-    events && events.forEach((event) => {
-      console.log("event", event)
+    events && events.data.forEach((event: EventProps) => {
       const startDay = dayjs(event.start_time).date();
-      console.log(event.start_time)
-      console.log(startDay)
       const endDay = dayjs(event.end_time).date();
-      console.log(event.end_time)
-      console.log(endDay)
       for (let i = startDay; i <= endDay; i++) {
         allDays.push(i);
       }
@@ -65,15 +61,14 @@ export const CalendarComponent = () => {
     //중복된 날짜를 제거한다.
     const uniqueDays = Array.from(new Set(allDays));
     //중복된 날짜를 제거한 날짜들을 eventsDay에 넣는다.
-
-    console.log(uniqueDays)
+    
     uniqueDays && setEventsDay(uniqueDays);
   }, [events])
 
   function ServerDay(props: PickersDayProps<Dayjs> & { eventsDay?: number[] }) {
     const { eventsDay = [], day, outsideCurrentMonth, ...other } = props;
 
-    const isSelected = eventsDay.indexOf(props.day.date()) >= 0;
+    const isSelected = dayjs().daysInMonth() && eventsDay.indexOf(props.day.date()) >= 0;
 
     return (
       <Badge
@@ -86,7 +81,7 @@ export const CalendarComponent = () => {
     );
   }
 
-  return (
+  return !eventsIsLoading ? (
     <div>
       <ToggleButtonGroup
         value={toggleFilter}
@@ -127,8 +122,8 @@ export const CalendarComponent = () => {
         }}
         onChange={(newValue) => setPickDate(newValue)} renderLoading={() => <DayCalendarSkeleton />} />
 
-      {!isLoading && <div className="flex flex-col space-y-2">
-        {events && events.map((event: any, index: number) => {
+      <div className="flex flex-col space-y-2">
+        {events && events.data.map((event: EventProps, index: number) => {
           return (
             <Link key={index} href={`/events/${event.id}`} className="no-underline text-black">
               <div className={`hover:cursor-pointer hover:font-bold hover:opacity-100 opacity-90 drop-shadow py-2 px-4 flex flex-col justify-between mt-2 text-sm rounded-[5px] ${event.current_members_count >= event.max_members_count ? "bg-[#e57373]" : "bg-[#81c784]"}`}>
@@ -145,8 +140,9 @@ export const CalendarComponent = () => {
           )
         }
         )}
-      </div>}
-
+      </div>
     </div>
+  ) : (
+    <LoadingComp />
   )
 }

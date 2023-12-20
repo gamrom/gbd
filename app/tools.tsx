@@ -16,3 +16,18 @@ export const elapsedTime = (date: number): string => {
 
   return `${start.toLocaleDateString()}`;
 };
+
+export const roleText = (role: string): string => {
+  switch (role) {
+    case 'admin':
+      return '관리자';
+    case 'manager':
+      return '운영진';
+    case 'member':
+      return '회원';
+    case 'guest':
+      return '손님';
+    default:
+      return '';
+  }
+}

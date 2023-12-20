@@ -1,7 +1,7 @@
 import useSWR from 'swr'
 import { fetcher } from "../api";
 
-export const useGetUser = () => {
+export const useGetCurrentUser = () => {
   const currentUser = useSWR('/me',
     (url) => fetcher({
       url: url,

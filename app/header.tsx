@@ -16,6 +16,8 @@ import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
 import { modalStyle } from './style';
 import dayjs from 'dayjs';
+import { useGetCurrentUser } from './hooks/useGetCurrentUser';
+import { roleText } from './tools';
 
 
 
@@ -68,6 +70,8 @@ export const Header = () => {
     }
   }, []);
 
+  const { data: currentUser, isLoading: isLoading } = useGetCurrentUser();
+
   const list = (anchor: any) => (
     <Box
       sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 250 }}
@@ -94,11 +98,22 @@ export const Header = () => {
             </Link>
           </>
         ) : (
-          <ListItemButton onClick={() => signOut()}>
-            <ListItemText>
-              로그아웃
-            </ListItemText>
-          </ListItemButton>
+          <>
+            <ListItemButton onClick={() => signOut()}>
+              <ListItemText>
+                로그아웃
+              </ListItemText>
+            </ListItemButton>
+
+            <ListItem>
+              <ListItemText>
+                이름 : {currentUser && currentUser.data.name}
+              </ListItemText>
+              <ListItemText>
+                등급 : {currentUser && roleText(currentUser.data.role)}
+              </ListItemText>
+            </ListItem>
+          </>
         )}
 
         <Divider flexItem />
@@ -140,13 +155,15 @@ export const Header = () => {
 
         <Divider flexItem />
 
-        <Link href="/admin_page" className="no-underline text-black">
-          <ListItemButton>
-            <ListItemText>
-              회원 관리
-            </ListItemText>
-          </ListItemButton>
-        </Link>
+        {currentUser && currentUser.data.role === ("admin" || "manager") && (
+          <Link href="/admin_page" className="no-underline text-black">
+            <ListItemButton>
+              <ListItemText>
+                회원 관리
+              </ListItemText>
+            </ListItemButton>
+          </Link>
+        )}
       </List>
     </Box>
   );
@@ -167,6 +184,8 @@ export const Header = () => {
     })
   }
 
+
+
   return (
     <div className="mx-auto flex items-center justify-between text-center w-full">
       <div className="flex items-center">
@@ -177,9 +196,13 @@ export const Header = () => {
 
 
       <div key={"right"} className="flex items-center justify-center">
-        <Button onClick={() => setIsModalOpen(true)} variant="contained" size="small" color="secondary" className="mr-4">
-          감보동 지원하기
-        </Button>
+        {
+          currentUser && currentUser.data.role === "guest" && (
+            <Button onClick={() => setIsModalOpen(true)} variant="contained" size="small" color="secondary" className="mr-4">
+              감보동 지원하기
+            </Button>
+          )
+        }
         <MenuIcon onClick={toggleDrawer("right", true)} className="cursor-pointer" />
         <Drawer
           anchor={"right"}
