@@ -39,6 +39,24 @@ AuthAPI.interceptors.request.use(
   }
 );
 
+
+export const fetcher = ({
+  url: url,
+  method: method,
+  data: data,
+}: {
+  url: string,
+  method: string,
+  data?: any,
+}) => {
+  return AuthAPI({
+    url: url,
+    method: method,
+    data: data,
+  })
+}
+
+
 //회원가입
 export const postSignUp = ({ email, name, gender, phone, referrer_path, uid }: { email: string, name: string, gender: string, phone: string, referrer_path: string, uid: string }) => {
   return AuthAPI.post(`/users/sign_up`, {
@@ -112,13 +130,21 @@ export const deleteCancelEvent = ({ event_id: eventId }: { event_id: string }) =
   )
 }
 
+
+
 export const getEventAttendances = ({ event_id: eventId }: { event_id: string }) => {
   return (
     AuthAPI.get(`/events/${eventId}/attendances`)
   )
 }
 
-export const getEvents = ({ year, month }: { year: string, month: string }) => {
+export const getEvents = () => {
+  return (
+    AuthAPI.get(`/events`)
+  )
+}
+
+export const getCurrentMonthEvents = ({ year, month }: { year: string, month: string }) => {
   return (
     AuthAPI.get(`/events`, {
       params: {
@@ -150,18 +176,8 @@ export const deleteEvent = ({ eventId }: { eventId: string }) => {
   )
 }
 
-export const fetcher = ({
-  url: url,
-  method: method,
-  data: data,
-}: {
-  url: string,
-  method: string,
-  data?: any,
-}) => {
-  return AuthAPI({
-    url: url,
-    method: method,
-    data: data,
-  })
+export const getApplyEvent = () => {
+  return (
+    AuthAPI.get(`/my_attended_events`)
+  )
 }

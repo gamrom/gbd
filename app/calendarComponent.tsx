@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
 import Link from 'next/link';
 import dayjs, { Dayjs } from 'dayjs';
-import { getEvents } from './api';
+import { getCurrentMonthEvents, getApplyEvent, getEvents } from './api';
 import { DayCalendarSkeleton } from '@mui/x-date-pickers/DayCalendarSkeleton';
 import { Badge } from '@mui/material';
 import { PickersDay, PickersDayProps } from '@mui/x-date-pickers/PickersDay';
@@ -25,7 +25,11 @@ type EventProps = {
 }
 
 export const CalendarComponent = () => {
-  const [toggleFilter, setToggleFilter] = useState<string | null>('monthAll');
+  const [toggleFilter, setToggleFilter] = useState<string | null>("monthAll");
+  const [pickDate, setPickDate] = useState<Dayjs | any>();
+  const { data: currentUser } = useGetCurrentUser();
+  const [eventsIsLoading, setEventsIsLoading] = useState<boolean>(true);
+  const [eventsDay, setEventsDay] = useState<Array<number>>([]);
 
   const handleFilter = (
     event: React.MouseEvent<HTMLElement>,
@@ -34,24 +38,55 @@ export const CalendarComponent = () => {
     setToggleFilter(newToggle)
   };
 
-  const [pickDate, setPickDate] = useState<Dayjs | any>(dayjs());
-
-  const { data: currentUser } = useGetCurrentUser();
-
-  const { data: events, isLoading: eventsIsLoading } = useSWR("/events", (url) => fetcher({
-    url: url,
-    method: 'GET',
-    data: {
-      year: pickDate.year(),
-      month: pickDate.month() + 1,
+  const [events, setEvents] = useState<EventProps[]>([]);
+  useEffect(() => {
+    debugger
+    if (pickDate !== "") {
+      setToggleFilter("");
+      getCurrentMonthEvents({
+        year: pickDate.year(),
+        month: pickDate.month() + 1,
+      }).then((res) => {
+        //res.data에서 day 가 오늘인 것만 필터
+        // const filteredData = res.data.filter((event: EventProps) => {
+        //   return dayjs(event.start_time).date() === dayjs().date();
+        // })
+        console.log(res.data)
+        setEvents(res.data);
+      })
+    } else {
+      setPickDate("");
+      if (toggleFilter === "monthAll") {
+        setToggleFilter("monthAll");
+        getCurrentMonthEvents({
+          year: String(dayjs().year()),
+          month: String(dayjs().month() + 1),
+        }).then((res) => {
+          setEvents(res.data);
+        })
+      } else if (toggleFilter === "canJoin") {
+        setToggleFilter("canJoin");
+        getEvents().then((res) => {
+          //res.data에서 current_members_count가 max_members_count와 같은 것만 빼고 setEvents
+          const filteredData = res.data.filter((event: EventProps) => {
+            return event.current_members_count === event.max_members_count;
+          })
+          setEvents(filteredData);
+        })
+      } else if (toggleFilter === "alreadyJoin") {
+        setToggleFilter("canJoin");
+        getApplyEvent().then((res) => {
+          setEvents(res.data);
+        })
+      }
     }
-  }));
+    setEventsIsLoading(false);
+  }, [pickDate, toggleFilter])
 
-  const [eventsDay, setEventsDay] = useState<Array<number>>([]);
   useEffect(() => {
     //모든 이벤트의 시작날짜와 끝날짜 사이의 모든 날짜를 구한다.
     const allDays: number[] = [];
-    events && events.data.forEach((event: EventProps) => {
+    events && events.forEach((event: EventProps) => {
       const startDay = dayjs(event.start_time).date();
       const endDay = dayjs(event.end_time).date();
       for (let i = startDay; i <= endDay; i++) {
@@ -96,8 +131,11 @@ export const CalendarComponent = () => {
               <ToggleButton className="w-full text-xs" color="secondary" value="monthAll" aria-label="left aligned">
                 이번달 모든 번개
               </ToggleButton>
-              <ToggleButton className="w-full text-xs" color="secondary" value="alreadyJoin" aria-label="centered">
-                참가중인 번개
+              <ToggleButton className="w-full text-xs" color="secondary" value="canJoin" aria-label="centered">
+                참가 가능한 번개
+              </ToggleButton>
+              <ToggleButton className="w-full text-xs" color="secondary" value="alreadyJoin" aria-label="right aligned">
+                참가 예정인 번개
               </ToggleButton>
             </ToggleButtonGroup>
             <div className="flex items-center justify-center">
@@ -124,10 +162,11 @@ export const CalendarComponent = () => {
             eventsDay,
           } as any,
         }}
-        onChange={(newValue) => setPickDate(newValue)} renderLoading={() => <DayCalendarSkeleton />} />
+        onChange={(newValue) => setPickDate(newValue)} 
+        renderLoading={() => <DayCalendarSkeleton />} />
 
       <div className="flex flex-col space-y-2">
-        {events && events.data.map((event: EventProps, index: number) => {
+        {events && events.map((event: EventProps, index: number) => {
           return (
             <Link key={index} href={`/events/${event.id}`} className="no-underline text-black">
               <div className={`hover:cursor-pointer hover:font-bold hover:opacity-100 opacity-90 drop-shadow py-2 px-4 flex flex-col justify-between mt-2 text-sm rounded-[5px] ${event.current_members_count >= event.max_members_count ? "bg-[#e57373]" : "bg-[#81c784]"}`}>
