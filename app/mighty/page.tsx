@@ -62,6 +62,11 @@ export default function MightyPage() {
       if (values.winPoint >= values.betPoint) {
         //여당승리
         standardPoint = Number(values.winPoint) - Number(values.betPoint) + 2 * (Number(values.betPoint) - 13)
+        if (values.winPoint === 20) {
+          //런
+          standardPoint *= 2;
+        }
+
         if (values.noGiruda) {
           //노기루다
           standardPoint *= 2;
@@ -227,6 +232,10 @@ export default function MightyPage() {
       } else {
         //야당승리
         standardPoint = Number(values.betPoint) - Number(values.winPoint)
+        if (values.winPoint <= 0) {
+          //백런
+          standardPoint *= 2;
+        }
         if (values.noGiruda) {
           //노기루다
           standardPoint *= 2;
