@@ -147,3 +147,9 @@ export const deleteEvent = ({ eventId }: { eventId: string }) => {
     AuthAPI.delete(`/events/${eventId}`)
   )
 }
+
+export const getMe = () => {
+  return (
+    AuthAPI.get(`/me`)
+  )
+}

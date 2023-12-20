@@ -108,7 +108,7 @@ export default function Event({ params }: { params: { event: string } }) {
 
       <div className="mt-4 flex justify-between">
         <div className="flex">
-          {user?.uid === event.owenr_uid && <Button variant="contained" color="error" className="mr-2" onClick={() => {
+          {user?.uid === event.owner_uid && <Button variant="contained" color="error" className="mr-2" onClick={() => {
             Swal.fire({
               title: '정말로 삭제하시겠습니까?',
               text: "삭제하시면 복구할 수 없습니다.",
@@ -124,7 +124,7 @@ export default function Event({ params }: { params: { event: string } }) {
                     icon: 'success',
                     confirmButtonText: '확인',
                   }).then(() => {
-                    window.location.href = '/events'
+                    window.location.href = '/'
                   })
                 })
               }
