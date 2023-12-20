@@ -61,7 +61,7 @@ export const CalendarComponent = () => {
     //중복된 날짜를 제거한다.
     const uniqueDays = Array.from(new Set(allDays));
     //중복된 날짜를 제거한 날짜들을 eventsDay에 넣는다.
-    
+
     uniqueDays && setEventsDay(uniqueDays);
   }, [events])
 
@@ -83,32 +83,36 @@ export const CalendarComponent = () => {
 
   return !eventsIsLoading ? (
     <div>
-      <ToggleButtonGroup
-        value={toggleFilter}
-        exclusive
-        onChange={handleFilter}
-        size="small"
-        className="w-full mt-4"
-      >
-        <ToggleButton className="w-full text-xs" color="secondary" value="monthAll" aria-label="left aligned">
-          이번달 모든 번개
-        </ToggleButton>
-        <ToggleButton className="w-full text-xs" color="secondary" value="alreadyJoin" aria-label="centered">
-          참가중인 번개
-        </ToggleButton>
-      </ToggleButtonGroup>
-
-      <div className="flex items-center justify-center">
-        <Link href={`/events/create?pickDate=${pickDate}`} >
-          <Button
-            variant="contained"
-            className="mt-4 mx-auto text-center"
-            color="success"
-            type="button"
-          >번개 생성</Button>
-        </Link>
-      </div>
-
+      {
+        currentUser && currentUser.data.role !== "guest" && (
+          <>
+            <ToggleButtonGroup
+              value={toggleFilter}
+              exclusive
+              onChange={handleFilter}
+              size="small"
+              className="w-full mt-4"
+            >
+              <ToggleButton className="w-full text-xs" color="secondary" value="monthAll" aria-label="left aligned">
+                이번달 모든 번개
+              </ToggleButton>
+              <ToggleButton className="w-full text-xs" color="secondary" value="alreadyJoin" aria-label="centered">
+                참가중인 번개
+              </ToggleButton>
+            </ToggleButtonGroup>
+            <div className="flex items-center justify-center">
+              <Link href={`/events/create?pickDate=${pickDate}`} >
+                <Button
+                  variant="contained"
+                  className="mt-4 mx-auto text-center"
+                  color="success"
+                  type="button"
+                >번개 생성</Button>
+              </Link>
+            </div>
+          </>
+        )
+      }
 
       <DateCalendar
         value={pickDate}
