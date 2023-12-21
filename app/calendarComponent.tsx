@@ -115,7 +115,7 @@ export const CalendarComponent = () => {
   function ServerDay(props: PickersDayProps<Dayjs> & { callendarEvents?: number[] }) {
     const { callendarEvents = [], day, outsideCurrentMonth, ...other } = props;
 
-    const isSelected = dayjs().daysInMonth() && callendarEvents.indexOf(props.day.date()) >= 0;
+    const isSelected = !props.outsideCurrentMonth && callendarEvents.indexOf(props.day.date()) >= 0;
 
     return (
       <Badge
