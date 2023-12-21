@@ -22,6 +22,7 @@
     "firebase": "^10.7.1",
     "firebase-tools": "^13.0.1",
     "formik": "^2.4.5",
+    "json2csv": "^6.0.0-alpha.2",
     "next": "14.0.3",
     "react": "^18",
     "react-dom": "^18",
