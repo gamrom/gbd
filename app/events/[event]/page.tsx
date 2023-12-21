@@ -12,6 +12,8 @@ import { useGetUser } from "@/app/useGetUser";
 import { elapsedTime } from "@/app/tools";
 import toast, { Toaster } from 'react-hot-toast';
 import Swal from "sweetalert2";
+import { useGetCurrentUser } from "@/app/hooks/useGetCurrentUser";
+import { LoadingComp } from "@/app/loadingComp";
 
 export default function Event({ params }: { params: { event: string } }) {
   const [event, setEvent] = useState<any>(null);
@@ -19,13 +21,33 @@ export default function Event({ params }: { params: { event: string } }) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [canJoin, setCanJoin] = useState(false);
 
-  const joinEvent = () => {
-    postJoinEvent({ event_id: params.event }).then(() => {
-      getEvent({ event_id: params.event }).then((res) => {
-        setEvent(res.data);
-        setCanJoin(false);
+  const { data: currentUser, isLoading: currentUserIsLoading } = useGetCurrentUser();
+
+  useEffect(() => {
+    if (currentUser && attendances) {
+      const userId = currentUser.data.uid;
+      const isJoined = attendances.filter((attendance: any) => {
+        return attendance.user_uid === userId;
       })
-    })
+      if (isJoined.length > 0) {
+        setCanJoin(false);
+      } else {
+        setCanJoin(true);
+      }
+    }
+  }, [attendances, currentUser])
+
+  const joinEvent = () => {
+    if (currentUser?.data.role !== "guest") {
+      postJoinEvent({ event_id: params.event }).then(() => {
+        getEvent({ event_id: params.event }).then((res) => {
+          setEvent(res.data);
+          setCanJoin(false);
+        })
+      })
+    } else {
+      alert("회원만 참가할 수 있습니다.")
+    }
   }
 
   const cancelEvent = () => {
@@ -39,25 +61,13 @@ export default function Event({ params }: { params: { event: string } }) {
     })
   }
 
-  const { user } = useGetUser();
-
-  useEffect(() => {
-    if (user && attendances) {
-      const userId = user?.uid;
-      const isJoined = attendances.filter((attendance: any) => {
-        return attendance.user_uid === userId;
-      })
-      if (isJoined.length > 0) {
-        setCanJoin(false);
-      } else {
-        setCanJoin(true);
-      }
-    }
-  }, [attendances, user])
-
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const openModal = () => {
-    setIsModalOpen(true);
+    if (currentUser?.data.role !== "guest") {
+      setIsModalOpen(true);
+    } else {
+      alert("회원만 참가자를 볼 수 있습니다.")
+    }
   }
 
   useEffect(() => {
@@ -84,7 +94,7 @@ export default function Event({ params }: { params: { event: string } }) {
     toast('번개 복사 완료!')
   }
 
-  return !isLoading && event ? (
+  return !isLoading && !currentUserIsLoading && event ? (
     <div className="flex flex-col px-4 mt-[50px]">
       <div className="flex justify-between">
         <span className="font-bold text-lg">{event?.title}</span>
@@ -108,7 +118,7 @@ export default function Event({ params }: { params: { event: string } }) {
 
       <div className="mt-4 flex justify-between">
         <div className="flex">
-          {user?.uid === event.owner_uid && <Button variant="contained" color="error" className="mr-2" onClick={() => {
+          {currentUser && ((currentUser.data.uid === event.owner_uid) || (currentUser.data.role === ("admin" || "manager"))) && <Button variant="contained" color="error" className="mr-2" onClick={() => {
             Swal.fire({
               title: '정말로 삭제하시겠습니까?',
               text: "삭제하시면 복구할 수 없습니다.",
@@ -130,15 +140,17 @@ export default function Event({ params }: { params: { event: string } }) {
               }
             })
           }}>삭제하기</Button>}
-          <Link href={`/events/${params.event}/edit`}>
-            <Button variant="contained" color="success">수정하기</Button>
-          </Link>
+          {currentUser && ((currentUser.data.uid === event.owner_uid) || (currentUser.data.role === ("admin" || "manager"))) && (
+            <Link href={`/events/${params.event}/edit`}>
+              <Button variant="contained" color="success">수정하기</Button>
+            </Link>
+          )}
         </div>
         <div className="flex items-center">
           <Button variant="contained" onClick={() => openModal()}>
             {event?.current_members_count} / {event?.max_members_count}
           </Button>
-          {user?.uid !== event.owner_uid && (canJoin ? <Button onClick={() => joinEvent()} variant="contained" color="info" className="ml-2">참가하기</Button> : <Button onClick={() => cancelEvent()} variant="contained" color="error" className="ml-2">불참하기</Button>)}
+          {currentUser && currentUser.data.uid !== event.owner_uid && (canJoin ? <Button onClick={() => joinEvent()} variant="contained" color="info" className="ml-2">참가하기</Button> : <Button onClick={() => cancelEvent()} variant="contained" color="error" className="ml-2">불참하기</Button>)}
         </div>
       </div>
 
@@ -165,7 +177,7 @@ export default function Event({ params }: { params: { event: string } }) {
       </Modal>
     </div >
   ) : (
-    <div></div>
+    <LoadingComp />
   )
 }
 

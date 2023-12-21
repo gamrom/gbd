@@ -1,5 +1,7 @@
 import axios from 'axios';
 import { auth } from '../firebase';
+import { url } from 'inspector';
+import useSWR, { SWRConfig } from 'swr'
 
 const AuthAPI = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BACKEND_URL,
@@ -37,8 +39,26 @@ AuthAPI.interceptors.request.use(
   }
 );
 
+
+export const fetcher = ({
+  url: url,
+  method: method,
+  data: data,
+}: {
+  url: string,
+  method: string,
+  data?: any,
+}) => {
+  return AuthAPI({
+    url: url,
+    method: method,
+    data: data,
+  })
+}
+
+
 //회원가입
-export const postSignUp = ({ email, name, gender, phone, referrer_path, uid }: { email: string, name: string, gender: string, phone: string, referrer_path: string, uid: string }) => {
+export const postSignUp = ({ email, name, gender, phone, referrer_path, uid, birth }: { email: string, name: string, gender: string, phone: string, referrer_path: string, uid: string, birth: any }) => {
   return AuthAPI.post(`/users/sign_up`, {
     email: email,
     name: name,
@@ -46,6 +66,7 @@ export const postSignUp = ({ email, name, gender, phone, referrer_path, uid }: {
     phone: phone,
     referrer_path: referrer_path,
     uid: uid,
+    birth: birth,
   });
 };
 
@@ -57,6 +78,7 @@ export const postCreateEvent = ({ title, location, description, start_time, end_
   end_time: any,
   max_members_count: number,
   uid: string,
+  
 }) => {
   return AuthAPI.post('/events', {
     title: title,
@@ -110,13 +132,21 @@ export const deleteCancelEvent = ({ event_id: eventId }: { event_id: string }) =
   )
 }
 
+
+
 export const getEventAttendances = ({ event_id: eventId }: { event_id: string }) => {
   return (
     AuthAPI.get(`/events/${eventId}/attendances`)
   )
 }
 
-export const getEvents = ({ year, month }: { year: string, month: string }) => {
+export const getEvents = () => {
+  return (
+    AuthAPI.get(`/events`)
+  )
+}
+
+export const getCurrentMonthEvents = ({ year, month }: { year: string, month: string }) => {
   return (
     AuthAPI.get(`/events`, {
       params: {
@@ -148,8 +178,8 @@ export const deleteEvent = ({ eventId }: { eventId: string }) => {
   )
 }
 
-export const getMe = () => {
+export const getApplyEvent = () => {
   return (
-    AuthAPI.get(`/me`)
+    AuthAPI.get(`/my_attended_events`)
   )
 }

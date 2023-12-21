@@ -20,6 +20,7 @@ import { visuallyHidden } from '@mui/utils';
 import { useEffect, useState } from 'react';
 import { getUsers, patchRole } from '../api';
 import Button from '@mui/material/Button';
+import { parse } from 'json2csv';
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -229,6 +230,8 @@ export default function EnhancedTable() {
   const [rows, setRows] = React.useState([]);
 
 
+
+
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -310,6 +313,30 @@ export default function EnhancedTable() {
       setRows(res.data);
     })
   }, [])
+
+
+  const downloadCSV = () => {
+    const fields = Object.keys(rows[0]);
+    const csvData = parse(rows, { fields });
+
+    // Specify encoding type (UTF-8)
+    const csvContent = `\uFEFF${csvData}`; // Add BOM character for Excel compatibility
+
+    // Create Blob with specified encoding
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+
+    const link = document.createElement('a');
+    if (link.download !== undefined) {
+      const url = URL.createObjectURL(blob);
+      link.setAttribute('href', url);
+      link.setAttribute('download', 'exported_data.csv');
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  };
+
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -399,6 +426,8 @@ export default function EnhancedTable() {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
+
+      <Button variant="contained" color="primary" onClick={downloadCSV}>액셀 다운로드</Button>
     </Box>
   );
 }

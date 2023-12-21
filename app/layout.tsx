@@ -17,7 +17,11 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+
+
+
   return (
+
     <html lang="ko" id="root">
       <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='ko'>
         <body className={`${inter.className} max-w-[650px] mx-auto px-4 min-h-screen`}>
@@ -27,5 +31,6 @@ export default function RootLayout({
         </body>
       </LocalizationProvider>
     </html>
+
   )
 }

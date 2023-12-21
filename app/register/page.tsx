@@ -16,6 +16,8 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import swal from 'sweetalert2';
 import { postSignUp } from "../api";
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import dayjs from "dayjs";
 
 
 const funnelsArray = [
@@ -39,6 +41,8 @@ export default function Register() {
       }
     })
   }, [])
+
+  const [birth, setBirth] = useState<Date | null>(null);
 
   const formik = useFormik({
     initialValues: {
@@ -67,7 +71,6 @@ export default function Register() {
     }),
     onSubmit: (values) => {
       setIsRegisterProceeding(true);
-
       createUserWithEmailAndPassword(auth, values.email, values.pw).then((authUser) => {
         postSignUp({
           email: values.email,
@@ -76,11 +79,12 @@ export default function Register() {
           phone: values.phone,
           referrer_path: values.funnels,
           uid: authUser.user.uid,
+          birth: birth,
         }).then((res) => {
           signInWithEmailAndPassword(auth, values.email, values.pw)
             .then((userCredential: any) => {
               //승인대기중 페이지로 이동 
-              router.push('/wait_approve');
+              router.push('/');
             })
             .catch((error: any) => {
               swal.fire({
@@ -146,19 +150,19 @@ export default function Register() {
 
   return (
     <form onSubmit={formik.handleSubmit} className="space-y-4 flex flex-col mx-auto mt-[100px] max-w-[360px]">
-      <TextField autoComplete='off' onChange={formik.handleChange} value={formik.values.email} size="small" id="email" label="이메일(아이디)" variant="outlined" />
+      <TextField InputLabelProps={{ shrink: true }} autoComplete='off' onChange={formik.handleChange} value={formik.values.email} size="small" id="email" label="이메일(아이디)" variant="outlined" />
       {formik.touched.email && formik.errors.email ? (
         <div className="!mt-[2px] text-[#FF0000] text-xs">{formik.errors.email}</div>
       ) : null}
-      <TextField autoComplete='off' onChange={formik.handleChange} value={formik.values.pw} size="small" id="pw" label="비밀번호" variant="outlined" type="password" placeholder="최소 8자 이상" />
+      <TextField InputLabelProps={{ shrink: true }} autoComplete='off' onChange={formik.handleChange} value={formik.values.pw} size="small" id="pw" label="비밀번호" variant="outlined" type="password" placeholder="최소 8자 이상" />
       {formik.touched.pw && formik.errors.pw ? (
         <div className="!mt-[2px] text-[#FF0000] text-xs">{formik.errors.pw}</div>
       ) : null}
-      <TextField autoComplete='off' onChange={formik.handleChange} value={formik.values.pwConfirm} size="small" id="pwConfirm" label="비밀번호 확인" variant="outlined" type="password" />
+      <TextField InputLabelProps={{ shrink: true }} autoComplete='off' onChange={formik.handleChange} value={formik.values.pwConfirm} size="small" id="pwConfirm" label="비밀번호 확인" variant="outlined" type="password" />
       {formik.touched.pwConfirm && formik.errors.pwConfirm ? (
         <div className="!mt-[2px] text-[#FF0000] text-xs">{formik.errors.pwConfirm}</div>
       ) : null}
-      <TextField autoComplete='off' onChange={formik.handleChange} value={formik.values.name} size="small" id="name" label="이름" variant="outlined" placeholder="본명을 입력해주세요." />
+      <TextField InputLabelProps={{ shrink: true }} autoComplete='off' onChange={formik.handleChange} value={formik.values.name} size="small" id="name" label="이름" variant="outlined" placeholder="본명을 입력해주세요." />
       {formik.touched.name && formik.errors.name ? (
         <div className="!mt-[2px] text-[#FF0000] text-xs">{formik.errors.name}</div>
       ) : null}
@@ -179,8 +183,30 @@ export default function Register() {
       {formik.touched.gender && formik.errors.gender ? (
         <div className="!mt-[2px] text-[#FF0000] text-xs">{formik.errors.gender}</div>
       ) : null}
-      {/* 생년월일 */}
-      <TextField autoComplete='off' onChange={formik.handleChange} value={formik.values.phone} size="small" id="phone" label="휴대폰 번호" variant="outlined" placeholder="숫자만 입력해주세요 ex)00011116666" />
+      <DatePicker
+        value={birth}
+        onChange={(newValue) => {
+
+          //만약 birth가 오늘을 기준으로 만 20 ~ 만 35세 사이가 아니라면
+          //회원가입 불가
+          const today = dayjs();
+          const minBirth = today.subtract(35, 'year');
+          const maxBirth = today.subtract(20, 'year');
+          if (newValue === null || newValue < minBirth.toDate() || newValue > maxBirth.toDate()) {
+            swal.fire({
+              title: '회원가입 실패',
+              text: '만 20세 ~ 만 35세 사이만 가입 가능합니다.',
+              icon: 'error',
+              confirmButtonText: '확인',
+            })
+            setBirth(null)
+          } else {
+            setBirth(newValue)
+          }
+        }
+        }
+      />
+      <TextField InputLabelProps={{ shrink: true }} autoComplete='off' onChange={formik.handleChange} value={formik.values.phone} size="small" id="phone" label="휴대폰 번호" variant="outlined" placeholder="숫자만 입력해주세요 ex)00011116666" />
       {formik.touched.phone && formik.errors.phone ? (
         <div className="!mt-[2px] text-[#FF0000] text-xs">{formik.errors.phone}</div>
       ) : null}
