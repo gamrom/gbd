@@ -26,7 +26,7 @@ type EventProps = {
 
 export const CalendarComponent = () => {
   const [toggleFilter, setToggleFilter] = useState<string | null>("monthAll");
-  const [pickDate, setPickDate] = useState<Dayjs | any>();
+  const [pickDate, setPickDate] = useState<Dayjs | any>(null);
   const { data: currentUser } = useGetCurrentUser();
   const [eventsIsLoading, setEventsIsLoading] = useState<boolean>(true);
   const [eventsDay, setEventsDay] = useState<Array<number>>([]);
@@ -39,71 +39,83 @@ export const CalendarComponent = () => {
   };
 
   const [events, setEvents] = useState<EventProps[]>([]);
+  const [callendarEvents, setCallendarEvents] = useState<Array<number>>([]);
   useEffect(() => {
-    debugger
-    if (pickDate !== "") {
+    if (pickDate) {
       setToggleFilter("");
       getCurrentMonthEvents({
-        year: pickDate.year(),
-        month: pickDate.month() + 1,
+        year: String(dayjs(pickDate).year()),
+        month: String(dayjs(pickDate).month() + 1),
       }).then((res) => {
-        //res.data에서 day 가 오늘인 것만 필터
-        // const filteredData = res.data.filter((event: EventProps) => {
-        //   return dayjs(event.start_time).date() === dayjs().date();
-        // })
-        console.log(res.data)
+        console.log(res.data);
+        const allEvents = res.data;
+        // 선택한 날짜가 시작시간과 끝시간 사이에 있는 모든 이벤트 필터
+        const filteredData = allEvents.filter((event: EventProps) => {
+          const startDate = dayjs(event.start_time);
+          const endDate = dayjs(event.end_time);
+          return dayjs(pickDate).isAfter(startDate) && dayjs(pickDate).isBefore(endDate);
+        });
+
+        console.log(filteredData);
+        setEvents(filteredData);
+      });
+    }
+  }, [pickDate])
+
+  useEffect(() => {
+    // setPickDate("");
+    if (toggleFilter === "monthAll") {
+      setToggleFilter("monthAll");
+      getCurrentMonthEvents({
+        year: String(dayjs().year()),
+        month: String(dayjs().month() + 1),
+      }).then((res) => {
         setEvents(res.data);
       })
-    } else {
-      setPickDate("");
-      if (toggleFilter === "monthAll") {
-        setToggleFilter("monthAll");
-        getCurrentMonthEvents({
-          year: String(dayjs().year()),
-          month: String(dayjs().month() + 1),
-        }).then((res) => {
-          setEvents(res.data);
+    } else if (toggleFilter === "canJoin") {
+      setToggleFilter("canJoin");
+      getEvents().then((res) => {
+        //res.data에서 current_members_count가 max_members_count와 같은 것만 빼고 setEvents
+        const filteredData = res.data.filter((event: EventProps) => {
+          return event.current_members_count === event.max_members_count;
         })
-      } else if (toggleFilter === "canJoin") {
-        setToggleFilter("canJoin");
-        getEvents().then((res) => {
-          //res.data에서 current_members_count가 max_members_count와 같은 것만 빼고 setEvents
-          const filteredData = res.data.filter((event: EventProps) => {
-            return event.current_members_count === event.max_members_count;
-          })
-          setEvents(filteredData);
-        })
-      } else if (toggleFilter === "alreadyJoin") {
-        setToggleFilter("canJoin");
-        getApplyEvent().then((res) => {
-          setEvents(res.data);
-        })
-      }
+        setEvents(filteredData);
+      })
+    } else if (toggleFilter === "alreadyJoin") {
+      setToggleFilter("canJoin");
+      getApplyEvent().then((res) => {
+        setEvents(res.data);
+      })
     }
     setEventsIsLoading(false);
-  }, [pickDate, toggleFilter])
+  }, [toggleFilter])
 
   useEffect(() => {
     //모든 이벤트의 시작날짜와 끝날짜 사이의 모든 날짜를 구한다.
     const allDays: number[] = [];
-    events && events.forEach((event: EventProps) => {
-      const startDay = dayjs(event.start_time).date();
-      const endDay = dayjs(event.end_time).date();
-      for (let i = startDay; i <= endDay; i++) {
-        allDays.push(i);
-      }
+    getCurrentMonthEvents({
+      year: String(dayjs().year()),
+      month: String(dayjs().month() + 1),
+    }).then((res) => {
+      const allEvents = res.data;
+      allEvents && allEvents.forEach((event: EventProps) => {
+        const startDay = dayjs(event.start_time).date();
+        const endDay = dayjs(event.end_time).date();
+        for (let i = startDay; i <= endDay; i++) {
+          allDays.push(i);
+        }
+      })
+      //중복된 날짜를 제거한다.
+      const uniqueDays = Array.from(new Set(allDays));
+      //중복된 날짜를 제거한 날짜들을 eventsDay에 넣는다.
+      setCallendarEvents(uniqueDays);
     })
-    //중복된 날짜를 제거한다.
-    const uniqueDays = Array.from(new Set(allDays));
-    //중복된 날짜를 제거한 날짜들을 eventsDay에 넣는다.
+  }, [])
 
-    uniqueDays && setEventsDay(uniqueDays);
-  }, [events])
+  function ServerDay(props: PickersDayProps<Dayjs> & { callendarEvents?: number[] }) {
+    const { callendarEvents = [], day, outsideCurrentMonth, ...other } = props;
 
-  function ServerDay(props: PickersDayProps<Dayjs> & { eventsDay?: number[] }) {
-    const { eventsDay = [], day, outsideCurrentMonth, ...other } = props;
-
-    const isSelected = dayjs().daysInMonth() && eventsDay.indexOf(props.day.date()) >= 0;
+    const isSelected = dayjs().daysInMonth() && callendarEvents.indexOf(props.day.date()) >= 0;
 
     return (
       <Badge
@@ -159,10 +171,10 @@ export const CalendarComponent = () => {
         }}
         slotProps={{
           day: {
-            eventsDay,
+            callendarEvents,
           } as any,
         }}
-        onChange={(newValue) => setPickDate(newValue)} 
+        onChange={(newValue) => setPickDate(newValue)}
         renderLoading={() => <DayCalendarSkeleton />} />
 
       <div className="flex flex-col space-y-2">
