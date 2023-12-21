@@ -58,7 +58,7 @@ export const fetcher = ({
 
 
 //회원가입
-export const postSignUp = ({ email, name, gender, phone, referrer_path, uid }: { email: string, name: string, gender: string, phone: string, referrer_path: string, uid: string }) => {
+export const postSignUp = ({ email, name, gender, phone, referrer_path, uid, birth }: { email: string, name: string, gender: string, phone: string, referrer_path: string, uid: string, birth: any }) => {
   return AuthAPI.post(`/users/sign_up`, {
     email: email,
     name: name,
@@ -66,6 +66,7 @@ export const postSignUp = ({ email, name, gender, phone, referrer_path, uid }: {
     phone: phone,
     referrer_path: referrer_path,
     uid: uid,
+    birth: birth,
   });
 };
 
@@ -77,6 +78,7 @@ export const postCreateEvent = ({ title, location, description, start_time, end_
   end_time: any,
   max_members_count: number,
   uid: string,
+  
 }) => {
   return AuthAPI.post('/events', {
     title: title,
