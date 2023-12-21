@@ -49,12 +49,12 @@ export const CalendarComponent = () => {
       }).then((res) => {
         console.log(res.data);
         const allEvents = res.data;
-        // 선택한 날짜가 시작시간과 끝시간 사이에 있는 모든 이벤트 필터
+        // 선택한 날짜가 시작날짜의 오전 0시 이상, 끝날짜의 오후 11시 59분 이하인 이벤트들을 뽑는다.
         const filteredData = allEvents.filter((event: EventProps) => {
-          const startDate = dayjs(event.start_time);
-          const endDate = dayjs(event.end_time);
-          return dayjs(pickDate).isAfter(startDate) && dayjs(pickDate).isBefore(endDate);
-        });
+          const startTime = dayjs(event.start_time);
+          const endTime = dayjs(event.end_time);
+          return startTime.isBefore(pickDate.endOf('day')) && endTime.isAfter(pickDate.startOf('day'));
+        })
 
         console.log(filteredData);
         setEvents(filteredData);
