@@ -18,10 +18,13 @@ import { modalStyle } from './style';
 import dayjs from 'dayjs';
 import { useGetCurrentUser } from './hooks/useGetCurrentUser';
 import { roleText } from './tools';
+import Swal from 'sweetalert2';
+import { useRouter } from 'next/navigation';
 
 
 
 export const Header = () => {
+  const router = useRouter();
   const [isLogin, setIsLogin] = useState<boolean>(false);
 
   const [state, setState] = useState({
@@ -99,7 +102,19 @@ export const Header = () => {
           </>
         ) : (
           <>
-            <ListItemButton onClick={() => signOut()}>
+            <ListItemButton onClick={() => {
+              Swal.fire({
+                title: '로그아웃 하시겠습니까?',
+                showCancelButton: true,
+                confirmButtonText: `로그아웃`,
+                cancelButtonText: `취소`,
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  signOut();
+                  router.push('/');
+                }
+              })
+            }}>
               <ListItemText>
                 로그아웃
               </ListItemText>

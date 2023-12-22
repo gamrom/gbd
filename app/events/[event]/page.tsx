@@ -56,7 +56,7 @@ export default function Event({ params }: { params: { event: string } }) {
         setEvent(res.data);
         setCanJoin(true);
       }).catch((err) => {
-        console.log(err);
+        alert("참가 취소에 실패했습니다.")
       })
     })
   }

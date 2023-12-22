@@ -70,59 +70,72 @@ export default function Register() {
       confirmRule: Yup.boolean().oneOf([true], '필수 동의사항입니다.').required('필수 동의사항입니다.'),
     }),
     onSubmit: (values) => {
-      setIsRegisterProceeding(true);
-      createUserWithEmailAndPassword(auth, values.email, values.pw).then((authUser) => {
-        postSignUp({
-          email: values.email,
-          name: values.name,
-          gender: values.gender,
-          phone: values.phone,
-          referrer_path: values.funnels,
-          uid: authUser.user.uid,
-          birth: birth,
-        }).then((res) => {
-          signInWithEmailAndPassword(auth, values.email, values.pw)
-            .then((userCredential: any) => {
-              //승인대기중 페이지로 이동 
-              router.push('/');
-            })
-            .catch((error: any) => {
-              swal.fire({
-                title: '회원가입 성공 && 로그인 실패',
-                text: '다시 로그인 해주세요. 계속 반복되면 감롬에게 문의주세요.',
-                icon: 'error',
-                confirmButtonText: '확인',
-                willClose: () => {
-                  router.push('/login');
-                }
-              })
-            });
+      const today = dayjs();
+      const minBirth = today.subtract(35, 'year');
+      const maxBirth = today.subtract(20, 'year');
+      if (birth === null || birth < minBirth.toDate() || birth > maxBirth.toDate()) {
+        swal.fire({
+          title: '생년월일을 다시 확인해주세요.',
+          text: '만 20세 ~ 만 35세 사이만 가입 가능합니다.',
+          icon: 'error',
+          confirmButtonText: '확인',
         })
+        setBirth(null)
+      } else {
+        setIsRegisterProceeding(true);
+        createUserWithEmailAndPassword(auth, values.email, values.pw).then((authUser) => {
+          postSignUp({
+            email: values.email,
+            name: values.name,
+            gender: values.gender,
+            phone: values.phone,
+            referrer_path: values.funnels,
+            uid: authUser.user.uid,
+            birth: birth,
+          }).then((res) => {
+            signInWithEmailAndPassword(auth, values.email, values.pw)
+              .then((userCredential: any) => {
+                //승인대기중 페이지로 이동 
+                router.push('/');
+              })
+              .catch((error: any) => {
+                swal.fire({
+                  title: '회원가입 성공 && 로그인 실패',
+                  text: '다시 로그인 해주세요. 계속 반복되면 감롬에게 문의주세요.',
+                  icon: 'error',
+                  confirmButtonText: '확인',
+                  willClose: () => {
+                    router.push('/login');
+                  }
+                })
+              });
+          })
 
-      }).catch((error) => {
-        if (error.code === "auth/email-already-in-use") {
-          swal.fire({
-            title: '회원가입 실패',
-            text: '이미 존재하는 아이디입니다.',
-            icon: 'error',
-            confirmButtonText: '확인',
-            willClose: () => {
-              setIsRegisterProceeding(false);
-            }
-          })
-        } else {
-          swal.fire({
-            title: '회원가입 실패',
-            text: '다시 시도해주세요. 계속 반복되면 감롬에게 문의주세요.',
-            icon: 'error',
-            confirmButtonText: '확인',
-            willClose: () => {
-              setIsRegisterProceeding(false);
-            }
-          })
-        }
-      })
-    },
+        }).catch((error) => {
+          if (error.code === "auth/email-already-in-use") {
+            swal.fire({
+              title: '회원가입 실패',
+              text: '이미 존재하는 아이디입니다.',
+              icon: 'error',
+              confirmButtonText: '확인',
+              willClose: () => {
+                setIsRegisterProceeding(false);
+              }
+            })
+          } else {
+            swal.fire({
+              title: '회원가입 실패',
+              text: '다시 시도해주세요. 계속 반복되면 감롬에게 문의주세요.',
+              icon: 'error',
+              confirmButtonText: '확인',
+              willClose: () => {
+                setIsRegisterProceeding(false);
+              }
+            })
+          }
+        })
+      }
+    }
   })
 
   const [funnels, setFunnels] = useState<string>('');
@@ -151,6 +164,7 @@ export default function Register() {
   return (
     <form onSubmit={formik.handleSubmit} className="space-y-4 flex flex-col mx-auto mt-[100px] max-w-[360px]">
       <TextField InputLabelProps={{ shrink: true }} autoComplete='off' onChange={formik.handleChange} value={formik.values.email} size="small" id="email" label="이메일(아이디)" variant="outlined" />
+      <div className="text-xs text-[#999999]">이메일을 이용하여 비밀번호를 찾을 수 있으니, 실제 존재하는 메일을 사용해주세요.</div>
       {formik.touched.email && formik.errors.email ? (
         <div className="!mt-[2px] text-[#FF0000] text-xs">{formik.errors.email}</div>
       ) : null}
@@ -186,7 +200,6 @@ export default function Register() {
       <DatePicker
         value={birth}
         onChange={(newValue) => {
-
           //만약 birth가 오늘을 기준으로 만 20 ~ 만 35세 사이가 아니라면
           //회원가입 불가
           const today = dayjs();

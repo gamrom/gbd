@@ -89,11 +89,9 @@ export default function PatchEvent({ params }: { params: { event: string } }) {
           confirmButtonText: '확인',
         }).then(() => {
           location.href = `/events/${params.event}`
-        }).catch((error) => {
-          console.log(error);
         })
       }).catch((error) => {
-        console.log(error);
+        alert("일정 수정에 실패했습니다.")
       })
     }
   }

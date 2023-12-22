@@ -68,7 +68,6 @@ export default function CreateEvent() {
           max_members_count: values.max_members_count,
           uid: values.uid,
         }).then((res) => {
-          console.log(res.data);
           window.location.href = `/events/${res.data.id}`;
           // pushDiscord({
           //   text: `새로운 번개가 생성되었습니다. \n 제목: ${values.title} \n 장소: ${values.location} \n 설명: ${values.description} \n 시작시간: ${values.start_time} \n 종료시간: ${values.end_time} \n 최대인원: ${values.max_members_count} \n 호스트: ${values.owner_name}`
