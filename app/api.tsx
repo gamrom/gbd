@@ -78,7 +78,7 @@ export const postCreateEvent = ({ title, location, description, start_time, end_
   end_time: any,
   max_members_count: number,
   uid: string,
-  
+
 }) => {
   return AuthAPI.post('/events', {
     title: title,
@@ -181,5 +181,11 @@ export const deleteEvent = ({ eventId }: { eventId: string }) => {
 export const getApplyEvent = () => {
   return (
     AuthAPI.get(`/my_attended_events`)
+  )
+}
+
+export const getMe = () => {
+  return (
+    AuthAPI.get(`/me`)
   )
 }
