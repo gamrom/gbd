@@ -9,6 +9,7 @@ import { Header } from './header'
 import 'dayjs/locale/ko'
 
 import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -26,6 +27,7 @@ export default function RootLayout({
         <body className={`${inter.className} max-w-[650px] mx-auto px-4 min-h-screen`}>
           <Header />
           {children}
+          <SpeedInsights />
           <Analytics />
         </body>
       </LocalizationProvider>
