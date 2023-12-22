@@ -26,9 +26,7 @@ export default function FindPwPage() {
         })
         .catch((error) => {
           //아이디 틀렸을 경우 체크해야함
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          console.log(errorCode, errorMessage)
+          alert("문제가 발송해 이메일 발송에 실패했습니다. 관리자에게 문의해주세요.")
         });
     },
 

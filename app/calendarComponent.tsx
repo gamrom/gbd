@@ -8,8 +8,6 @@ import { getCurrentMonthEvents, getApplyEvent, getEvents } from './api';
 import { DayCalendarSkeleton } from '@mui/x-date-pickers/DayCalendarSkeleton';
 import { Badge } from '@mui/material';
 import { PickersDay, PickersDayProps } from '@mui/x-date-pickers/PickersDay';
-import useSWR from 'swr'
-import { fetcher } from "./api";
 import { LoadingComp } from './loadingComp';
 import { useGetCurrentUser } from './hooks/useGetCurrentUser';
 
@@ -67,8 +65,8 @@ export const CalendarComponent = () => {
     if (toggleFilter === "monthAll") {
       setToggleFilter("monthAll");
       getCurrentMonthEvents({
-        year: String(dayjs().year()),
-        month: String(dayjs().month() + 1),
+        year: pickDate ? String(pickDate.year()) : String(dayjs().year()),
+        month: pickDate ? String(pickDate.month() + 1) : String(dayjs().month() + 1),
       }).then((res) => {
         setEvents(res.data);
       })
@@ -88,14 +86,14 @@ export const CalendarComponent = () => {
       })
     }
     setEventsIsLoading(false);
-  }, [toggleFilter])
+  }, [toggleFilter, pickDate])
 
   useEffect(() => {
     //모든 이벤트의 시작날짜와 끝날짜 사이의 모든 날짜를 구한다.
     const allDays: number[] = [];
     getCurrentMonthEvents({
-      year: String(dayjs().year()),
-      month: String(dayjs().month() + 1),
+      year: pickDate ? String(pickDate.year()) : String(dayjs().year()),
+      month: pickDate ? String(pickDate.month() + 1) : String(dayjs().month() + 1),
     }).then((res) => {
       const allEvents = res.data;
       allEvents && allEvents.forEach((event: EventProps) => {
@@ -110,7 +108,7 @@ export const CalendarComponent = () => {
       //중복된 날짜를 제거한 날짜들을 eventsDay에 넣는다.
       setCallendarEvents(uniqueDays);
     })
-  }, [])
+  }, [pickDate])
 
   function ServerDay(props: PickersDayProps<Dayjs> & { callendarEvents?: number[] }) {
     const { callendarEvents = [], day, outsideCurrentMonth, ...other } = props;
@@ -130,37 +128,45 @@ export const CalendarComponent = () => {
 
   return !eventsIsLoading ? (
     <div>
+      <ToggleButtonGroup
+        value={toggleFilter}
+        exclusive
+        onChange={handleFilter}
+        size="small"
+        className="w-full mt-4"
+      >
+        <ToggleButton className="w-full text-xs" color="secondary" value="monthAll" aria-label="left aligned">
+          이번달 모든 번개
+        </ToggleButton>
+        {
+          currentUser && currentUser.data.role !== "guest" && (
+            <ToggleButton className="w-full text-xs" color="secondary" value="canJoin" aria-label="centered">
+              참가 가능한 번개
+            </ToggleButton>
+          )
+        }
+
+        {
+          currentUser && currentUser.data.role !== "guest" && (
+            <ToggleButton className="w-full text-xs" color="secondary" value="alreadyJoin" aria-label="right aligned">
+              참가 예정인 번개
+            </ToggleButton>
+          )
+        }
+      </ToggleButtonGroup>
+
       {
         currentUser && currentUser.data.role !== "guest" && (
-          <>
-            <ToggleButtonGroup
-              value={toggleFilter}
-              exclusive
-              onChange={handleFilter}
-              size="small"
-              className="w-full mt-4"
-            >
-              <ToggleButton className="w-full text-xs" color="secondary" value="monthAll" aria-label="left aligned">
-                이번달 모든 번개
-              </ToggleButton>
-              <ToggleButton className="w-full text-xs" color="secondary" value="canJoin" aria-label="centered">
-                참가 가능한 번개
-              </ToggleButton>
-              <ToggleButton className="w-full text-xs" color="secondary" value="alreadyJoin" aria-label="right aligned">
-                참가 예정인 번개
-              </ToggleButton>
-            </ToggleButtonGroup>
-            <div className="flex items-center justify-center">
-              <Link href={`/events/create?pickDate=${pickDate}`} >
-                <Button
-                  variant="contained"
-                  className="mt-4 mx-auto text-center"
-                  color="success"
-                  type="button"
-                >번개 생성</Button>
-              </Link>
-            </div>
-          </>
+          <div className="flex items-center justify-center">
+            <Link href={`/events/create?pickDate=${pickDate}`} >
+              <Button
+                variant="contained"
+                className="mt-4 mx-auto text-center"
+                color="success"
+                type="button"
+              >번개 생성</Button>
+            </Link>
+          </div>
         )
       }
 
@@ -174,7 +180,11 @@ export const CalendarComponent = () => {
             callendarEvents,
           } as any,
         }}
-        onChange={(newValue) => setPickDate(newValue)}
+        onChange={(newValue) => {
+          setToggleFilter("");
+          setPickDate(newValue)
+        }}
+        onMonthChange={(newValue) => setPickDate(newValue)}
         renderLoading={() => <DayCalendarSkeleton />} />
 
       <div className="flex flex-col space-y-2">

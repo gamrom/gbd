@@ -225,12 +225,9 @@ export default function EnhancedTable() {
   const [orderBy, setOrderBy] = React.useState('calories');
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(50);
 
   const [rows, setRows] = React.useState([]);
-
-
-
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -307,13 +304,11 @@ export default function EnhancedTable() {
     }
   };
 
-
   useEffect(() => {
     getUsers().then((res) => {
       setRows(res.data);
     })
   }, [])
-
 
   const downloadCSV = () => {
     const fields = Object.keys(rows[0]);
@@ -417,7 +412,7 @@ export default function EnhancedTable() {
           </Table>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[5, 25, 100]}
+          rowsPerPageOptions={[50, 100]}
           component="div"
           count={rows.length}
           rowsPerPage={rowsPerPage}

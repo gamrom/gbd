@@ -18,10 +18,13 @@ import { modalStyle } from './style';
 import dayjs from 'dayjs';
 import { useGetCurrentUser } from './hooks/useGetCurrentUser';
 import { roleText } from './tools';
+import Swal from 'sweetalert2';
+import { useRouter } from 'next/navigation';
 
 
 
 export const Header = () => {
+  const router = useRouter();
   const [isLogin, setIsLogin] = useState<boolean>(false);
 
   const [state, setState] = useState({
@@ -60,7 +63,7 @@ export const Header = () => {
           const minutes = Math.floor((remainingTime % (60 * 60)) / 60);
           const seconds = remainingTime % 60;
 
-          setCountdown(`남은 시간은 ${days}일 ${hours}시간 ${minutes}분 ${seconds}초`);
+          setCountdown(`${days}일 ${hours}시간 ${minutes}분 ${seconds}초`);
         }
       }, 1000);
 
@@ -99,20 +102,33 @@ export const Header = () => {
           </>
         ) : (
           <>
-            <ListItemButton onClick={() => signOut()}>
+            <ListItemButton onClick={() => {
+              Swal.fire({
+                title: '로그아웃 하시겠습니까?',
+                showCancelButton: true,
+                confirmButtonText: `로그아웃`,
+                cancelButtonText: `취소`,
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  signOut();
+                }
+              }).finally(() => {
+                location.reload();
+              })
+            }}>
               <ListItemText>
                 로그아웃
               </ListItemText>
             </ListItemButton>
 
-            <ListItem>
-              <ListItemText>
-                이름 : {currentUser && currentUser.data.name}
-              </ListItemText>
-              <ListItemText>
-                등급 : {currentUser && roleText(currentUser.data.role)}
-              </ListItemText>
-            </ListItem>
+            <Divider flexItem />
+            <ListItemText className="px-4">
+              이름 : {currentUser && currentUser.data.name}
+            </ListItemText>
+            <ListItemText className="px-4">
+              등급 : {currentUser && roleText(currentUser.data.role)}
+            </ListItemText>
+
           </>
         )}
 
@@ -234,10 +250,10 @@ export const Header = () => {
             )}
 
             {!canJoin && (
-              <div className="flex flex-col">
-                <div>지원 기간이 아닙니다.</div>
+              <div className="flex flex-col items-center justify-center">
+                <div className="font-bold text-lg mb-2">지원 기간이 아닙니다.</div>
                 <div>매달 마지막 7일 동안 지원이 가능합니다.</div>
-                {countdown && <div>지원 가능까지 {countdown} 남았습니다.</div>}
+                {countdown && <div className="flex items-center justify-center">지원 가능까지 남은시간 : {countdown}</div>}
               </div>
             )}
 
