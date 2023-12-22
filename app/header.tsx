@@ -111,8 +111,9 @@ export const Header = () => {
               }).then((result) => {
                 if (result.isConfirmed) {
                   signOut();
-                  router.push('/');
                 }
+              }).finally(() => {
+                location.reload();
               })
             }}>
               <ListItemText>

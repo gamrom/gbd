@@ -154,16 +154,21 @@ export const CalendarComponent = () => {
           )
         }
       </ToggleButtonGroup>
-      <div className="flex items-center justify-center">
-        <Link href={`/events/create?pickDate=${pickDate}`} >
-          <Button
-            variant="contained"
-            className="mt-4 mx-auto text-center"
-            color="success"
-            type="button"
-          >번개 생성</Button>
-        </Link>
-      </div>
+
+      {
+        currentUser && currentUser.data.role !== "guest" && (
+          <div className="flex items-center justify-center">
+            <Link href={`/events/create?pickDate=${pickDate}`} >
+              <Button
+                variant="contained"
+                className="mt-4 mx-auto text-center"
+                color="success"
+                type="button"
+              >번개 생성</Button>
+            </Link>
+          </div>
+        )
+      }
 
       <DateCalendar
         value={pickDate}

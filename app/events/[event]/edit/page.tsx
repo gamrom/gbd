@@ -1,25 +1,20 @@
 'use client';
-import { Box, Button, Modal, TextField } from "@mui/material";
-import { useFormik } from "formik";
-import { DateTimePicker } from "@mui/x-date-pickers";
+import { Box, Button, TextField } from "@mui/material";
 import { getActiveUsers, patchEvent, getEvent } from "../../../api";
-import { useSearchParams } from "next/navigation";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import * as Yup from 'yup';
 import Swal from 'sweetalert2';
 import Link from "next/link";
 import NativeSelect from '@mui/material/NativeSelect';
 import { LoadingComp } from "@/app/loadingComp";
 import { DatePickerComp } from "./DatePickerComp";
-
+import { useGetCurrentUser } from "@/app/hooks/useGetCurrentUser";
 
 export default function PatchEvent({ params }: { params: { event: string } }) {
   const [event, setEvent] = useState<any>({});
+  const { data: currentUser, isLoading: isLoading } = useGetCurrentUser();
 
   useEffect(() => {
     getEvent({ event_id: params.event }).then((res) => {
@@ -96,35 +91,55 @@ export default function PatchEvent({ params }: { params: { event: string } }) {
     }
   }
 
+
+  useEffect(() => {
+    if (currentUser && currentUser.data.role !== ("manager" || "admin")) {
+      setEvent({
+        ...event,
+        uid: currentUser.data.uid,
+      })
+    }
+  }, [currentUser])
+
+
   return event ? (
     <div className="flex flex-col space-y-4">
       <div className="font-bold text-lg">일정 수정</div>
       <TextField InputLabelProps={{ shrink: true }} name="title" value={event.title} onChange={(e) => setEvent({ ...event, title: e.target.value })} autoComplete='off' label="일정 제목" variant="outlined" />
       <TextField InputLabelProps={{ shrink: true }} name="location" value={event.location} onChange={(e) => setEvent({ ...event, location: e.target.value })} autoComplete='off' label="일정 장소" variant="outlined" />
-      {/* <TextField name="owner_name" value={event.owner_name} onChange={formik.handleChange} autoComplete='off' label="벙주/호스트" variant="outlined" defaultValue="김은식" /> */}
-      <Box sx={{ minWidth: 120 }}>
-        <FormControl fullWidth>
-          <InputLabel shrink htmlFor="owner_uid" variant="standard">벙주</InputLabel>
 
-          <NativeSelect
-            name="uid"
-            value={event.uid}
-            onChange={(e) => {
-              setEvent({ ...event, uid: e.target.value })
-            }}
-            inputProps={{
-              name: 'uid',
-              id: 'owner_uid',
-            }}
-          >
-            {activeUsers.map((user: any) => {
-              return (
-                user.uid === event.owner_uid ? <option key={user.uid} value={user.uid} selected>{user.name}</option> : <option key={user.uid} value={user.uid}>{user.name}</option>
-              )
-            })}
-          </NativeSelect>
-        </FormControl>
-      </Box>
+
+
+      {
+        currentUser &&
+        ((currentUser.data.role === ("manager" || "admin")) ? (
+          <Box sx={{ minWidth: 120 }}>
+            <FormControl fullWidth>
+              <InputLabel shrink htmlFor="owner_uid" variant="standard">벙주</InputLabel>
+
+              <NativeSelect
+                name="uid"
+                value={event.uid}
+                onChange={(e) => {
+                  setEvent({ ...event, uid: e.target.value })
+                }}
+                inputProps={{
+                  name: 'uid',
+                  id: 'owner_uid',
+                }}
+              >
+                {activeUsers.map((user: any) => {
+                  return (
+                    user.uid === event.owner_uid ? <option key={user.uid} value={user.uid} selected>{user.name}</option> : <option key={user.uid} value={user.uid}>{user.name}</option>
+                  )
+                })}
+              </NativeSelect>
+            </FormControl>
+          </Box>
+        ) : (
+          <TextField disabled defaultValue={event.owner_name} autoComplete='off' label="벙주/호스트" variant="outlined" />
+        ))}
+
       <TextField InputLabelProps={{ shrink: true }} name="description" value={event.description} onChange={
         (e) => setEvent({ ...event, description: e.target.value })
       } autoComplete='off' label="일정 내용" variant="outlined" multiline placeholder='번개 상세한 설명을 적어주세요.' />

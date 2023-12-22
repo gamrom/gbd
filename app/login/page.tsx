@@ -11,17 +11,7 @@ import { useEffect } from "react";
 import Swal from "sweetalert2";
 
 export default function Login() {
-
-  useEffect(() => {
-    auth.onAuthStateChanged((user) => {
-      if (user) {
-        router.push('/')
-      }
-    })
-  }, [])
-
   const router = useRouter();
-
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -32,12 +22,8 @@ export default function Login() {
       signInWithEmailAndPassword(auth, values.email, values.pw)
         .then((userCredential: any) => {
           // Signed in
-          console.log(userCredential);
-          var user = userCredential.user;
           //메인페이지로 이동
-
-          router.push('/');
-          // ...
+          window.location.href = "/";
         })
         .catch((error: any) => {
           if (error.code === "auth/too-many-requests") {
