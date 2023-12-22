@@ -8,8 +8,6 @@ import { getCurrentMonthEvents, getApplyEvent, getEvents } from './api';
 import { DayCalendarSkeleton } from '@mui/x-date-pickers/DayCalendarSkeleton';
 import { Badge } from '@mui/material';
 import { PickersDay, PickersDayProps } from '@mui/x-date-pickers/PickersDay';
-import useSWR from 'swr'
-import { fetcher } from "./api";
 import { LoadingComp } from './loadingComp';
 import { useGetCurrentUser } from './hooks/useGetCurrentUser';
 
@@ -128,41 +126,46 @@ export const CalendarComponent = () => {
     );
   }
 
+  console.log(pickDate);
+
   return !eventsIsLoading ? (
     <div>
-      {
-        currentUser && currentUser.data.role !== "guest" && (
-          <>
-            <ToggleButtonGroup
-              value={toggleFilter}
-              exclusive
-              onChange={handleFilter}
-              size="small"
-              className="w-full mt-4"
-            >
-              <ToggleButton className="w-full text-xs" color="secondary" value="monthAll" aria-label="left aligned">
-                이번달 모든 번개
-              </ToggleButton>
+
+
+      <ToggleButtonGroup
+        value={toggleFilter}
+        exclusive
+        onChange={handleFilter}
+        size="small"
+        className="w-full mt-4"
+      >
+        <ToggleButton className="w-full text-xs" color="secondary" value="monthAll" aria-label="left aligned">
+          이번달 모든 번개
+        </ToggleButton>
+        {
+          currentUser && currentUser.data.role !== "guest" && (
+            <>
               <ToggleButton className="w-full text-xs" color="secondary" value="canJoin" aria-label="centered">
                 참가 가능한 번개
               </ToggleButton>
               <ToggleButton className="w-full text-xs" color="secondary" value="alreadyJoin" aria-label="right aligned">
                 참가 예정인 번개
               </ToggleButton>
-            </ToggleButtonGroup>
-            <div className="flex items-center justify-center">
-              <Link href={`/events/create?pickDate=${pickDate}`} >
-                <Button
-                  variant="contained"
-                  className="mt-4 mx-auto text-center"
-                  color="success"
-                  type="button"
-                >번개 생성</Button>
-              </Link>
-            </div>
-          </>
-        )
-      }
+
+            </>
+          )
+        }
+      </ToggleButtonGroup>
+      <div className="flex items-center justify-center">
+        <Link href={`/events/create?pickDate=${pickDate}`} >
+          <Button
+            variant="contained"
+            className="mt-4 mx-auto text-center"
+            color="success"
+            type="button"
+          >번개 생성</Button>
+        </Link>
+      </div>
 
       <DateCalendar
         value={pickDate}

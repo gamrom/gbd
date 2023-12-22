@@ -120,14 +120,14 @@ export const Header = () => {
               </ListItemText>
             </ListItemButton>
 
-            <ListItem>
-              <ListItemText>
-                이름 : {currentUser && currentUser.data.name}
-              </ListItemText>
-              <ListItemText>
-                등급 : {currentUser && roleText(currentUser.data.role)}
-              </ListItemText>
-            </ListItem>
+            <Divider flexItem />
+            <ListItemText className="px-4">
+              이름 : {currentUser && currentUser.data.name}
+            </ListItemText>
+            <ListItemText className="px-4">
+              등급 : {currentUser && roleText(currentUser.data.role)}
+            </ListItemText>
+
           </>
         )}
 
