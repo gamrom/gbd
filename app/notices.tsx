@@ -13,8 +13,8 @@ export const Notices = () => {
 
   const { data: currentUser, isLoading: isLoading } = useGetCurrentUser();
 
-  const handleClickNotice = ({ noticeId }: { noticeId: number }) => {
-    if (currentUser && (currentUser.data.role !== "guest")) {
+  const handleClickNotice = ({ noticeId, canAccess }: { noticeId: number, canAccess: boolean }) => {
+    if (currentUser && canAccess) {
       setOpenModalId(noticeId);
       setIsModalOpen(true);
     } else {
@@ -26,7 +26,7 @@ export const Notices = () => {
     <div className="grid grid-cols-2 gap-2">
       {noticeLists.map((notice) => {
         return (
-          <Button key={notice.id} onClick={() => handleClickNotice({ noticeId: notice.id })} variant="contained" color="info" size="small">{notice.title}</Button>
+          <Button key={notice.id} onClick={() => handleClickNotice({ noticeId: notice.id, canAccess: notice.canAccess })} variant="contained" color="info" size="small">{notice.title}</Button>
         )
       })}
 
