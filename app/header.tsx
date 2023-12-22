@@ -239,6 +239,7 @@ export const Header = () => {
           <div className="flex flex-col space-y-4">
             {canJoin && (
               <div className="flex flex-col">
+                <div className="text-center font-bold mb-2 text-lg">지원가능 기간입니다.</div>
                 <div>지원 전 회칙을 반드시 확인해주세요.</div>
                 <a href="https://gamromboard.notion.site/290766405fa14166bcd829f3afa8a9ba?pvs=4" target="_blank" className="text-black no-underline">회칙 보러가기</a>
                 <div>지원 후 3개월동안 활동하게 됩니다.</div>
