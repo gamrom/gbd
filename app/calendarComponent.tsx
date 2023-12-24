@@ -45,7 +45,6 @@ export const CalendarComponent = () => {
         year: String(dayjs(pickDate).year()),
         month: String(dayjs(pickDate).month() + 1),
       }).then((res) => {
-        console.log(res.data);
         const allEvents = res.data;
         // 선택한 날짜가 시작날짜의 오전 0시 이상, 끝날짜의 오후 11시 59분 이하인 이벤트들을 뽑는다.
         const filteredData = allEvents.filter((event: EventProps) => {
@@ -53,15 +52,12 @@ export const CalendarComponent = () => {
           const endTime = dayjs(event.end_time);
           return startTime.isBefore(pickDate.endOf('day')) && endTime.isAfter(pickDate.startOf('day'));
         })
-
-        console.log(filteredData);
         setEvents(filteredData);
       });
     }
   }, [pickDate])
 
   useEffect(() => {
-    // setPickDate("");
     if (toggleFilter === "monthAll") {
       setToggleFilter("monthAll");
       getCurrentMonthEvents({
@@ -73,14 +69,20 @@ export const CalendarComponent = () => {
     } else if (toggleFilter === "canJoin") {
       setToggleFilter("canJoin");
       getEvents().then((res) => {
-        //res.data에서 current_members_count가 max_members_count와 같은 것만 빼고 setEvents
-        const filteredData = res.data.filter((event: EventProps) => {
-          return event.current_members_count === event.max_members_count;
+        //res.data 중에서 시작시간이 오늘 이상인 이벤트들을 뽑는다.
+        const filter1 = res.data.filter((event: EventProps) => {
+          const startTime = dayjs(event.start_time);
+          return startTime.isAfter(dayjs().startOf('day'));
         })
-        setEvents(filteredData);
+
+        const filter2 = filter1.filter((event: EventProps) => {
+          return event.current_members_count !== event.max_members_count;
+        })
+
+        setEvents(filter2);
       })
     } else if (toggleFilter === "alreadyJoin") {
-      setToggleFilter("canJoin");
+      setToggleFilter("alreadyJoin");
       getApplyEvent().then((res) => {
         setEvents(res.data);
       })
