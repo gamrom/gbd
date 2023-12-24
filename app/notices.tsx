@@ -14,11 +14,16 @@ export const Notices = () => {
   const { data: currentUser, isLoading: isLoading } = useGetCurrentUser();
 
   const handleClickNotice = ({ noticeId, canAccess }: { noticeId: number, canAccess: boolean }) => {
-    if (currentUser && canAccess) {
+    if (canAccess) {
       setOpenModalId(noticeId);
       setIsModalOpen(true);
     } else {
-      alert("회원만 이용 가능합니다.");
+      if (currentUser.data.role !== "guest") {
+        setOpenModalId(noticeId);
+        setIsModalOpen(true);
+      } else {
+        alert("회원만 이용 가능합니다.");
+      }
     }
   }
 
