@@ -48,9 +48,8 @@ export const Header = () => {
   useEffect(() => {
     const today = dayjs();
     const last7th = dayjs().endOf('month').subtract(7, 'day');
-    const endOfCurrentMonth = dayjs().endOf('month');
 
-    if (today.isBefore(endOfCurrentMonth)) {
+    if (today.isBefore(last7th)) {
       setCanJoin(false);
       const timer = setInterval(() => {
         const remainingTime = last7th.diff(dayjs(), 'second');
@@ -71,7 +70,7 @@ export const Header = () => {
     } else {
       setCanJoin(true);
     }
-  }, []);
+  }, [isModalOpen]);
 
   const { data: currentUser, isLoading: isLoading } = useGetCurrentUser();
 
