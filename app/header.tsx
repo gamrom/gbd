@@ -47,7 +47,7 @@ export const Header = () => {
 
   useEffect(() => {
     const today = dayjs();
-    const last7th = dayjs().endOf('month').subtract(6, 'day');
+    const last7th = dayjs().endOf('month').subtract(7, 'day');
     const endOfCurrentMonth = dayjs().endOf('month');
 
     if (today.isBefore(endOfCurrentMonth)) {
