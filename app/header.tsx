@@ -213,7 +213,7 @@ export const Header = () => {
 
       <div key={"right"} className="flex items-center justify-center">
         {
-          currentUser && currentUser.data.role === "guest" && (
+          currentUser && (
             <Button onClick={() => setIsModalOpen(true)} variant="contained" size="small" color="secondary" className="mr-4">
               감보동 지원하기
             </Button>

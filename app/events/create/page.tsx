@@ -113,7 +113,7 @@ export default function CreateEvent() {
           title: '일정이 생성되었습니다.',
           showConfirmButton: false,
         }).then(() => {
-          location.href = `/events/${res.data.event_id}`
+          location.href = `/events/${res.data.id}`
         })
       }).catch((error) => {
         alert("일정 생성에 실패했습니다.")
