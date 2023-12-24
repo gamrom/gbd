@@ -244,7 +244,7 @@ export const Header = () => {
                 <a href="https://gamromboard.notion.site/290766405fa14166bcd829f3afa8a9ba?pvs=4" target="_blank">회칙 보러가기</a>
                 <div>지원 후 3개월동안 활동하게 됩니다.</div>
                 <div className="font-bold mt-2 text-lg">지원 방법</div>
-                <div>다음 계좌로 회비 입금해주시면 지원 완료됩니다.</div>
+                <div>다음 계좌로 회비 45000원 입금해주시면 지원 완료됩니다.</div>
                 <div>김은식 카카오뱅크 3333-03-5130993</div>
                 <div className="mt-2">가입 승인은 매달 마지막날 ~ 다음달 1일 중 처리됩니다.</div>
                 <div>가입 완료되신분들은 카톡방에 초대해드리고 있습니다.</div>
