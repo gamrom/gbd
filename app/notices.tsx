@@ -18,7 +18,7 @@ export const Notices = () => {
       setOpenModalId(noticeId);
       setIsModalOpen(true);
     } else {
-      if (currentUser.data.role !== "guest") {
+      if (currentUser && currentUser.data.role !== "guest") {
         setOpenModalId(noticeId);
         setIsModalOpen(true);
       } else {

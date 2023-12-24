@@ -73,6 +73,12 @@ const headCells = [
     disablePadding: false,
     label: '전화번호',
   },
+  {
+    id: "email",
+    numeric: false,
+    disablePadding: false,
+    label: "이메일"
+  }
 ];
 
 
@@ -395,7 +401,8 @@ export default function EnhancedTable() {
                           {row.name}
                         </TableCell>
                     }
-                    <TableCell width="60%">{row.phone}</TableCell>
+                    <TableCell width="30%">{row.phone}</TableCell>
+                    <TableCell width="60%">{row.email}</TableCell>
                   </TableRow>
                 );
               })}
