@@ -128,6 +128,8 @@ export default function CreateEvent() {
     }
   }
 
+  console.log(currentUser.data.role)
+
   return (
     <div className="flex flex-col space-y-4">
       <div className="font-bold text-lg">일정 생성</div>
@@ -146,7 +148,7 @@ export default function CreateEvent() {
       }} autoComplete='off' label="일정 장소" variant="outlined" />
       {
         currentUser &&
-        ((currentUser.data.role === ("manager" || "admin")) ? (
+        ((currentUser.data.role === "manager" || "admin") ? (
           <Box sx={{ minWidth: 120 }}>
             <FormControl fullWidth>
               <InputLabel>벙주</InputLabel>

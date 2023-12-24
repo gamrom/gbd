@@ -108,11 +108,9 @@ export default function PatchEvent({ params }: { params: { event: string } }) {
       <TextField InputLabelProps={{ shrink: true }} name="title" value={event.title} onChange={(e) => setEvent({ ...event, title: e.target.value })} autoComplete='off' label="일정 제목" variant="outlined" />
       <TextField InputLabelProps={{ shrink: true }} name="location" value={event.location} onChange={(e) => setEvent({ ...event, location: e.target.value })} autoComplete='off' label="일정 장소" variant="outlined" />
 
-
-
       {
         currentUser &&
-        ((currentUser.data.role === ("manager" || "admin")) ? (
+        ((currentUser.data.role === "manager" || "admin") ? (
           <Box sx={{ minWidth: 120 }}>
             <FormControl fullWidth>
               <InputLabel shrink htmlFor="owner_uid" variant="standard">벙주</InputLabel>
