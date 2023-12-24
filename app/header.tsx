@@ -213,7 +213,7 @@ export const Header = () => {
 
       <div key={"right"} className="flex items-center justify-center">
         {
-          currentUser && currentUser.data.role === "guest" && (
+          currentUser && currentUser.data.role !== "guest" && (
             <Button onClick={() => setIsModalOpen(true)} variant="contained" size="small" color="secondary" className="mr-4">
               감보동 지원하기
             </Button>
@@ -241,9 +241,12 @@ export const Header = () => {
               <div className="flex flex-col">
                 <div className="text-center font-bold mb-2 text-lg">지원가능 기간입니다.</div>
                 <div>지원 전 회칙을 반드시 확인해주세요.</div>
-                <a href="https://gamromboard.notion.site/290766405fa14166bcd829f3afa8a9ba?pvs=4" target="_blank" className="text-black no-underline">회칙 보러가기</a>
+                <a href="https://gamromboard.notion.site/290766405fa14166bcd829f3afa8a9ba?pvs=4" target="_blank">회칙 보러가기</a>
                 <div>지원 후 3개월동안 활동하게 됩니다.</div>
-                <div>가입 승인은 매달 마지막날 ~ 다음달 1일 중 처리됩니다.</div>
+                <div className="font-bold mt-2 text-lg">지원 방법</div>
+                <div>다음 계좌로 회비 입금해주시면 지원 완료됩니다.</div>
+                <div>김은식 카카오뱅크 3333-03-5130993</div>
+                <div className="mt-2">가입 승인은 매달 마지막날 ~ 다음달 1일 중 처리됩니다.</div>
                 <div>가입 완료되신분들은 카톡방에 초대해드리고 있습니다.</div>
                 <div>아지트 포화 등의 이유로 가입에 제한이 있을 수 있습니다.</div>
                 <div>추가 문의사항은 인스타그램으로 부탁드립니다.</div>
