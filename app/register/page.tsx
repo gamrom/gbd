@@ -248,7 +248,7 @@ export default function Register() {
 
       <div className="flex flex-col">
         <FormControlLabel required control={<Checkbox onChange={handleConfirmRule} />} label="회칙 및 유의사항을 읽었습니다." />
-        <Link href="#" target="_blank">회칙 확인</Link>
+        <Link href="https://gamromboard.notion.site/290766405fa14166bcd829f3afa8a9ba?pvs=4" target="_blank">회칙 확인</Link>
       </div>
 
       <Button variant="contained" type="submit" disabled={isRegisterProceeding}>회원가입 완료하기</Button>
