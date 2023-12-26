@@ -11,12 +11,6 @@ export const noticeLists: Array<{
       canAccess: false,
     },
     {
-      id: 2,
-      title: "신규 회원 모집 공지",
-      content: "매달 마지막 주, 7일간 모집합니다. \n이때에 회원가입 및 회비 입금 가능합니다! \n기간을 놓치면 다음달을 노려주세요 :)",
-      canAccess: true,
-    },
-    {
       id: 3,
       title: "아지트 비밀번호",
       content: "아지트 비밀번호는 999999 입니다.",
