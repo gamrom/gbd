@@ -12,20 +12,21 @@ import { DatePickerComp } from "../[event]/edit/DatePickerComp";
 import { DateTimePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 import Swal from "sweetalert2";
+import axios from "axios";
 
 
 export default function CreateEvent() {
   const pickDate: any = useSearchParams().get('pickDate');
   const [isSubmitting, setIsSubmitting] = useState(false);
   //discord
-  // const pushDiscord = ({ text }: { text: string }) => {
-  //   axios.post(DISCORD_WEBHOOK_URL, {
-  //     headers: {
-  //       'Content-Type': 'multipart/form-data'
-  //     },
-  //     content: text
-  //   })
-  // }
+  const pushDiscord = ({ text }: { text: string }) => {
+    process.env.NEXT_PUBLIC_DISCORD_WEBHOOK_URL && axios.post(process.env.NEXT_PUBLIC_DISCORD_WEBHOOK_URL, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      },
+      content: text
+    })
+  }
 
   const { data: currentUser, isLoading: isLoading } = useGetCurrentUser();
 
@@ -108,6 +109,9 @@ export default function CreateEvent() {
         uid: formState.uid,
       }).then((res) => {
         setIsSubmitting(true);
+        pushDiscord({
+          text: `새로운 번개가 생성되었습니다. \n 제목: ${formState.title} \n 장소: ${formState.location} \n 설명: ${formState.description} \n 시작시간: ${formState.start_time} \n 종료시간: ${formState.end_time} \n 최대인원: ${formState.max_members_count} \n 호스트: ${formState.owner_name}`
+        });
         Swal.fire({
           icon: 'success',
           title: '일정이 생성되었습니다.',
@@ -118,13 +122,6 @@ export default function CreateEvent() {
       }).catch((error) => {
         alert("일정 생성에 실패했습니다.")
       })
-
-      // pushDiscord({
-      //   text: `새로운 번개가 생성되었습니다. \n 제목: ${formState.title} \n 장소: ${formState.location} \n 설명: ${formState.description} \n 시작시간: ${formState.start_time} \n 종료시간: ${formState.end_time} \n 최대인원: ${formState.max_members_count} \n 호스트: ${formState.owner_name}`
-      // });
-      // router.push('/');
-      //정모생성 id response
-
     }
   }
 
