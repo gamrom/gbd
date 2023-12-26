@@ -11,4 +11,5 @@ export const modalStyle = {
   width: "100%", /* Ensures the modal takes 100% width within the max-width limit */
   maxHeight: "80vh", /* Restricts the maximum height to 80% of the viewport height */
   overflowY: "auto",
+  textAlign: "center",
 };
