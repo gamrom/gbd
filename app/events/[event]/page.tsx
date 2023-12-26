@@ -63,7 +63,7 @@ export default function Event({ params }: { params: { event: string } }) {
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const openModal = () => {
-    if (currentUser?.data.role !== "guest") {
+    if (currentUser && currentUser.data.role !== "guest") {
       setIsModalOpen(true);
     } else {
       alert("회원만 참가자를 볼 수 있습니다.")
@@ -101,10 +101,10 @@ export default function Event({ params }: { params: { event: string } }) {
         <Button size="small" onClick={() => handleClickAdvertise()}>홍보하기</Button>
         <Toaster />
       </div>
-      <div className="mt-4">📆 {dayjs(event?.start_time).format(
+      <div className="mt-4">📆 {dayjs(event?.start_time.replace(/-/g, "/")).format(
         "YY년 MM월 DD일 HH시 mm분"
       )
-      } ~ {dayjs(event?.end_time).format(
+      } ~ {dayjs(event?.end_time.replace(/-/g, "/")).format(
         "YY년 MM월 DD일 HH시 mm분"
       )
         }</div>
@@ -166,7 +166,7 @@ export default function Event({ params }: { params: { event: string } }) {
                 return (
                   <div key={attendance.id} className="flex justify-between">
                     <div>{attendance.user_name}</div>
-                    <div className="ml-2">{elapsedTime(attendance.created_at)}</div>
+                    <div className="ml-2">{elapsedTime(attendance.created_at.replace(/-/g, "/"))}</div>
                   </div>
                 )
               })

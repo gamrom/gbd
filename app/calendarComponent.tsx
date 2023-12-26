@@ -48,8 +48,8 @@ export const CalendarComponent = () => {
         const allEvents = res.data;
         // 선택한 날짜가 시작날짜의 오전 0시 이상, 끝날짜의 오후 11시 59분 이하인 이벤트들을 뽑는다.
         const filteredData = allEvents.filter((event: EventProps) => {
-          const startTime = dayjs(event.start_time);
-          const endTime = dayjs(event.end_time);
+          const startTime = dayjs(event.start_time.replace(/-/g, "/"));
+          const endTime = dayjs(event.end_time.replace(/-/g, "/"));
           return startTime.isBefore(pickDate.endOf('day')) && endTime.isAfter(pickDate.startOf('day'));
         })
         setEvents(filteredData);
@@ -71,7 +71,7 @@ export const CalendarComponent = () => {
       getEvents().then((res) => {
         //res.data 중에서 시작시간이 오늘 이상인 이벤트들을 뽑는다.
         const filter1 = res.data.filter((event: EventProps) => {
-          const startTime = dayjs(event.start_time);
+          const startTime = dayjs(event.start_time.replace(/-/g, "/"));
           return startTime.isAfter(dayjs().startOf('day'));
         })
 
@@ -99,8 +99,8 @@ export const CalendarComponent = () => {
     }).then((res) => {
       const allEvents = res.data;
       allEvents && allEvents.forEach((event: EventProps) => {
-        const startDay = dayjs(event.start_time).date();
-        const endDay = dayjs(event.end_time).date();
+        const startDay = dayjs(event.start_time.replace(/-/g, "/")).date();
+        const endDay = dayjs(event.end_time.replace(/-/g, "/")).date();
         for (let i = startDay; i <= endDay; i++) {
           allDays.push(i);
         }
@@ -196,7 +196,7 @@ export const CalendarComponent = () => {
               <div className={`hover:cursor-pointer hover:font-bold hover:opacity-100 opacity-90 drop-shadow py-2 px-4 flex flex-col justify-between mt-2 text-sm rounded-[5px] ${event.current_members_count >= event.max_members_count ? "bg-[#e57373]" : "bg-[#81c784]"}`}>
                 <div className="flex justify-between w-full">
                   <div className="flex space-x-4 w-full">
-                    <div>{dayjs(event.start_time).format('YY/MM/DD')}</div>
+                    <div>{dayjs(event.start_time.replace(/-/g, "/")).format('YY/MM/DD')}</div>
                     <div>{event.current_members_count}/{event.max_members_count}</div>
                   </div>
                   <div className="shrink-0">{event.owner_name}</div>
