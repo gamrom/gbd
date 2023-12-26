@@ -52,7 +52,6 @@ export default function Login() {
   return (
     <form onSubmit={formik.handleSubmit}>
       <div className="flex flex-col mx-auto mt-[100px] max-w-[360px]">
-
         <TextField InputLabelProps={{ shrink: true }} id="email" name="email" value={formik.values.email} onChange={formik.handleChange} label="아이디" variant="outlined" />
         <TextField InputLabelProps={{ shrink: true }} id="pw" name="pw" type="password" value={formik.values.pw} onChange={formik.handleChange} label="비밀번호" variant="outlined" className="mt-4" />
         <div onClick={() =>
@@ -65,6 +64,10 @@ export default function Login() {
         } className="text-xs text-right ml-auto mt-4 cursor-pointer w-fit">아이디를 잊으셨나요?</div>
         <Link href="/find_pw" className="text-xs ml-auto text-right mt-[2px] no-underline cursor-pointer text-black w-fit">비밀번호를 잊으셨나요?</Link>
         <Button disabled={formik.isSubmitting} type="submit" variant="contained" className="mt-4">로그인</Button>
+        <Button variant="outlined" className="text-center mt-4">
+          <Link href="/register" className="no-underline text-black">회원가입</Link>
+        </Button>
+        <div className="my-2 mx-auto font-bold text-[#FF0000]">회원만 감보동에 지원하실 수 있습니다.</div>
       </div>
     </form>
   )

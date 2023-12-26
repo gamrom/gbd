@@ -212,9 +212,14 @@ export const Header = () => {
 
       <div key={"right"} className="flex items-center justify-center">
         {
-          currentUser && (
+          currentUser ? (
             <Button onClick={() => setIsModalOpen(true)} variant="contained" size="small" color="secondary" className="mr-4">
               신규지원/연장하기
+            </Button>
+          ) : (
+            //회원가입 후 지원하기 버튼
+            <Button onClick={() => router.push('/login')} variant="contained" size="small" color="secondary" className="mr-4">
+              로그인 후 지원하기
             </Button>
           )
         }
