@@ -10,6 +10,7 @@ import 'dayjs/locale/ko'
 
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from "@vercel/speed-insights/next"
+import Head from 'next/head'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -21,9 +22,10 @@ export default function RootLayout({
   return (
     <html lang="ko" id="root">
       <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='ko'>
-        <head>
+        <Head>
           <link rel="icon" href="/favicon.ico" sizes="any" />
-        </head>
+          <title>감롬의 보드게임 동아리</title>
+        </Head>
         <body className={`${inter.className} max-w-[650px] mx-auto px-4 min-h-screen`}>
           <Header />
           {children}
