@@ -31,15 +31,13 @@ export const Notices = () => {
     <div className="grid grid-cols-2 gap-2">
       {noticeLists.map((notice) => {
         return (
-          <Button key={notice.id} onClick={() => handleClickNotice({ noticeId: notice.id, canAccess: notice.canAccess })} variant="contained" color="info" size="small">{notice.title}</Button>
+          <Button key={notice.id} onClick={() => handleClickNotice({ noticeId: notice.id, canAccess: notice.canAccess })} variant="outlined" color="info" size="small">{notice.title}</Button>
         )
       })}
 
       <Modal
         open={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        aria-labelledby="parent-modal-title"
-        aria-describedby="parent-modal-description"
       >
         <Box sx={modalStyle}>
           <div className="flex flex-col space-y-4">
