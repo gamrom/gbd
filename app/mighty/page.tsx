@@ -473,7 +473,7 @@ export default function MightyPage() {
             <div>
               <form onSubmit={calFormik.handleSubmit} className="mt-8">
                 <div className="grid grid-cols-[1fr_5fr] gap-2">
-                  <Box className="flex items-center justify-center" component="section" sx={{ border: '1px solid grey' }}>주공</Box>
+                  <Box className="flex items-center justify-center text-xs" component="section" sx={{ border: '1px solid grey' }}>주공</Box>
                   <ToggleButtonGroup
                     value={calFormik.values.king}
                     exclusive
@@ -506,7 +506,7 @@ export default function MightyPage() {
                 }
 
                 <div className="grid grid-cols-[1fr_5fr] gap-2 mt-2">
-                  <Box className="flex items-center justify-center" component="section" sx={{ border: '1px solid grey' }}>프렌드</Box>
+                  <Box className="flex items-center justify-center text-xs" component="section" sx={{ border: '1px solid grey' }}>프렌드</Box>
                   <ToggleButtonGroup
                     value={calFormik.values.friend}
                     exclusive
@@ -538,7 +538,7 @@ export default function MightyPage() {
                   ) : null
                 }
                 <div className="grid grid-cols-[1fr_5fr] gap-8 mt-2">
-                  <Box className="flex items-center justify-center" component="section" sx={{ border: '1px solid grey' }}>건점수</Box>
+                  <Box className="flex items-center justify-center text-xs" component="section" sx={{ border: '1px solid grey' }}>건점수</Box>
                   <Slider
                     name="betPoint"
                     onChange={(e: any) => {
@@ -553,7 +553,7 @@ export default function MightyPage() {
                 </div>
 
                 <div className="grid grid-cols-[1fr_5fr] gap-8 mt-2">
-                  <Box className="flex items-center justify-center" component="section" sx={{ border: '1px solid grey' }}>이긴점수</Box>
+                  <Box className="flex items-center justify-center text-xs" component="section" sx={{ border: '1px solid grey' }}>이긴점수</Box>
                   <Slider
                     name="winPoint"
                     onChange={(e: any) => {
