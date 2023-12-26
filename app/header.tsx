@@ -214,7 +214,7 @@ export const Header = () => {
         {
           currentUser && (
             <Button onClick={() => setIsModalOpen(true)} variant="contained" size="small" color="secondary" className="mr-4">
-              감보동 지원하기
+              신규지원/연장하기
             </Button>
           )
         }
