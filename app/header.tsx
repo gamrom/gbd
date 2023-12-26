@@ -170,15 +170,17 @@ export const Header = () => {
 
         <Divider flexItem />
 
-        {currentUser && currentUser.data.role === ("admin" || "manager") && (
-          <Link href="/admin_page" className="no-underline text-black">
-            <ListItemButton>
-              <ListItemText>
-                회원 관리
-              </ListItemText>
-            </ListItemButton>
-          </Link>
-        )}
+        {
+          !isLoading && (currentUser && currentUser.data.role === ("admin" || "manager") && (
+            <Link href="/admin_page" className="no-underline text-black">
+              <ListItemButton>
+                <ListItemText>
+                  회원 관리
+                </ListItemText>
+              </ListItemButton>
+            </Link>
+          ))
+        }
       </List>
     </Box>
   );
@@ -212,7 +214,7 @@ export const Header = () => {
 
       <div key={"right"} className="flex items-center justify-center">
         {
-          currentUser ? (
+          !isLoading && (currentUser ? (
             <Button onClick={() => setIsModalOpen(true)} variant="contained" size="small" color="secondary" className="mr-4">
               신규지원/연장하기
             </Button>
@@ -221,7 +223,7 @@ export const Header = () => {
             <Button onClick={() => router.push('/login')} variant="contained" size="small" color="secondary" className="mr-4">
               로그인 후 지원하기
             </Button>
-          )
+          ))
         }
         <MenuIcon onClick={toggleDrawer("right", true)} className="cursor-pointer" />
         <Drawer
