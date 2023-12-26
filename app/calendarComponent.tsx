@@ -186,7 +186,11 @@ export const CalendarComponent = () => {
           setToggleFilter("");
           setPickDate(newValue)
         }}
-        onMonthChange={(newValue) => setPickDate(newValue)}
+        onMonthChange={(newValue) => {
+          if (toggleFilter === "monthAll") {
+            setPickDate(newValue)
+          }
+        }}
         renderLoading={() => <DayCalendarSkeleton />} />
 
       <div className="flex flex-col space-y-2">
