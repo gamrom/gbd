@@ -21,13 +21,13 @@ export default function PatchEvent({ params }: { params: { event: string } }) {
       setEvent({
         current_members_count: res.data.current_members_count,
         description: res.data.description,
-        end_time: dayjs(res.data.end_time),
+        end_time: dayjs(res.data.end_time.replace(/-/g, "/")),
         event_id: res.data.event_id,
         location: res.data.location,
         max_members_count: res.data.max_members_count,
         owner_name: res.data.owner_name,
         owner_uid: res.data.owner_uid,
-        start_time: dayjs(res.data.start_time),
+        start_time: dayjs(res.data.start_time.replace(/-/g, "/")),
         title: res.data.title,
       })
     })
