@@ -232,7 +232,7 @@ export default function MightyPage() {
       } else {
         //야당승리
         standardPoint = Number(values.betPoint) - Number(values.winPoint)
-        if (values.winPoint <= 0) {
+        if (values.winPoint <= 10) {
           //백런
           standardPoint *= 2;
         }
