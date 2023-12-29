@@ -189,3 +189,12 @@ export const getMe = () => {
     AuthAPI.get(`/me`)
   )
 }
+
+export const patchUser = ({ uid, birth, name }: any) => {
+  return (
+    AuthAPI.patch(`/admin/users/${uid}`, {
+      birth: birth,
+      name: name,
+    })
+  )
+}
