@@ -165,7 +165,7 @@ export default function Event({ params }: { params: { event: string } }) {
               attendances && attendances.map((attendance: any) => {
                 return (
                   <div key={attendance.id} className="flex justify-between">
-                    <div>{attendance.user_name}</div>
+                    <div>{attendance.user_uid === event.owner_uid && "👑"} {attendance.user_name}</div>
                     <div className="ml-2">{elapsedTime(attendance.created_at.replace(/-/g, "/"))}</div>
                   </div>
                 )
