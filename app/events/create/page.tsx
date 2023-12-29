@@ -1,5 +1,5 @@
 'use client';
-import { Box, Button, Modal, TextField } from "@mui/material";
+import { Box, Button, TextField, Checkbox } from "@mui/material";
 import { getActiveUsers, postCreateEvent } from "../../api";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -8,11 +8,11 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { useGetCurrentUser } from "@/app/hooks/useGetCurrentUser";
-import { DatePickerComp } from "../[event]/edit/DatePickerComp";
 import { DateTimePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 import Swal from "sweetalert2";
 import axios from "axios";
+import FormControlLabel from '@mui/material/FormControlLabel';
 
 
 export default function CreateEvent() {
@@ -66,6 +66,12 @@ export default function CreateEvent() {
     }
   }, [pickDate])
 
+  const [isPushAlarm, setIsPushAlarm] = useState<any>(true);
+  useEffect(() => {
+    console.log(isPushAlarm)
+  }, [isPushAlarm])
+
+
   const handleSubmit = () => {
     if ((timeState.startTime || timeState.endTime) == null) {
       alert("시간을 입력해주세요.")
@@ -109,9 +115,11 @@ export default function CreateEvent() {
         uid: formState.uid,
       }).then((res) => {
         setIsSubmitting(true);
-        pushDiscord({
-          text: `새로운 번개가 생성되었습니다. \n 제목: ${formState.title} \n 장소: ${formState.location} \n 설명: ${formState.description} \n 시작시간: ${formState.startTime} \n 종료시간: ${formState.endTime} \n 최대인원: ${formState.max_members_count}`
-        });
+        if (isPushAlarm) {
+          pushDiscord({
+            text: `새로운 번개가 생성되었습니다. \n 제목: ${formState.title} \n 장소: ${formState.location} \n 설명: ${formState.description} \n 시작시간: ${formState.startTime} \n 종료시간: ${formState.endTime} \n 최대인원: ${formState.max_members_count}`
+          });
+        }
         Swal.fire({
           icon: 'success',
           title: '일정이 생성되었습니다.',
@@ -201,6 +209,12 @@ export default function CreateEvent() {
         }}
         name="max_members_count"
       />
+
+      <FormControlLabel control={<Checkbox defaultChecked={true} onChange={
+        (e) => {
+          setIsPushAlarm(e.target.checked)
+        }
+      } />} label="디스코드에 번개 생성 알림을 보냅니다." />
       <Button disabled={isSubmitting} type="button" variant='contained' color="success" onClick={() => handleSubmit()}>완료하기</Button>
       <Button type="button" color="error">취소</Button>
     </div>
