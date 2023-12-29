@@ -171,7 +171,7 @@ export const Header = () => {
         <Divider flexItem />
 
         {
-          !isLoading && (currentUser && currentUser.data.role === ("admin" || "manager") && (
+          !isLoading && (currentUser && ((currentUser.data.role === "admin") || (currentUser.data.role === "manager")) && (
             <Link href="/admin_page" className="no-underline text-black">
               <ListItemButton>
                 <ListItemText>

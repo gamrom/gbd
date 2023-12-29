@@ -110,7 +110,7 @@ export default function CreateEvent() {
       }).then((res) => {
         setIsSubmitting(true);
         pushDiscord({
-          text: `새로운 번개가 생성되었습니다. \n 제목: ${formState.title} \n 장소: ${formState.location} \n 설명: ${formState.description} \n 시작시간: ${formState.start_time} \n 종료시간: ${formState.end_time} \n 최대인원: ${formState.max_members_count} \n 호스트: ${formState.owner_name}`
+          text: `새로운 번개가 생성되었습니다. \n 제목: ${formState.title} \n 장소: ${formState.location} \n 설명: ${formState.description} \n 시작시간: ${formState.startTime} \n 종료시간: ${formState.endTime} \n 최대인원: ${formState.max_members_count}`
         });
         Swal.fire({
           icon: 'success',
@@ -143,7 +143,7 @@ export default function CreateEvent() {
       }} autoComplete='off' label="일정 장소" variant="outlined" />
       {
         currentUser &&
-        ((currentUser.data.role === "manager" || "admin") ? (
+        (((currentUser.data.role === "admin") || (currentUser.data.role === "manager")) ? (
           <Box sx={{ minWidth: 120 }}>
             <FormControl fullWidth>
               <InputLabel>벙주</InputLabel>

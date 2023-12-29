@@ -110,7 +110,7 @@ export default function PatchEvent({ params }: { params: { event: string } }) {
 
       {
         currentUser &&
-        ((currentUser.data.role === "manager" || "admin") ? (
+        (((currentUser.data.role === "admin") || (currentUser.data.role === "manager")) ? (
           <Box sx={{ minWidth: 120 }}>
             <FormControl fullWidth>
               <InputLabel shrink htmlFor="owner_uid" variant="standard">벙주</InputLabel>

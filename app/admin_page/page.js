@@ -21,6 +21,9 @@ import { useEffect, useState } from 'react';
 import { getUsers, patchRole } from '../api';
 import Button from '@mui/material/Button';
 import { parse } from 'json2csv';
+import Modal from '@mui/material/Modal';
+import { UserEditForm } from './userEditForm';
+import dayjs from 'dayjs';
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -78,7 +81,19 @@ const headCells = [
     numeric: false,
     disablePadding: false,
     label: "이메일"
-  }
+  },
+  {
+    id: "birth",
+    numeric: false,
+    disablePadding: false,
+    label: "생년월일"
+  },
+  {
+    id: "userEdit",
+    numeric: false,
+    disablePadding: false,
+    label: ""
+  },
 ];
 
 
@@ -207,7 +222,7 @@ function EnhancedTableToolbar(props) {
 
       {numSelected > 0 && (
         <>
-          <select value={selectedRole} onChange={handleRoleChange}>
+          <select value={selectedRole} onChange={handleRoleChange} className="mr-2">
             <option value="">등급 선택</option>
             <option value="manager">매니저</option>
             <option value="member">멤버</option>
@@ -228,7 +243,7 @@ EnhancedTableToolbar.propTypes = {
 
 export default function EnhancedTable() {
   const [order, setOrder] = React.useState('asc');
-  const [orderBy, setOrderBy] = React.useState('calories');
+  const [orderBy, setOrderBy] = React.useState('role');
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(50);
@@ -294,21 +309,6 @@ export default function EnhancedTable() {
     [order, orderBy, page, rowsPerPage, rows],
   );
 
-  const [clickedRowId, setClickedRowId] = React.useState(null);
-  const [isEditable, setIsEditable] = React.useState(false);
-  const handleClickName = (id) => {
-    setClickedRowId(id);
-    setIsEditable(true);
-  }
-
-  const handleKeyDown = (e, rowId) => {
-    if (e.key === 'Enter') {
-      // Perform action on pressing Enter (e.g., save the content)
-      console.log('Enter pressed for row ID:', rowId, 'Content:', "수정하는이름");
-      setClickedRowId(null);
-      setIsEditable(false);
-    }
-  };
 
   useEffect(() => {
     getUsers().then((res) => {
@@ -339,13 +339,23 @@ export default function EnhancedTable() {
   };
 
 
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const [editingUserData, setEditingUserData] = React.useState(null);
+  const handleEditUser = ({ e: e, data: user }) => {
+    e.preventDefault();
+    setIsModalOpen(true);
+    setEditingUserData(user);
+  }
+
+  const modalClose = () => setIsModalOpen(false);
+
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
         <EnhancedTableToolbar numSelected={selected.length} selected={selected} />
         <TableContainer>
           <Table
-            sx={{ minWidth: 750 }}
+            sx={{ minWidth: 900 }}
             aria-labelledby="tableTitle"
           >
             <EnhancedTableHead
@@ -384,25 +394,26 @@ export default function EnhancedTable() {
                       id={labelId}
                       scope="row"
                       padding="none"
-                      width="20%"
+
                     >
                       {row.role === "admin" && "관리자"}
                       {row.role === "manager" && "매니저"}
                       {row.role === "member" && "멤버"}
                       {row.role === "guest" && "게스트"}
                     </TableCell>
-                    {
-                      clickedRowId === row.uid ?
-                        <TableCell width="20%">
-                          <input type="text" defaultValue={row.name} onKeyDown={(e) => handleKeyDown(e, row.uid)} />
-                        </TableCell>
-                        :
-                        <TableCell width="20%" onClick={() => handleClickName(row.uid)}>
-                          {row.name}
-                        </TableCell>
-                    }
-                    <TableCell width="30%">{row.phone}</TableCell>
-                    <TableCell width="60%">{row.email}</TableCell>
+
+                    <TableCell>
+                      {row.name}
+                    </TableCell>
+
+                    <TableCell>{row.phone}</TableCell>
+                    <TableCell>{row.email}</TableCell>
+                    <TableCell>{dayjs(row.birth).format(
+                      "YY-MM-DD"
+                    )}</TableCell>
+                    <TableCell className="shrink-0">
+                      <Button variant="contained" color="primary" type="button" onClick={(e) => handleEditUser({ e: e, data: row })}>정보수정</Button>
+                    </TableCell>
                   </TableRow>
                 );
               })}
@@ -430,6 +441,13 @@ export default function EnhancedTable() {
       </Paper>
 
       <Button variant="contained" color="primary" onClick={downloadCSV}>액셀 다운로드</Button>
+
+      <Modal
+        open={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      >
+        <UserEditForm user={editingUserData} close={modalClose} />
+      </Modal>
     </Box>
   );
 }
