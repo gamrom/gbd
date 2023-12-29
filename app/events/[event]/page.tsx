@@ -118,7 +118,7 @@ export default function Event({ params }: { params: { event: string } }) {
 
       <div className="mt-4 flex justify-between">
         <div className="flex">
-          {currentUser && ((currentUser.data.uid === event.owner_uid) || (currentUser.data.role === ("admin" || "manager"))) && <Button variant="contained" color="error" className="mr-2" onClick={() => {
+          {currentUser && ((currentUser.data.uid === event.owner_uid) || ((currentUser.data.role === "admin") || (currentUser.data.role === "manager"))) && <Button variant="contained" color="error" className="mr-2" onClick={() => {
             Swal.fire({
               title: '정말로 삭제하시겠습니까?',
               text: "삭제하시면 복구할 수 없습니다.",
@@ -140,7 +140,7 @@ export default function Event({ params }: { params: { event: string } }) {
               }
             })
           }}>삭제하기</Button>}
-          {currentUser && ((currentUser.data.uid === event.owner_uid) || (currentUser.data.role === ("admin" || "manager"))) && (
+          {currentUser && ((currentUser.data.uid === event.owner_uid) || ((currentUser.data.role === "admin") || (currentUser.data.role === "manager"))) && (
             <Link href={`/events/${params.event}/edit`}>
               <Button variant="contained" color="success">수정하기</Button>
             </Link>

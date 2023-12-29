@@ -143,7 +143,7 @@ export default function CreateEvent() {
       }} autoComplete='off' label="일정 장소" variant="outlined" />
       {
         currentUser &&
-        ((currentUser.data.role === "manager" || "admin") ? (
+        (((currentUser.data.role === "admin") || (currentUser.data.role === "manager")) ? (
           <Box sx={{ minWidth: 120 }}>
             <FormControl fullWidth>
               <InputLabel>벙주</InputLabel>
