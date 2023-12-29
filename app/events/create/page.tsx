@@ -67,10 +67,6 @@ export default function CreateEvent() {
   }, [pickDate])
 
   const [isPushAlarm, setIsPushAlarm] = useState<any>(true);
-  useEffect(() => {
-    console.log(isPushAlarm)
-  }, [isPushAlarm])
-
 
   const handleSubmit = () => {
     if ((timeState.startTime || timeState.endTime) == null) {
@@ -115,11 +111,11 @@ export default function CreateEvent() {
         uid: formState.uid,
       }).then((res) => {
         setIsSubmitting(true);
-        if (isPushAlarm) {
-          pushDiscord({
-            text: `새로운 번개가 생성되었습니다. \n 제목: ${formState.title} \n 장소: ${formState.location} \n 설명: ${formState.description} \n 시작시간: ${formState.startTime} \n 종료시간: ${formState.endTime} \n 최대인원: ${formState.max_members_count}`
-          });
-        }
+        // if (isPushAlarm) {
+        //   pushDiscord({
+        //     text: `새로운 번개가 생성되었습니다. \n 제목: ${formState.title} \n 장소: ${formState.location} \n 설명: ${formState.description} \n 시작시간: ${formState.startTime} \n 종료시간: ${formState.endTime} \n 최대인원: ${formState.max_members_count}`
+        //   });
+        // }
         Swal.fire({
           icon: 'success',
           title: '일정이 생성되었습니다.',
@@ -210,11 +206,11 @@ export default function CreateEvent() {
         name="max_members_count"
       />
 
-      <FormControlLabel control={<Checkbox defaultChecked={true} onChange={
+      {/* <FormControlLabel control={<Checkbox defaultChecked={true} onChange={
         (e) => {
           setIsPushAlarm(e.target.checked)
         }
-      } />} label="디스코드에 번개 생성 알림을 보냅니다." />
+      } />} label="디스코드에 번개 생성 알림을 보냅니다." /> */}
       <Button disabled={isSubmitting} type="button" variant='contained' color="success" onClick={() => handleSubmit()}>완료하기</Button>
       <Button type="button" color="error">취소</Button>
     </div>
