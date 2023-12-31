@@ -173,7 +173,6 @@ function EnhancedTableToolbar(props) {
       patchRole({ uid: item, role: selectedRole }).then((res) => {
         if (res.status === 200) {
           alert("회원등급이 변경되었습니다.");
-          window.location.reload();
         }
       })
     })
