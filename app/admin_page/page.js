@@ -173,7 +173,6 @@ function EnhancedTableToolbar(props) {
       patchRole({ uid: item, role: selectedRole }).then((res) => {
         if (res.status === 200) {
           alert("회원등급이 변경되었습니다.");
-          window.location.reload();
         }
       })
     })
@@ -413,7 +412,7 @@ export default function EnhancedTable() {
                     )}</TableCell>
                     <TableCell className="shrink-0">
                       <Button variant="contained" color="primary" type="button" onClick={(e) => handleEditUser({ e: e, data: row })}>정보수정</Button>
-                      <Button className="ml-2" variant="contained" color="error" type="button" onClick={(e) => {
+                      {/* <Button className="ml-2" variant="contained" color="error" type="button" onClick={(e) => {
                         e.preventDefault();
                         if (window.confirm("정말로 탈퇴시키겠습니까?")) {
                           deleteUser({ uid: row.uid }).then((res) => {
@@ -425,7 +424,7 @@ export default function EnhancedTable() {
                             alert("회원 탈퇴에 실패했습니다.");
                           })
                         }
-                      }}>회원탈퇴</Button>
+                      }}>회원탈퇴</Button> */}
                     </TableCell>
                   </TableRow>
                 );
