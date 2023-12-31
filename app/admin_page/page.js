@@ -18,7 +18,7 @@ import Checkbox from '@mui/material/Checkbox';
 import Tooltip from '@mui/material/Tooltip';
 import { visuallyHidden } from '@mui/utils';
 import { useEffect, useState } from 'react';
-import { getUsers, patchRole } from '../api';
+import { getUsers, patchRole, deleteUser } from '../api';
 import Button from '@mui/material/Button';
 import { parse } from 'json2csv';
 import Modal from '@mui/material/Modal';
@@ -413,6 +413,19 @@ export default function EnhancedTable() {
                     )}</TableCell>
                     <TableCell className="shrink-0">
                       <Button variant="contained" color="primary" type="button" onClick={(e) => handleEditUser({ e: e, data: row })}>정보수정</Button>
+                      <Button className="ml-2" variant="contained" color="error" type="button" onClick={(e) => {
+                        e.preventDefault();
+                        if (window.confirm("정말로 탈퇴시키겠습니까?")) {
+                          deleteUser({ uid: row.uid }).then((res) => {
+                            if (res.status === 200) {
+                              alert("회원이 탈퇴되었습니다.");
+                              window.location.reload();
+                            }
+                          }).catch((err) => {
+                            alert("회원 탈퇴에 실패했습니다.");
+                          })
+                        }
+                      }}>회원탈퇴</Button>
                     </TableCell>
                   </TableRow>
                 );
