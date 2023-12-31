@@ -198,3 +198,9 @@ export const patchUser = ({ uid, birth, name }: any) => {
     })
   )
 }
+
+export const deleteUser = ({ uid }: any) => {
+  return (
+    AuthAPI.delete(`/admin/users/${uid}`)
+  )
+}
