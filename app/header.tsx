@@ -13,9 +13,6 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import MenuIcon from '@mui/icons-material/Menu';
 import Button from '@mui/material/Button';
-import Modal from '@mui/material/Modal';
-import { modalStyle } from './style';
-import dayjs from 'dayjs';
 import { useGetCurrentUser } from './hooks/useGetCurrentUser';
 import { roleText } from './tools';
 import Swal from 'sweetalert2';
@@ -42,35 +39,7 @@ export const Header = () => {
   };
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [canJoin, setCanJoin] = useState<boolean>(false);
-  const [countdown, setCountdown] = useState('');
 
-  useEffect(() => {
-    const today = dayjs();
-    const last7th = dayjs().endOf('month').subtract(7, 'day');
-
-    if (today.isBefore(last7th)) {
-      setCanJoin(false);
-      const timer = setInterval(() => {
-        const remainingTime = last7th.diff(dayjs(), 'second');
-
-        if (remainingTime <= 0) {
-          clearInterval(timer);
-        } else {
-          const days = Math.floor(remainingTime / (60 * 60 * 24));
-          const hours = Math.floor((remainingTime % (60 * 60 * 24)) / (60 * 60));
-          const minutes = Math.floor((remainingTime % (60 * 60)) / 60);
-          const seconds = remainingTime % 60;
-
-          setCountdown(`${days}일 ${hours}시간 ${minutes}분 ${seconds}초`);
-        }
-      }, 1000);
-
-      return () => clearInterval(timer);
-    } else {
-      setCanJoin(true);
-    }
-  }, [isModalOpen]);
 
   const { data: currentUser, isLoading: isLoading } = useGetCurrentUser();
 
@@ -84,20 +53,13 @@ export const Header = () => {
       <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
         {!isLogin ? (
           <>
-            <Link href="/register" className="no-underline text-black">
-              <ListItem key="회원가입" disablePadding>
-                <ListItemButton>
-                  <ListItemText primary="회원가입" />
-                </ListItemButton>
-              </ListItem>
-            </Link>
-            <Link href="/login" className="no-underline text-black">
-              <ListItemButton>
-                <ListItemText>
-                  로그인
-                </ListItemText>
-              </ListItemButton>
-            </Link>
+            <ListItem>
+              <Button variant="contained" color="secondary">
+                <Link href="/login" className="no-underline text-white">
+                  로그인 후 지원하기
+                </Link>
+              </Button>
+            </ListItem>
           </>
         ) : (
           <>
@@ -213,18 +175,6 @@ export const Header = () => {
 
 
       <div key={"right"} className="flex items-center justify-center">
-        {
-          !isLoading && (currentUser ? (
-            <Button onClick={() => setIsModalOpen(true)} variant="contained" size="small" color="secondary" className="mr-4">
-              신규지원/연장하기
-            </Button>
-          ) : (
-            //회원가입 후 지원하기 버튼
-            <Button onClick={() => router.push('/login')} variant="contained" size="small" color="secondary" className="mr-4">
-              로그인 후 지원하기
-            </Button>
-          ))
-        }
         <MenuIcon onClick={toggleDrawer("right", true)} className="cursor-pointer" />
         <Drawer
           anchor={"right"}
@@ -234,43 +184,6 @@ export const Header = () => {
           {list("right")}
         </Drawer>
       </div>
-
-      <Modal
-        open={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        aria-labelledby="parent-modal-title"
-        aria-describedby="parent-modal-description"
-      >
-        <Box sx={modalStyle}>
-          <div className="flex flex-col space-y-4">
-            {canJoin && (
-              <div className="flex flex-col">
-                <div className="text-center font-bold mb-2 text-lg">지원가능 기간입니다.</div>
-                <div>지원 전 회칙을 반드시 확인해주세요.</div>
-                <a href="https://gamromboard.notion.site/290766405fa14166bcd829f3afa8a9ba?pvs=4" target="_blank">회칙 보러가기</a>
-                <div>지원 후 3개월동안 활동하게 됩니다.</div>
-                <div className="font-bold mt-2 text-lg">지원 방법</div>
-                <div>다음 계좌로 회비 45000원 입금해주시면 지원 완료됩니다.</div>
-                <div>김은식 카카오뱅크 3333-03-5130993</div>
-                <div className="mt-2">가입 승인은 매달 마지막날 ~ 다음달 1일 중 처리됩니다.</div>
-                <div>가입 완료되신분들은 카톡방에 초대해드리고 있습니다.</div>
-                <div>아지트 포화 등의 이유로 가입에 제한이 있을 수 있습니다.</div>
-                <div>추가 문의사항은 인스타그램으로 부탁드립니다.</div>
-              </div>
-            )}
-
-            {!canJoin && (
-              <div className="flex flex-col items-center justify-center">
-                <div className="font-bold text-lg mb-2">지원 기간이 아닙니다.</div>
-                <div>매달 마지막 7일 동안 지원이 가능합니다.</div>
-                {countdown && <div className="flex items-center justify-center">지원 가능까지 남은시간 : {countdown}</div>}
-              </div>
-            )}
-
-            <Button color="error" onClick={() => setIsModalOpen(false)}>닫기</Button>
-          </div>
-        </Box>
-      </Modal>
     </div>
   )
 }

@@ -13,20 +13,12 @@ import dayjs from "dayjs";
 import Swal from "sweetalert2";
 import axios from "axios";
 import FormControlLabel from '@mui/material/FormControlLabel';
-
+import { pushDiscord } from "@/app/tools";
 
 export default function CreateEvent() {
   const pickDate: any = useSearchParams().get('pickDate');
   const [isSubmitting, setIsSubmitting] = useState(false);
   //discord
-  const pushDiscord = ({ text }: { text: string }) => {
-    process.env.NEXT_PUBLIC_DISCORD_WEBHOOK_URL && axios.post(process.env.NEXT_PUBLIC_DISCORD_WEBHOOK_URL, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      },
-      content: text
-    })
-  }
 
   const { data: currentUser, isLoading: isLoading } = useGetCurrentUser();
 
@@ -67,7 +59,7 @@ export default function CreateEvent() {
   }, [pickDate])
 
   const [isPushAlarm, setIsPushAlarm] = useState<boolean>(true);
-  
+
 
   const handleSubmit = () => {
     if ((timeState.startTime || timeState.endTime) == null) {
@@ -114,7 +106,13 @@ export default function CreateEvent() {
         setIsSubmitting(true);
         if (isPushAlarm) {
           pushDiscord({
-            text: `새로운 번개가 생성되었습니다. \n 제목: ${formState.title} \n 장소: ${formState.location} \n 설명: ${formState.description} \n 시작시간: ${formState.startTime} \n 종료시간: ${formState.endTime} \n 최대인원: ${formState.max_members_count}`
+            text: `------------------\n새로운 번개가 생성되었습니다. \n 제목: ${formState.title} \n 장소: ${formState.location} \n 설명: ${formState.description} \n 시작시간: ${dayjs(timeState.startTime).format(
+              "YYYY-MM-DD HH:mm:ss"
+            )} \n 종료시간: ${dayjs(timeState.endTime).format(
+              "YYYY-MM-DD HH:mm:ss"
+            )} \n 최대인원: ${formState.max_members_count}
+            \n 바로가기 : https://www.gambodong.com/events/${res.data.id}
+            `
           });
         }
         Swal.fire({

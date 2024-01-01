@@ -1,5 +1,5 @@
 'use client';
-import { Box, Button, TextField } from "@mui/material";
+import { Box, Button, TextField, Checkbox } from "@mui/material";
 import { getActiveUsers, patchEvent, getEvent } from "../../../api";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
@@ -11,6 +11,8 @@ import NativeSelect from '@mui/material/NativeSelect';
 import { LoadingComp } from "@/app/loadingComp";
 import { DatePickerComp } from "./DatePickerComp";
 import { useGetCurrentUser } from "@/app/hooks/useGetCurrentUser";
+import FormControlLabel from '@mui/material/FormControlLabel';
+import { pushDiscord } from "@/app/tools";
 
 export default function PatchEvent({ params }: { params: { event: string } }) {
   const [event, setEvent] = useState<any>({});
@@ -77,6 +79,17 @@ export default function PatchEvent({ params }: { params: { event: string } }) {
         uid: event.uid,
         event_id: params.event
       }).then((res: any) => {
+        if (isPushAlarm) {
+          pushDiscord({
+            text: `------------------\n번개가 수정되었습니다. \n 제목: ${event.title} \n 장소: ${event.location} \n 설명: ${event.description} \n 시작시간: ${dayjs(timeState.startTime).format(
+              "YYYY-MM-DD HH:mm:ss"
+            )} \n 종료시간: ${dayjs(timeState.endTime).format(
+              "YYYY-MM-DD HH:mm:ss"
+            )} \n 최대인원: ${event.max_members_count}
+            \n 바로가기 : https://www.gambodong.com/events/${res.data.id}
+            `
+          });
+        }
         Swal.fire({
           icon: 'success',
           title: '수정 완료',
@@ -101,6 +114,7 @@ export default function PatchEvent({ params }: { params: { event: string } }) {
     }
   }, [currentUser])
 
+  const [isPushAlarm, setIsPushAlarm] = useState<boolean>(true);
 
   return event ? (
     <div className="flex flex-col space-y-4">
@@ -162,15 +176,22 @@ export default function PatchEvent({ params }: { params: { event: string } }) {
         onChange={(e) => setEvent({ ...event, max_members_count: e.target.value })}
         name="max_members_count"
       />
+
+      <FormControlLabel control={<Checkbox defaultChecked={true} onChange={
+        (e) => {
+          setIsPushAlarm(e.target.checked)
+        }
+      } />} label="디스코드에 번개 생성 알림을 보냅니다." />
+
       <Button type="button" onClick={() => handleSubmit()} variant='contained' color="success">완료하기</Button>
-      <Link
-        href={`/events/${params.event}`}
-        className="flex items-center justify-center w-full no-underline"
-      >
-        <Button color="error">
+      <Button color="error">
+        <Link
+          href={`/events/${params.event}`}
+          className="flex items-center justify-center w-full no-underline text-black"
+        >
           취소
-        </Button>
-      </Link>
+        </Link>
+      </Button>
     </div>
   ) : (
     <LoadingComp />

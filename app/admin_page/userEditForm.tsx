@@ -16,7 +16,7 @@ export const UserEditForm = ({ user, close }: { user: any, close: any }) => {
       setBirth(dayjs(user.birth));
     }
   }, [user])
-
+  
   const handleSubmit = () => {
     const pData = {
       name: name,
@@ -24,7 +24,7 @@ export const UserEditForm = ({ user, close }: { user: any, close: any }) => {
     }
 
     if (pData.name !== "" && pData.birth !== null) {
-      patchUser({ uid: user.uid, name: name, birth: birth }).then((res) => {
+      patchUser({ uid: user.uid, name: name, birth: dayjs(birth).format("YYYY-MM-DD") }).then((res) => {
         alert("수정되었습니다. 페이지가 새로고침됩니다.")
         window.location.reload();
         close();

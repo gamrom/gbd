@@ -92,7 +92,7 @@ export default function Register() {
             phone: values.phone,
             referrer_path: values.funnels,
             uid: authUser.user.uid,
-            birth: birth,
+            birth: dayjs(birth).locale("ko").format("YYYY-MM-DD"),
           }).then((res) => {
             signInWithEmailAndPassword(auth, values.email, values.pw)
               .then((userCredential: any) => {

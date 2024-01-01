@@ -59,6 +59,12 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
+    id: "userEdit",
+    numeric: false,
+    disablePadding: false,
+    label: ""
+  },
+  {
     id: 'role',
     numeric: false,
     disablePadding: true,
@@ -71,6 +77,18 @@ const headCells = [
     label: '이름',
   },
   {
+    id: "birth",
+    numeric: false,
+    disablePadding: false,
+    label: "생년월일"
+  },
+  {
+    id: "gender",
+    numeric: false,
+    disablePadding: false,
+    label: "성별"
+  },
+  {
     id: 'phone',
     numeric: false,
     disablePadding: false,
@@ -81,18 +99,6 @@ const headCells = [
     numeric: false,
     disablePadding: false,
     label: "이메일"
-  },
-  {
-    id: "birth",
-    numeric: false,
-    disablePadding: false,
-    label: "생년월일"
-  },
-  {
-    id: "userEdit",
-    numeric: false,
-    disablePadding: false,
-    label: ""
   },
 ];
 
@@ -388,12 +394,27 @@ export default function EnhancedTable() {
                         }}
                       />
                     </TableCell>
+                    <TableCell className="shrink-0">
+                      <Button variant="contained" color="primary" type="button" onClick={(e) => handleEditUser({ e: e, data: row })}>정보수정</Button>
+                      {/* <Button className="ml-2" variant="contained" color="error" type="button" onClick={(e) => {
+                            e.preventDefault();
+                            if (window.confirm("정말로 탈퇴시키겠습니까?")) {
+                              deleteUser({ uid: row.uid }).then((res) => {
+                                if (res.status === 200) {
+                                  alert("회원이 탈퇴되었습니다.");
+                                  window.location.reload();
+                                }
+                              }).catch((err) => {
+                                alert("회원 탈퇴에 실패했습니다.");
+                              })
+                            }
+                          }}>회원탈퇴</Button> */}
+                    </TableCell>
                     <TableCell
                       component="th"
                       id={labelId}
                       scope="row"
                       padding="none"
-
                     >
                       {row.role === "admin" && "관리자"}
                       {row.role === "manager" && "매니저"}
@@ -405,27 +426,16 @@ export default function EnhancedTable() {
                       {row.name}
                     </TableCell>
 
-                    <TableCell>{row.phone}</TableCell>
-                    <TableCell>{row.email}</TableCell>
                     <TableCell>{dayjs(row.birth).format(
                       "YY-MM-DD"
                     )}</TableCell>
-                    <TableCell className="shrink-0">
-                      <Button variant="contained" color="primary" type="button" onClick={(e) => handleEditUser({ e: e, data: row })}>정보수정</Button>
-                      {/* <Button className="ml-2" variant="contained" color="error" type="button" onClick={(e) => {
-                        e.preventDefault();
-                        if (window.confirm("정말로 탈퇴시키겠습니까?")) {
-                          deleteUser({ uid: row.uid }).then((res) => {
-                            if (res.status === 200) {
-                              alert("회원이 탈퇴되었습니다.");
-                              window.location.reload();
-                            }
-                          }).catch((err) => {
-                            alert("회원 탈퇴에 실패했습니다.");
-                          })
-                        }
-                      }}>회원탈퇴</Button> */}
+                    <TableCell>
+                      {row.gender === "male" && "남성"}
+                      {row.gender === "female" && "여성"}
                     </TableCell>
+                    <TableCell>{row.phone}</TableCell>
+                    <TableCell>{row.email}</TableCell>
+
                   </TableRow>
                 );
               })}

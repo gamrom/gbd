@@ -1,3 +1,5 @@
+import axios from "axios";
+
 export const elapsedTime = (date: number): string => {
   const start = new Date(date);
   const end = new Date();
@@ -30,4 +32,13 @@ export const roleText = (role: string): string => {
     default:
       return '';
   }
+}
+
+export const pushDiscord = ({ text }: { text: string }) => {
+  process.env.NEXT_PUBLIC_DISCORD_WEBHOOK_URL && axios.post(process.env.NEXT_PUBLIC_DISCORD_WEBHOOK_URL, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    },
+    content: text
+  })
 }
