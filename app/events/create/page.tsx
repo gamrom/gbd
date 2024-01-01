@@ -67,7 +67,7 @@ export default function CreateEvent() {
   }, [pickDate])
 
   const [isPushAlarm, setIsPushAlarm] = useState<boolean>(true);
-  
+
 
   const handleSubmit = () => {
     if ((timeState.startTime || timeState.endTime) == null) {
@@ -114,7 +114,11 @@ export default function CreateEvent() {
         setIsSubmitting(true);
         if (isPushAlarm) {
           pushDiscord({
-            text: `새로운 번개가 생성되었습니다. \n 제목: ${formState.title} \n 장소: ${formState.location} \n 설명: ${formState.description} \n 시작시간: ${formState.startTime} \n 종료시간: ${formState.endTime} \n 최대인원: ${formState.max_members_count}`
+            text: `------------------\n새로운 번개가 생성되었습니다. \n 제목: ${formState.title} \n 장소: ${formState.location} \n 설명: ${formState.description} \n 시작시간: ${dayjs(timeState.startTime).format(
+              "YYYY-MM-DD HH:mm:ss"
+            )} \n 종료시간: ${dayjs(timeState.endTime).format(
+              "YYYY-MM-DD HH:mm:ss"
+            )} \n 최대인원: ${formState.max_members_count}\n------------------`
           });
         }
         Swal.fire({
