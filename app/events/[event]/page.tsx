@@ -112,7 +112,7 @@ export default function Event({ params }: { params: { event: string } }) {
         📍 {event?.location}
       </div>
       <div className="mt-4">👑 {event?.owner_name}</div>
-      <div className="mt-4 pre-wrap">
+      <div className="mt-4 whitespace-pre-line">
         {event?.description}
       </div>
 
