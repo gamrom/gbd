@@ -184,14 +184,14 @@ export default function PatchEvent({ params }: { params: { event: string } }) {
       } />} label="디스코드에 번개 생성 알림을 보냅니다." />
 
       <Button type="button" onClick={() => handleSubmit()} variant='contained' color="success">완료하기</Button>
-      <Link
-        href={`/events/${params.event}`}
-        className="flex items-center justify-center w-full no-underline"
-      >
-        <Button color="error">
+      <Button color="error">
+        <Link
+          href={`/events/${params.event}`}
+          className="flex items-center justify-center w-full no-underline text-black"
+        >
           취소
-        </Button>
-      </Link>
+        </Link>
+      </Button>
     </div>
   ) : (
     <LoadingComp />
