@@ -6,6 +6,7 @@ import './globals.css'
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { Header } from './header'
+import { Footer } from './footer'
 import 'dayjs/locale/ko'
 
 import { Analytics } from '@vercel/analytics/react';
@@ -31,6 +32,7 @@ export default function RootLayout({
         <body className={`${inter.className} max-w-[650px] mx-auto px-4 min-h-screen`}>
           <Header />
           {children}
+          <Footer />
           <SpeedInsights />
           <Analytics />
         </body>

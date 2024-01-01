@@ -53,20 +53,6 @@ export const Header = () => {
       <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
         {!isLogin ? (
           <>
-            {/* <Link href="/register" className="no-underline text-black">
-              <ListItem key="회원가입" disablePadding>
-                <ListItemButton>
-                  <ListItemText primary="회원가입" />
-                </ListItemButton>
-              </ListItem>
-            </Link>
-            <Link href="/login" className="no-underline text-black">
-              <ListItemButton>
-                <ListItemText>
-                  로그인
-                </ListItemText>
-              </ListItemButton>
-            </Link> */}
             <ListItem>
               <Button variant="contained" color="secondary">
                 <Link href="/login" className="no-underline text-white">
