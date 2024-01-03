@@ -9,6 +9,7 @@ import { LoadingComp } from "./loadingComp";
 import { useRouter } from 'next/navigation';
 import dayjs from "dayjs";
 import { useEffect } from "react";
+import Link from "next/link";
 
 export const Notices = () => {
   const router = useRouter();
@@ -81,6 +82,13 @@ export const Notices = () => {
           <Button key={notice.id} onClick={() => handleClickNotice({ noticeId: notice.id, canAccess: notice.canAccess })} variant="outlined" color="info" size="small">{notice.title}</Button>
         )
       })}
+      {
+        <Button size="small" variant="outlined">
+          <Link color="secondary" className="no-underline text-[#0288d1]" target="_blank" href="https://gamromboard.notion.site/af19c7f8fd434d198a263590ce10c0de?pvs=4">
+            슬리브 구매
+          </Link>
+        </Button>
+      }
 
       <Modal
         open={isModalOpen}
