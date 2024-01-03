@@ -167,7 +167,7 @@ export const CalendarComponent = () => {
               color="success"
               type="button"
             >
-              <Link className="text-white no-underline" href={`/events/create?pickDate=${pickDate}`}>
+              <Link className="w-full text-white no-underline" href={`/events/create?pickDate=${pickDate}`}>
                 번개 생성
               </Link>
             </Button>

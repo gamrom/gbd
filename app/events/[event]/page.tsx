@@ -142,7 +142,7 @@ export default function Event({ params }: { params: { event: string } }) {
           }}>삭제하기</Button>}
           {currentUser && ((currentUser.data.uid === event.owner_uid) || ((currentUser.data.role === "admin") || (currentUser.data.role === "manager"))) && (
             <Button variant="contained" color="success" className="text-xs">
-              <Link className="no-underline text-white" href={`/events/${params.event}/edit`}>
+              <Link className="w-full no-underline text-white" href={`/events/${params.event}/edit`}>
                 수정하기
               </Link>
             </Button>

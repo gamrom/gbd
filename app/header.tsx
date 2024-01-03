@@ -55,7 +55,7 @@ export const Header = () => {
           <>
             <ListItem>
               <Button variant="contained" color="secondary">
-                <Link href="/login" className="no-underline text-white">
+                <Link href="/login" className="w-full no-underline text-white">
                   로그인 후 지원하기
                 </Link>
               </Button>
