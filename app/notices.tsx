@@ -84,7 +84,7 @@ export const Notices = () => {
       })}
       {
         <Button size="small" variant="outlined">
-          <Link color="secondary" className="no-underline text-[#0288d1]" target="_blank" href="https://gamromboard.notion.site/af19c7f8fd434d198a263590ce10c0de?pvs=4">
+          <Link color="secondary" className="w-full no-underline text-[#0288d1]" target="_blank" href="https://gamromboard.notion.site/af19c7f8fd434d198a263590ce10c0de?pvs=4">
             슬리브 구매
           </Link>
         </Button>
