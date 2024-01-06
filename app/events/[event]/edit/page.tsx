@@ -81,12 +81,11 @@ export default function PatchEvent({ params }: { params: { event: string } }) {
       }).then((res: any) => {
         if (isPushAlarm) {
           pushDiscord({
-            text: `------------------\n번개가 수정되었습니다. \n 제목: ${event.title} \n 장소: ${event.location} \n 설명: ${event.description} \n 시작시간: ${dayjs(timeState.startTime).format(
-              "YYYY-MM-DD HH:mm:ss"
-            )} \n 종료시간: ${dayjs(timeState.endTime).format(
-              "YYYY-MM-DD HH:mm:ss"
-            )} \n 최대인원: ${event.max_members_count}
-            \n 바로가기 : https://www.gambodong.com/events/${res.data.id}
+            text: `------------------------------\n번개가 수정되었습니다. \n제목: ${res.data.title} \n장소: ${res.data.location} \n벙주: ${res.data.owner_name} \n설명: ${res.data.description} \n시작시간: ${dayjs(res.data.start_time).format(
+              "YY-MM-DD HH:mm"
+            )} \n종료시간: ${dayjs(res.data.end_time).format(
+              "YY-MM-DD HH:mm"
+            )}  \n최대인원: ${res.data.max_members_count} \n바로가기 : https://www.gambodong.com/events/${res.data.id}
             `
           });
         }
@@ -182,6 +181,8 @@ export default function PatchEvent({ params }: { params: { event: string } }) {
           setIsPushAlarm(e.target.checked)
         }
       } />} label="디스코드에 번개 생성 알림을 보냅니다." />
+
+      <span className="text-xs !mt-0">밤10시에서 오전9시 사이에는 체크를 하여도 알림이 가지 않습니다.</span>
 
       <Button type="button" onClick={() => handleSubmit()} variant='contained' color="success">완료하기</Button>
       <Button color="error">

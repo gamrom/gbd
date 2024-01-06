@@ -143,6 +143,14 @@ export const Header = () => {
             </Link>
           ))
         }
+
+        <Link href="/schedule_generator" className="no-underline text-black">
+          <ListItemButton>
+            <ListItemText>
+              정모 생성기
+            </ListItemText>
+          </ListItemButton>
+        </Link>
       </List>
     </Box>
   );
