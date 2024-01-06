@@ -35,8 +35,9 @@ export const roleText = (role: string): string => {
   }
 }
 
-export const pushDiscord = ({ text }: { text: string }) => {
+export const pushDiscord = ({ text, isActivateWorkingHour = true }: { text: string, isActivateWorkingHour?: boolean }) => {
   function isWorkingHour() {
+    if (!isActivateWorkingHour) return true;
     const now = dayjs().locale('ko'); // 현재 한국 시간 기준으로 가져오기
     const hour = now.hour();
 
@@ -54,4 +55,5 @@ export const pushDiscord = ({ text }: { text: string }) => {
     },
     content: text
   })
+
 }

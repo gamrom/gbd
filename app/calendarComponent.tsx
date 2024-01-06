@@ -10,6 +10,7 @@ import { Badge } from '@mui/material';
 import { PickersDay, PickersDayProps } from '@mui/x-date-pickers/PickersDay';
 import { LoadingComp } from './loadingComp';
 import { useGetCurrentUser } from './hooks/useGetCurrentUser';
+import { useSearchParams } from 'next/navigation';
 
 type EventProps = {
   id: number,
@@ -36,6 +37,8 @@ export const CalendarComponent = () => {
   };
 
   const [events, setEvents] = useState<EventProps[]>([]);
+
+
   const [callendarEvents, setCallendarEvents] = useState<Array<number>>([]);
   useEffect(() => {
     if (pickDate) {
@@ -57,6 +60,7 @@ export const CalendarComponent = () => {
   }, [pickDate])
 
   useEffect(() => {
+
     if (toggleFilter === "monthAll") {
       setToggleFilter("monthAll");
       getCurrentMonthEvents({
@@ -86,6 +90,7 @@ export const CalendarComponent = () => {
         setEvents(res.data);
       })
     }
+
     setEventsIsLoading(false);
   }, [toggleFilter, pickDate, callendarEvents])
 
@@ -109,6 +114,18 @@ export const CalendarComponent = () => {
       setCallendarEvents(uniqueDays);
     })
   }, [pickDate])
+
+  const queryPickDate = useSearchParams().get("pickDate");
+  useEffect(() => {
+    if (queryPickDate) {
+      setToggleFilter("");
+      setPickDate(dayjs(queryPickDate).locale("ko"));
+    } else {
+      setPickDate(null);
+    }
+  }, [queryPickDate])
+
+  console.log(pickDate)
 
   function ServerDay(props: PickersDayProps<Dayjs> & { callendarEvents?: number[] }) {
     const { callendarEvents = [], day, outsideCurrentMonth, ...other } = props;
@@ -187,6 +204,8 @@ export const CalendarComponent = () => {
         onChange={(newValue) => {
           setToggleFilter("");
           setPickDate(newValue)
+          //현재 주소뒤에 query paramter로 pickDate를 붙여준다.
+          window.history.pushState({}, "", `?pickDate=${dayjs(newValue).format('YYYY-MM-DD')}`);
         }}
         onMonthChange={(newValue) => {
           if (toggleFilter === "monthAll") {

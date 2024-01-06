@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { auth } from '../firebase';
-import { url } from 'inspector';
-import useSWR, { SWRConfig } from 'swr'
+
 
 const AuthAPI = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BACKEND_URL,
