@@ -1,4 +1,5 @@
 import axios from "axios";
+import dayjs from "dayjs";
 
 export const elapsedTime = (date: number): string => {
   const start = new Date(date);
@@ -35,7 +36,19 @@ export const roleText = (role: string): string => {
 }
 
 export const pushDiscord = ({ text }: { text: string }) => {
-  process.env.NEXT_PUBLIC_DISCORD_WEBHOOK_URL && axios.post(process.env.NEXT_PUBLIC_DISCORD_WEBHOOK_URL, {
+  function isWorkingHour() {
+    const now = dayjs().locale('ko'); // 현재 한국 시간 기준으로 가져오기
+    const hour = now.hour();
+
+    // 밤 10시부터 아침 9시 사이인지 여부 확인
+    if (hour >= 22 || hour < 9) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  isWorkingHour() && process.env.NEXT_PUBLIC_DISCORD_WEBHOOK_URL && axios.post(process.env.NEXT_PUBLIC_DISCORD_WEBHOOK_URL, {
     headers: {
       'Content-Type': 'multipart/form-data'
     },

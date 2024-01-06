@@ -37,6 +37,7 @@ export default function CreateEvent() {
     end_time: "",
     max_members_count: 4,
     uid: "",
+    owner_name: ""
   })
 
   useEffect(() => {
@@ -106,19 +107,18 @@ export default function CreateEvent() {
         setIsSubmitting(true);
         if (isPushAlarm) {
           pushDiscord({
-            text: `------------------\n새로운 번개가 생성되었습니다. \n 제목: ${formState.title} \n 장소: ${formState.location} \n 설명: ${formState.description} \n 시작시간: ${dayjs(timeState.startTime).format(
-              "YYYY-MM-DD HH:mm:ss"
-            )} \n 종료시간: ${dayjs(timeState.endTime).format(
-              "YYYY-MM-DD HH:mm:ss"
-            )} \n 최대인원: ${formState.max_members_count}
-            \n 바로가기 : https://www.gambodong.com/events/${res.data.id}
+            text: `------------------------------\n새로운 번개가 생성되었습니다. \n제목: ${res.data.title} \n장소: ${res.data.location} \n벙주: ${res.data.owner_name} \n설명: ${res.data.description} \n시작시간: ${dayjs(res.data.start_time).format(
+              "YY-MM-DD HH:mm"
+            )} \n종료시간: ${dayjs(res.data.end_time).format(
+              "YY-MM-DD HH:mm"
+            )}  \n최대인원: ${res.data.max_members_count} \n바로가기 : https://www.gambodong.com/events/${res.data.id}
             `
           });
         }
         Swal.fire({
           icon: 'success',
           title: '일정이 생성되었습니다.',
-          showConfirmButton: false,
+          confirmButtonText: '확인',
         }).then(() => {
           location.href = `/events/${res.data.id}`
         })
@@ -210,6 +210,7 @@ export default function CreateEvent() {
           setIsPushAlarm(e.target.checked)
         }
       } />} label="디스코드에 번개 생성 알림을 보냅니다." />
+      <span className="text-xs !mt-0">밤10시에서 오전9시 사이에는 체크를 하여도 알림이 가지 않습니다.</span>
       <Button disabled={isSubmitting} type="button" variant='contained' color="success" onClick={() => handleSubmit()}>완료하기</Button>
       <Button type="button" color="error">취소</Button>
     </div>
