@@ -27,7 +27,6 @@ export const CalendarComponent = () => {
   const [pickDate, setPickDate] = useState<Dayjs | any>(null);
   const { data: currentUser } = useGetCurrentUser();
   const [eventsIsLoading, setEventsIsLoading] = useState<boolean>(true);
-  const [eventsDay, setEventsDay] = useState<Array<number>>([]);
 
   const handleFilter = (
     event: React.MouseEvent<HTMLElement>,
@@ -88,7 +87,7 @@ export const CalendarComponent = () => {
       })
     }
     setEventsIsLoading(false);
-  }, [toggleFilter, pickDate])
+  }, [toggleFilter, pickDate, callendarEvents])
 
   useEffect(() => {
     //모든 이벤트의 시작날짜와 끝날짜 사이의 모든 날짜를 구한다.
@@ -107,7 +106,6 @@ export const CalendarComponent = () => {
       })
       //중복된 날짜를 제거한다.
       const uniqueDays = Array.from(new Set(allDays));
-      //중복된 날짜를 제거한 날짜들을 eventsDay에 넣는다.
       setCallendarEvents(uniqueDays);
     })
   }, [pickDate])

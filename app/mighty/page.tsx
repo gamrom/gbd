@@ -49,7 +49,6 @@ export default function MightyPage() {
       friend: "",
       winPoint: 13,
       betPoint: 13,
-      noGiruda: false,
     },
     validationSchema: Yup.object({
       king: Yup.string().required('주공을 선택해주세요'),
@@ -67,7 +66,7 @@ export default function MightyPage() {
           standardPoint *= 2;
         }
 
-        if (values.noGiruda) {
+        if (nogiruda) {
           //노기루다
           standardPoint *= 2;
         }
@@ -236,7 +235,7 @@ export default function MightyPage() {
           //백런
           standardPoint *= 2;
         }
-        if (values.noGiruda) {
+        if (nogiruda) {
           //노기루다
           standardPoint *= 2;
         }
