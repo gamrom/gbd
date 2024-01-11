@@ -1,15 +1,16 @@
+'use client'
 import { ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { DateCalendar } from '@mui/x-date-pickers';
 import { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
 import Link from 'next/link';
 import dayjs, { Dayjs } from 'dayjs';
-import { getCurrentMonthEvents, getApplyEvent, getEvents } from './api';
+import { getCurrentMonthEvents, getApplyEvent, getEvents } from '../api';
 import { DayCalendarSkeleton } from '@mui/x-date-pickers/DayCalendarSkeleton';
 import { Badge } from '@mui/material';
 import { PickersDay, PickersDayProps } from '@mui/x-date-pickers/PickersDay';
-import { LoadingComp } from './loadingComp';
-import { useGetCurrentUser } from './hooks/useGetCurrentUser';
+import { LoadingComp } from '../loadingComp';
+import { useGetCurrentUser } from '../hooks/useGetCurrentUser';
 import { useSearchParams } from 'next/navigation';
 
 type EventProps = {

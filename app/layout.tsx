@@ -43,9 +43,8 @@ export default function RootLayout({
           <meta name="twitter:description" content="" />
           <meta name="twitter:image" content="https://opengraph.b-cdn.net/production/documents/e11d93e3-ddd4-4b19-a19a-14592b5cb9ea.png?token=JBsz2BlhZcfuovakmojI0n6WZjcnnWJmCGWTxg4e0dY&height=400&width=800&expires=33240121561" />
 
-
         </head>
-        <body className={`${inter.className} max-w-[650px] mx-auto px-4 min-h-screen`}>
+        <body className={`${inter.className}`}>
           <Header />
           {children}
           <Footer />

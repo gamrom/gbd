@@ -1,6 +1,6 @@
 export const Footer = () => {
   return (
-    <footer className="bg-white">
+    <footer className="bg-white max-w-[650px] mx-auto px-4 min-h-screen">
       <div className="mx-auto max-w-screen-xl space-y-2 py-16">
         {/* 문의 및 활동사진 */}
         <div>
