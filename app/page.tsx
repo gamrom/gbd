@@ -386,7 +386,7 @@ export default function Home() {
               </div>
             )}
 
-            <Button color="error" onClick={() => setIsSpecialModalOpen(false)}>닫기</Button>
+            <Button color="red" className="border-none" onClick={() => setIsSpecialModalOpen(false)}>닫기</Button>
           </div>
         </Box>
       </Modal>
