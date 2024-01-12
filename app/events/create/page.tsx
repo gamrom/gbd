@@ -11,15 +11,13 @@ import { useGetCurrentUser } from "@/app/hooks/useGetCurrentUser";
 import { DateTimePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 import Swal from "sweetalert2";
-import axios from "axios";
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { pushDiscord } from "@/app/tools";
 
 export default function CreateEvent() {
   const pickDate: any = useSearchParams().get('pickDate');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  //discord
-
+  
   const { data: currentUser, isLoading: isLoading } = useGetCurrentUser();
 
   const [activeUsers, setActiveUsers] = useState<any>([]);
