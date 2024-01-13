@@ -355,7 +355,7 @@ export default function EnhancedTable() {
   const modalClose = () => setIsModalOpen(false);
 
   return (
-    <Box sx={{ width: '100%' }}>
+    <Box sx={{ width: '100%', marginTop: "72px" }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
         <EnhancedTableToolbar numSelected={selected.length} selected={selected} />
         <TableContainer>

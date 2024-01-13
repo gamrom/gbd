@@ -132,8 +132,17 @@ export function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const [canSee, setCanSee] = useState<boolean>(false);
+  useEffect(() => {
+    if (!isLoading && currentUser) {
+      if (currentUser.data.role === "admin" || currentUser.data.role === "manager") {
+        setCanSee(true);
+      }
+    }
+  }, [isLoading, currentUser])
+
   return (
-    <nav className="fixed top-0 z-50 border-0 px-4 bg-white w-full py-4" style={{maxWidth: "-webkit-fill-available"}}>
+    <nav className="fixed top-0 z-50 border-0 px-4 bg-white w-full py-4" style={{ maxWidth: "-webkit-fill-available" }}>
       <div className="container flex items-center justify-between mx-auto">
         <Typography
           as="a"
@@ -148,14 +157,12 @@ export function Navbar() {
           className={`hidden items-center gap-6 lg:flex text-gray-900`}
         >
           {NAV_MENU.map((item, index) => {
-            if (!isLoading && (currentUser && ((currentUser.data.role === "admin") || (currentUser.data.role === "manager")) && !item.accessAll)) {
-              return (
-                <NavItem key={`name_${index}`} name={item.name} href={item.href} targetBlank={item.targetBlank} />
-              )
+            if (item.accessAll) {
+              return <NavItem key={`name_${index}`} name={item.name} href={item.href} targetBlank={item.targetBlank} />
             } else {
-              return (
-                <NavItem key={`name_${index}`} name={item.name} href={item.href} targetBlank={item.targetBlank} />
-              )
+              if (canSee) {
+                return <NavItem key={`name_${index}`} name={item.name} href={item.href} targetBlank={item.targetBlank} />
+              }
             }
           })}
         </ul>
@@ -165,21 +172,19 @@ export function Navbar() {
         <div className="container mx-auto bg-white rounded-lg py-4 px-6 mt-3 border-t border-gray-200">
           <ul className="flex flex-col gap-4">
             {NAV_MENU.map((item, index) => {
-              if (!isLoading && (currentUser && ((currentUser.data.role === "admin") || (currentUser.data.role === "manager")) && !item.accessAll)) {
-                return (
-                  <NavItem key={`name_${index}`} name={item.name} href={item.href} targetBlank={item.targetBlank} />
-                )
+              if (item.accessAll) {
+                return <NavItem key={`name_${index}`} name={item.name} href={item.href} targetBlank={item.targetBlank} />
               } else {
-                return (
-                  <NavItem key={`name_${index}`} name={item.name} href={item.href} targetBlank={item.targetBlank} />
-                )
+                if (canSee) {
+                  return <NavItem key={`name_${index}`} name={item.name} href={item.href} targetBlank={item.targetBlank} />
+                }
               }
             })}
           </ul>
           <div className="mt-6 flex items-center gap-2">
             {!isLoading && (!currentUser ? (
               <div className="items-center gap-2 lg:flex">
-                <Link href="/login" className="no-underline text-white cursor-pointer">
+                <Link href="/login" className="no-underline text-white cursor-pointer" onClick={() => setOpen(false)}>
                   <Button variant="gradient" color="blue" className="border-none cursor-pointer">
                     로그인 후 지원하기
                   </Button>
