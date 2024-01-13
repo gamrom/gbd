@@ -116,7 +116,7 @@ export default function ScheduleGeneratorPage() {
         willClose: () => {
           pushDiscord({
             text: `------------------------------\n이번주 정모가 열렸습니다!  \n장소: 아지트 \n벙주: ${users.find((user) => user.uid === select)?.name
-              } \n설명: 선착순 모집이며, 참여가능한 시간에 모두 참석 눌러주세요!\n상세시간은 정모 톡방이 파진 후 벙주가 다시 조사합니다.\n16인을 초과한 분들 부터는 대기 명단으로 들어가며, 톡방에 초대 되지 않으면 대기 인것이니 참고해주세요!\n*톡방은 보통 수요일 밤에 파집니다.\n최대인원: 시간당 16명 \n바로가기 : https://www.gambodong.com/?pickDate=${formatSaturday}
+              } \n설명: 선착순 모집이며, 참여가능한 시간에 모두 참석 눌러주세요!\n상세시간은 정모 톡방이 파진 후 벙주가 다시 조사합니다.\n16인을 초과한 분들 부터는 대기 명단으로 들어가며, 톡방에 초대 되지 않으면 대기 인것이니 참고해주세요!\n*톡방은 보통 수요일 밤에 파집니다.\n최대인원: 시간당 16명 \n바로가기 : https://www.gambodong.com/events?pickDate=${formatSaturday}
             `,
           });
         }

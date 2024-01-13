@@ -1,15 +1,16 @@
+'use client'
 import { ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { DateCalendar } from '@mui/x-date-pickers';
 import { useEffect, useState } from 'react';
-import Button from '@mui/material/Button';
+import { Button } from "@material-tailwind/react"
 import Link from 'next/link';
 import dayjs, { Dayjs } from 'dayjs';
-import { getCurrentMonthEvents, getApplyEvent, getEvents } from './api';
+import { getCurrentMonthEvents, getApplyEvent, getEvents } from '../api';
 import { DayCalendarSkeleton } from '@mui/x-date-pickers/DayCalendarSkeleton';
 import { Badge } from '@mui/material';
 import { PickersDay, PickersDayProps } from '@mui/x-date-pickers/PickersDay';
-import { LoadingComp } from './loadingComp';
-import { useGetCurrentUser } from './hooks/useGetCurrentUser';
+import { LoadingComp } from '../loadingComp';
+import { useGetCurrentUser } from '../hooks/useGetCurrentUser';
 import { useSearchParams } from 'next/navigation';
 
 type EventProps = {
@@ -177,9 +178,9 @@ export const CalendarComponent = () => {
           <div className="flex items-center justify-center">
 
             <Button
-              variant="contained"
-              className="mt-4 mx-auto text-center"
-              color="success"
+              variant="gradient"
+              className="mt-4 mx-auto text-center border-none"
+              color="blue"
               type="button"
             >
               <Link className="w-full text-white no-underline" href={`/events/create?pickDate=${pickDate}`}>
@@ -218,7 +219,7 @@ export const CalendarComponent = () => {
         {events && events.map((event: EventProps, index: number) => {
           return (
             <Link key={index} href={`/events/${event.id}`} className="no-underline text-black">
-              <div className={`hover:cursor-pointer hover:font-bold hover:opacity-100 opacity-90 drop-shadow py-2 px-4 flex flex-col justify-between mt-2 text-sm rounded-[5px] ${event.current_members_count >= event.max_members_count ? "bg-[#e57373]" : "bg-[#81c784]"}`}>
+              <Button color={`${event.current_members_count >= event.max_members_count ? "red" : "green"}`} className={`w-full border-none hover:cursor-pointer hover:font-bold hover:opacity-100 opacity-90 drop-shadow py-2 px-4 flex flex-col justify-between mt-2 text-sm rounded-[5px] `}>
                 <div className="flex justify-between w-full">
                   <div className="flex space-x-4 w-full">
                     <div>{dayjs(event.start_time.replace(/-/g, "/")).format('YY/MM/DD')}</div>
@@ -227,7 +228,7 @@ export const CalendarComponent = () => {
                   <div className="shrink-0">{event.owner_name}</div>
                 </div>
                 <div className="truncate">{event.title}</div>
-              </div>
+              </Button>
             </Link>
           )
         }

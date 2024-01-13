@@ -8,7 +8,6 @@ import { postJoinEvent, deleteCancelEvent, getEventAttendances, deleteEvent } fr
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import { modalStyle } from "../../style";
-import { useGetUser } from "@/app/useGetUser";
 import { elapsedTime } from "@/app/tools";
 import toast, { Toaster } from 'react-hot-toast';
 import Swal from "sweetalert2";

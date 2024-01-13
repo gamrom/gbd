@@ -1,6 +1,7 @@
 'use client';
 
-import { Button, TextField } from "@mui/material"
+import { TextField } from "@mui/material"
+import { Button } from "@material-tailwind/react";
 import Link from "next/link"
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase";
@@ -63,11 +64,13 @@ export default function Login() {
           })
         } className="text-xs text-right ml-auto mt-4 cursor-pointer w-fit">아이디를 잊으셨나요?</div>
         <Link href="/find_pw" className="text-xs ml-auto text-right mt-[2px] no-underline cursor-pointer text-black w-fit">비밀번호를 잊으셨나요?</Link>
-        <Button disabled={formik.isSubmitting} type="submit" variant="contained" className="mt-4">로그인</Button>
-        <Button variant="outlined" className="text-center mt-4">
+        <Button disabled={formik.isSubmitting} type="submit" variant="gradient" color="blue" className="border-none cursor-pointer mt-4">
+          로그인
+        </Button>
+        <Button color="orange" variant="filled" className="text-center mt-4 border-none">
           <Link href="/register" className="w-full no-underline text-black">회원가입</Link>
         </Button>
-        <div className="my-2 mx-auto font-bold text-[#FF0000]">회원만 감보동에 지원하실 수 있습니다.</div>
+        <div className="mt-4 mx-auto font-bold text-[#FF0000]">회원만 감보동에 지원하실 수 있습니다.</div>
       </div>
     </form>
   )
