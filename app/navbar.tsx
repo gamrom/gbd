@@ -72,8 +72,6 @@ function NavItemDiv({
   return (
     <li>
       <Typography
-        as="a"
-        href="#"
         variant="paragraph"
         className="flex items-center gap-2 font-medium no-underline"
       >
@@ -135,14 +133,8 @@ export function Navbar() {
   }, []);
 
   return (
-    <MTNavbar
-      fullWidth
-      shadow={false}
-      blurred={false}
-      color={isScrolling ? "white" : "white"}
-      className="fixed top-0 z-50 border-0"
-    >
-      <div className="container mx-auto flex items-center justify-between">
+    <nav className="fixed top-0 z-50 border-0 px-4 bg-white w-full py-4" style={{maxWidth: "-webkit-fill-available"}}>
+      <div className="container flex items-center justify-between mx-auto">
         <Typography
           as="a"
           href="/"
@@ -153,8 +145,7 @@ export function Navbar() {
           감롬의 보드게임 동아리
         </Typography>
         <ul
-          className={`ml-10 hidden items-center gap-6 lg:flex ${isScrolling ? "text-gray-900" : "text-gray-900"
-            }`}
+          className={`hidden items-center gap-6 lg:flex text-gray-900`}
         >
           {NAV_MENU.map((item, index) => {
             if (!isLoading && (currentUser && ((currentUser.data.role === "admin") || (currentUser.data.role === "manager")) && !item.accessAll)) {
@@ -168,15 +159,6 @@ export function Navbar() {
             }
           })}
         </ul>
-        {!isLoading ? (!currentUser && (
-          <div className="hidden items-center gap-2 lg:flex">
-            <Link href="/login" className="no-underline text-white cursor-pointer">
-              <Button variant="gradient" color="blue" className="border-none cursor-pointer">
-                로그인하고 지원하기
-              </Button>
-            </Link>
-          </div>
-        )) : <div></div>}
         <MenuIcon onClick={handleOpen} className="cursor-pointer h-8 w-8 text-black" />
       </div>
       <Collapse open={open}>
@@ -195,16 +177,16 @@ export function Navbar() {
             })}
           </ul>
           <div className="mt-6 flex items-center gap-2">
-            {!isLoading && !currentUser ? (
-              <div className="hidden items-center gap-2 lg:flex">
+            {!isLoading && (!currentUser ? (
+              <div className="items-center gap-2 lg:flex">
                 <Link href="/login" className="no-underline text-white cursor-pointer">
                   <Button variant="gradient" color="blue" className="border-none cursor-pointer">
-                    로그인하고 지원하기
+                    로그인 후 지원하기
                   </Button>
                 </Link>
               </div>
             ) : (
-              <div className="hidden items-center gap-2 lg:flex">
+              <div className="items-center gap-2 lg:flex">
                 <Button onClick={() => {
                   Swal.fire({
                     title: '로그아웃 하시겠습니까?',
@@ -218,15 +200,16 @@ export function Navbar() {
                   }).finally(() => {
                     location.reload();
                   })
-                }} variant="gradient" color={isScrolling ? "red" : "red"}>
+                }} variant="filled" color="red" className="border-none cursor-pointer">
                   로그아웃
                 </Button>
               </div>
-            )}
+            ))}
           </div>
         </div>
       </Collapse>
-    </MTNavbar>
+    </nav >
+
   );
 }
 
