@@ -19,7 +19,7 @@ export default function Home() {
 
   return (
     <div>
-      <div className="relative min-h-screen w-full bg-[url('/image/image-4.jpeg')] bg-cover bg-no-repeat">
+      <div className="relative min-h-screen w-full bg-[url('/image/image-4.jpeg')] bg-cover bg-no-repeat px-4" style={{ maxWidth: "-webkit-fill-available" }}>
         <div className="absolute inset-0 h-full w-full bg-gray-900/75 bg-cover" />
         <div className="grid min-h-screen px-8">
           <div className="container relative z-10 my-auto mx-auto grid place-items-center text-center">
@@ -77,7 +77,7 @@ export default function Home() {
         </div>
       </div>
 
-      <section className="py-12 px-8">
+      <section className="py-12 px-4">
         <div className="mx-auto max-w-screen-md">
           <Typography color="blue" variant="h6">
             #감롬의보드게임동아리 #서울대입구역도보6분아지트 #대학생직장인동아리
@@ -142,7 +142,7 @@ export default function Home() {
             className="mb-4 h-[28rem] w-full rounded-xl object-cover"
           />
 
-          <section className="w-full max-w-6xl mx-auto flex flex-col items-center px-4 py-20">
+          <section className="w-full max-w-full mx-auto flex flex-col items-center py-20">
             <Typography variant="h3" className="text-center" color="blue-gray">
               이런 활동들을 해요
             </Typography>
@@ -171,7 +171,7 @@ export default function Home() {
                           width={768}
                           height={768}
                           src="/image/image2_1.jpg"
-                          className="w-full h-full rounded-lg"
+                          className="w-full h-full rounded-lg object-cover"
                           alt="지니어스대회"
                         />
                       </div>
@@ -215,7 +215,7 @@ export default function Home() {
                           width={768}
                           height={768}
                           src="/image/image3_6.png"
-                          className="w-10/12 md:w-full object-cover h-full rounded-lg"
+                          className="w-10/12 object-cover h-full rounded-lg"
                           alt="대회"
                         />
                       </div>
@@ -241,7 +241,7 @@ export default function Home() {
                           width={768}
                           height={768}
                           src="/image/image2_3.jpeg"
-                          className="w-full h-full rounded-lg"
+                          className="w-full h-full rounded-lg object-cover"
                           alt="할로윈"
                         />
                       </div>
@@ -258,7 +258,7 @@ export default function Home() {
                             width={256}
                             height={256}
                             src="/image/Memoji-05.png"
-                            className="w-12 h-12 rounded-lg"
+                            className="w-12 h-12 rounded-lg object-cover"
                             alt="photo"
                           />
                         </div>
@@ -282,7 +282,7 @@ export default function Home() {
                           width={768}
                           height={768}
                           src="/image/image3_5.png"
-                          className="w-10/12 md:w-full object-cover h-full rounded-lg"
+                          className="w-10/12 object-cover h-full rounded-lg w-full"
                           alt="대회"
                         />
                       </div>
@@ -308,7 +308,7 @@ export default function Home() {
                           width={768}
                           height={768}
                           src="/image/image2_2.jpeg"
-                          className="w-10/12 md:w-full object-cover h-full rounded-lg"
+                          className="w-10/12 w-full object-cover h-full rounded-lg"
                           alt="보드게임콘"
                         />
                       </div>
@@ -332,7 +332,7 @@ export default function Home() {
                         width={768}
                         height={768}
                         src="/image/image2_4.png"
-                        className="w-10/12 md:w-full object-cover h-full rounded-lg"
+                        className="w-10/12 w-full object-cover h-full rounded-lg"
                         alt="인라인"
                       />
                     </div>
