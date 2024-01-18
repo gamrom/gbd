@@ -11,7 +11,8 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { Footer } from './footer'
 import 'dayjs/locale/ko'
 
-import { Analytics } from '@vercel/analytics/react';
+// import { Analytics } from '@vercel/analytics/react';
+import { GoogleTagManager } from '@next/third-parties/google'
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { ThemeProvider } from "@material-tailwind/react";
 import { Navbar } from './navbar'
@@ -60,7 +61,8 @@ export default function RootLayout({
             {children}
             <Footer />
             <SpeedInsights />
-            <Analytics />
+            {/* <Analytics /> */}
+            <GoogleTagManager gtmId="GTM-TQ8SGL5W" />
           </body>
         </html>
       </LocalizationProvider>
