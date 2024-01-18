@@ -24,6 +24,7 @@ import { parse } from 'json2csv';
 import Modal from '@mui/material/Modal';
 import { UserEditForm } from './userEditForm';
 import dayjs from 'dayjs';
+import { useGetCurrentUser } from '../hooks/useGetCurrentUser';
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -314,6 +315,8 @@ export default function EnhancedTable() {
     [order, orderBy, page, rowsPerPage, rows],
   );
 
+  const { data: currentUser, loading } = useGetCurrentUser();
+
 
   useEffect(() => {
     getUsers().then((res) => {
@@ -394,22 +397,34 @@ export default function EnhancedTable() {
                         }}
                       />
                     </TableCell>
-                    <TableCell className="shrink-0">
-                      <Button variant="contained" color="primary" type="button" onClick={(e) => handleEditUser({ e: e, data: row })}>정보수정</Button>
-                      {/* <Button className="ml-2" variant="contained" color="error" type="button" onClick={(e) => {
-                            e.preventDefault();
-                            if (window.confirm("정말로 탈퇴시키겠습니까?")) {
-                              deleteUser({ uid: row.uid }).then((res) => {
-                                if (res.status === 200) {
+
+                    {(currentUser.data.role === "admin") && (
+                      <TableCell className="shrink-0">
+                        <Button variant="contained" color="primary" type="button" onClick={(e) => handleEditUser({ e: e, data: row })}>정보수정</Button>
+                        <Button className="ml-2" variant="contained" color="error" type="button" onClick={(e) => {
+                          e.preventDefault();
+                          if (window.confirm("정말로 탈퇴시키겠습니까?")) {
+                            deleteUser({ uid: row.uid }).then((res) => {
+                              if (res.status === 200) {
+                                fetch("/api/deleteUser", {
+                                  method: "POST",
+                                  headers: {
+                                    "Content-Type": "application/json",
+                                  },
+                                  body: JSON.stringify({
+                                    uid: row.uid
+                                  }),
+                                }).then(() => {
                                   alert("회원이 탈퇴되었습니다.");
-                                  window.location.reload();
-                                }
-                              }).catch((err) => {
-                                alert("회원 탈퇴에 실패했습니다.");
-                              })
-                            }
-                          }}>회원탈퇴</Button> */}
-                    </TableCell>
+                                }).error(() => {
+                                  alert("문제가 생겼습니다. 관리자에게 문의 해주세요.")
+                                })
+                              }
+                            })
+                          }
+                        }}>회원탈퇴</Button>
+                      </TableCell>
+                    )}
                     <TableCell
                       component="th"
                       id={labelId}

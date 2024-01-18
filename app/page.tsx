@@ -104,14 +104,14 @@ export default function Home() {
           />
 
           <Typography variant="h2" color="blue-gray" className="mt-8 mb-6">
-            아지트에 대해서...
+            아지트를 소개합니다!
           </Typography>
 
           <Typography className="my-10 font-normal !text-gray-500">
-            1. 보드게임 400여개<br />
-            2. 글룸헤이븐등을 위한 75인치 TV<br />
-            3. 광기의 저택등을 위한 태블릿<br />
-            4. 16인 이상 여유롭게 앉을 수 있는 공간<br />
+            1. 400종 이상 다양한 장르의 보드게임<br />
+            2. 영화 상영회, 보드게임 중계 등이 가능한 75인치 TV<br />
+            3. 글룸헤이븐, 광기의 저택 등 APP 연동 보드게임 플레이를 위한 태블릿<br />
+            4. 16인 이상 여유롭게 앉을 수 있는 쾌적한 공간과 인테리어<br />
           </Typography>
 
           <Image
@@ -123,15 +123,15 @@ export default function Home() {
           />
 
           <Typography variant="h2" color="blue-gray" className="mt-8 mb-6">
-            본 동아리의 취지에 맞는 분들
+            이런 분이라면? 감보동 지원을 꼭 추천합니다!
           </Typography>
 
           <Typography className="my-10 font-normal !text-gray-500">
             1. 보드게임을 좋아하시는 분 <br />
-            2. 새로운 분들과 동아리 형태로 보드게임을 하고 싶으신 분<br />
-            3. 보드게임 소식을 간간히 듣고 싶으신 분<br />
-            4. 유령회원은 하고 싶은데 정말 가끔은 모임에 나가고 싶으신 분<br />
-            5. 언젠가 한 번은 온다는 마음가짐<br />
+            2. 새로운 사람들과 동아리 형태로 보드게임을 하고 싶으신 분<br />
+            3. 최신 보드게임 소식을 쉽게 전하고 이야기 나누고 싶으신 분<br />
+            4. 너무 타이트한 정모/번개 출석 관리가 부담스러우신 분<br />
+            + 가끔 시간 나면 들린다는 가벼운 마음가짐으로 동아리 활동을 하고 싶으신 분 역시 환영입니다!<br />
           </Typography>
 
           <Image
@@ -215,7 +215,7 @@ export default function Home() {
                           width={768}
                           height={768}
                           src="/image/image3_6.png"
-                          className="w-10/12 object-cover h-full rounded-lg"
+                          className="w-10/12 object-cover h-full rounded-lg w-full"
                           alt="대회"
                         />
                       </div>
@@ -264,7 +264,7 @@ export default function Home() {
                         </div>
                         <div>
                           <Typography className="!font-bold !text-sm text-gray-900">
-                            할로윈 파티 참가자
+                            보드게임 행사 참여자
                           </Typography>
                           <Typography className="!font-normal !text-xs text-gray-500 ">
                             감보동 4기
@@ -316,10 +316,10 @@ export default function Home() {
                         variant="h3"
                         className="leading-[45px] mb-6 !text-gray-900"
                       >
-                        기념일 파티
+                        각종 테마 파티 (할로윈, 크리스마스 등)
                       </Typography>
                       <Typography className="!font-bold !text-sm text-gray-700">
-                        파티에 적극적으로 참여해준 감보동 멤버들 그리고 지인분들에게 기억에 남는 할로윈이 되었으면 좋겠네요🎃
+                        지난 호스트의 한마디 : 파티에 적극적으로 참여해준 감보동 멤버들 그리고 지인분들에게 기억에 남는 할로윈이 되었으면 좋겠네요 🎃
                       </Typography>
                     </CardBody>
                   </Card>
