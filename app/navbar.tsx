@@ -32,8 +32,8 @@ const NAV_MENU = [
     targetBlank: false,
   },
   {
-    name: "마이티 계산기",
-    href: "/mighty",
+    name: "보드게임 도구",
+    href: "/boardgame_tools",
     accessAll: true,
     targetBlank: false,
   },

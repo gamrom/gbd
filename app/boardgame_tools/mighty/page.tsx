@@ -9,7 +9,7 @@ import Slider from '@mui/material/Slider';
 import * as Yup from 'yup';
 import Swal from "sweetalert2";
 import Modal from '@mui/material/Modal';
-import { modalStyle } from "../style";
+import { modalStyle } from "../../style";
 import { useSessionStorage } from "react-use";
 
 
@@ -409,7 +409,8 @@ export default function MightyPage() {
   return (
     <div>
       <div className="flex flex-col mt-[50px]">
-        <div className="flex justify-between">
+        * 창을 닫으면 모든 정보가 사라집니다
+        <div className="flex justify-between mt-4">
           <Button variant="contained" color="error" onClick={() => {
             Swal.fire({
               title: '정말로 초기화 하시겠습니까?',
