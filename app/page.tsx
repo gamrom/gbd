@@ -10,6 +10,7 @@ import { modalStyle } from "./style";
 import { useState } from 'react';
 import { useGetCurrentUser } from "./hooks/useGetCurrentUser";
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 export default function Home() {
   const { countdown, canJoin } = useRemainJoinTime();
@@ -45,23 +46,27 @@ export default function Home() {
                   )
               }
             </Typography>
-            <Typography
-              variant="lead"
-              color="white"
-              className="mt-4 mb-12 w-full md:max-w-full lg:max-w-3xl"
-            >
-              <span>
-                서울대 입구역 도보 6분 아지트
-                <br />
-                감롬의 보드게임 동아리
-              </span>
-            </Typography>
+            {!isLoading && (!currentUser && (
+              <Typography
+                variant="lead"
+                color="white"
+                className="mt-4 mb-12 w-full md:max-w-full lg:max-w-3xl"
+              >
+                회원가입하고 모집 오픈 문자 받기 <br />
+                <Link href="/register">
+                  <Button variant="outlined" className="cursor-pointer mt-4" size="lg">
+                    회원가입
+                  </Button>
+                </Link>
+              </Typography>
+            ))
+            }
             <Typography
               variant="paragraph"
               color="white"
-              className="mt-1 mb-2 font-medium uppercase"
+              className="mt-4 mb-2 font-medium uppercase"
             >
-              인스타그램 팔로우하고 신규 소식 받기
+              인스타그램에서 활동사진 보기
             </Typography>
             <div className="gap-8 flex">
               <a
