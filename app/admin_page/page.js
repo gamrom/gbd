@@ -398,7 +398,7 @@ export default function EnhancedTable() {
                       />
                     </TableCell>
 
-                    {(currentUser.data.role === "admin") && (
+                    {!loading && (currentUser.data.role === "admin") && (
                       <TableCell className="shrink-0">
                         <Button variant="contained" color="primary" type="button" onClick={(e) => handleEditUser({ e: e, data: row })}>정보수정</Button>
                         <Button className="ml-2" variant="contained" color="error" type="button" onClick={(e) => {
