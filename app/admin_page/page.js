@@ -358,7 +358,7 @@ export default function EnhancedTable() {
   const modalClose = () => setIsModalOpen(false);
 
   return (
-    <Box sx={{ width: '100%', marginTop: "72px" }}>
+    <Box sx={{ width: '100%', marginTop: "72px", paddingLeft: "20px", paddingRight: "20px" }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
         <EnhancedTableToolbar numSelected={selected.length} selected={selected} />
         <TableContainer>
@@ -398,7 +398,7 @@ export default function EnhancedTable() {
                       />
                     </TableCell>
 
-                    {!loading && (currentUser.data.role === "admin") && (
+                    {currentUser && (currentUser.data.role === "admin") && (
                       <TableCell className="shrink-0">
                         <Button variant="contained" color="primary" type="button" onClick={(e) => handleEditUser({ e: e, data: row })}>정보수정</Button>
                         <Button className="ml-2" variant="contained" color="error" type="button" onClick={(e) => {
