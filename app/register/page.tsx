@@ -96,8 +96,7 @@ export default function Register() {
           }).then((res) => {
             signInWithEmailAndPassword(auth, values.email, values.pw)
               .then((userCredential: any) => {
-                //승인대기중 페이지로 이동 
-                router.push('/');
+                router.push('/join');
               })
               .catch((error: any) => {
                 swal.fire({
