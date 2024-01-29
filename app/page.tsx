@@ -1,23 +1,11 @@
 'use client';
 
-import { IconButton, Typography } from "@material-tailwind/react";
-import { useRemainJoinTime } from "./hooks/useRemainJoinTime";
-import { Button, Card, CardBody } from "@material-tailwind/react";
+import { Typography } from "@material-tailwind/react";
+import { Card, CardBody } from "@material-tailwind/react";
 import Image from "next/image";
-import Modal from '@mui/material/Modal';
-import Box from '@mui/material/Box';
-import { modalStyle } from "./style";
-import { useState } from 'react';
-import { useGetCurrentUser } from "./hooks/useGetCurrentUser";
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 export default function Home() {
-  const { countdown, canJoin } = useRemainJoinTime();
-  const [isSpecialModalOpen, setIsSpecialModalOpen] = useState<boolean>(false);
-  const { data: currentUser, isLoading } = useGetCurrentUser();
-  const router = useRouter();
-
   return (
     <div>
       <div className="relative min-h-screen w-full bg-[url('/image/image-4.jpeg')] bg-cover bg-no-repeat px-4" style={{ maxWidth: "-webkit-fill-available" }}>
@@ -25,42 +13,11 @@ export default function Home() {
         <div className="grid min-h-screen px-8">
           <div className="container relative z-10 my-auto mx-auto grid place-items-center text-center">
             <Typography variant="h1" color="white">
-              {
-                canJoin ?
-                  (
-                    !isLoading && (currentUser ? (
-                      <Button size="lg" color="amber" className="border-none cursor-hover" onClick={() => setIsSpecialModalOpen(true)}>
-                        신규지원/연장하기
-                      </Button>
-                    ) : (
-                      //회원가입 후 지원하기 버튼
-                      <Button size="lg" color="amber" className="border-none cursor-hover" onClick={() => router.push('/login')}>
-                        로그인 후 지원하기
-                      </Button>
-                    ))
-                  ) : (
-                    <span>
-                      다음 모집까지 <br />
-                      {countdown}
-                    </span>
-                  )
-              }
+              <Link href="/join" className="text-2xl shadow-lg cursor-pointer hover:text-white hover:bg-[#333333] no-underline rounded-lg h-[75px] bg-white border border-b border-solid text-black flex items-center justify-center px-4 px-2">
+                지원하기/연장하기
+              </Link>
             </Typography>
-            {!isLoading && (!currentUser && (
-              <Typography
-                variant="lead"
-                color="white"
-                className="mt-4 mb-12 w-full md:max-w-full lg:max-w-3xl"
-              >
-                회원가입하고 모집 오픈 문자 받기 <br />
-                <Link href="/register">
-                  <Button variant="outlined" className="cursor-pointer mt-4" size="lg">
-                    회원가입
-                  </Button>
-                </Link>
-              </Typography>
-            ))
-            }
+
             <Typography
               variant="paragraph"
               color="white"
@@ -358,43 +315,6 @@ export default function Home() {
           </section>
         </div>
       </section>
-
-      <Modal
-        open={isSpecialModalOpen}
-        onClose={() => setIsSpecialModalOpen(false)}
-        aria-labelledby="parent-modal-title"
-        aria-describedby="parent-modal-description"
-      >
-        <Box sx={modalStyle}>
-          <div className="flex flex-col space-y-4">
-            {canJoin && (
-              <div className="flex flex-col">
-                <div className="text-center font-bold mb-2 text-lg">지원가능 기간입니다.</div>
-                <div>지원 전 회칙을 반드시 확인해주세요.</div>
-                <a href="https://gamromboard.notion.site/290766405fa14166bcd829f3afa8a9ba?pvs=4" target="_blank">회칙 보러가기</a>
-                <div>지원 후 3개월동안 활동하게 됩니다.</div>
-                <div className="font-bold mt-2 text-lg">지원 방법</div>
-                <div>다음 계좌로 회비 45000원 입금해주시면 지원 완료됩니다.</div>
-                <div>김은식 카카오뱅크 3333-03-5130993</div>
-                <div className="mt-2">가입 승인은 매달 마지막날 ~ 다음달 1일 중 처리됩니다.</div>
-                <div>가입 완료되신분들은 카톡방에 초대해드리고 있습니다.</div>
-                <div>아지트 포화 등의 이유로 가입에 제한이 있을 수 있습니다.</div>
-                <div>추가 문의사항은 인스타그램으로 부탁드립니다.</div>
-              </div>
-            )}
-
-            {!canJoin && (
-              <div className="flex flex-col items-center justify-center">
-                <div className="font-bold text-lg mb-2">지원 기간이 아닙니다.</div>
-                <div>매달 마지막 7일 동안 지원이 가능합니다.</div>
-                {countdown && <div className="flex items-center justify-center">지원 가능까지 남은시간 : {countdown}</div>}
-              </div>
-            )}
-
-            <Button color="red" className="border-none" onClick={() => setIsSpecialModalOpen(false)}>닫기</Button>
-          </div>
-        </Box>
-      </Modal>
     </div >
   )
 }
