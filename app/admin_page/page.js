@@ -72,6 +72,12 @@ const headCells = [
     label: '회원등급',
   },
   {
+    id: "isMarketing",
+    numeric: false,
+    disablePadding: false,
+    label: "마케팅동의"
+  },
+  {
     id: 'name',
     numeric: false,
     disablePadding: false,
@@ -190,8 +196,6 @@ function EnhancedTableToolbar(props) {
   ) => {
     setSelectedRole(event.target.value);
   }
-
-
 
   return (
     <Toolbar
@@ -435,6 +439,10 @@ export default function EnhancedTable() {
                       {row.role === "manager" && "매니저"}
                       {row.role === "member" && "멤버"}
                       {row.role === "guest" && "게스트"}
+                    </TableCell>
+
+                    <TableCell>
+                      {row.is_marketing === true ? "동의" : "비동의"}
                     </TableCell>
 
                     <TableCell>

@@ -38,10 +38,16 @@ export default function Register() {
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
       if (user) {
-        router.push('/')
+        router.push('/join')
       }
     })
   }, [])
+
+
+  const [funnels, setFunnels] = useState<string>('');
+  const [confirmRule, setConfirmRule] = useState<boolean>(false);
+  const [confirmMarketing, setConfirmMarketing] = useState<boolean>(true);
+
 
   const [birth, setBirth] = useState<Date | null>(null);
 
@@ -55,6 +61,7 @@ export default function Register() {
       gender: '',
       funnels: '',
       confirmRule: false,
+      confirmMarketing: true,
     },
     validationSchema: Yup.object({
       email: Yup.string().email('이메일 형식이 아닙니다.').required('필수 입력사항입니다.'),
@@ -93,6 +100,7 @@ export default function Register() {
             referrer_path: values.funnels,
             uid: authUser.user.uid,
             birth: dayjs(birth).locale("ko").format("YYYY-MM-DD"),
+            confirmMarketing: values.confirmMarketing,
           }).then((res) => {
             signInWithEmailAndPassword(auth, values.email, values.pw)
               .then((userCredential: any) => {
@@ -138,9 +146,6 @@ export default function Register() {
     }
   })
 
-  const [funnels, setFunnels] = useState<string>('');
-  const [confirmRule, setConfirmRule] = useState<boolean>(false);
-
   const [gender, setGender] = useState<string | null>();
   const handleGender = (
     event: React.MouseEvent<HTMLElement>,
@@ -159,6 +164,11 @@ export default function Register() {
   const handleConfirmRule = (event: React.ChangeEvent<HTMLInputElement>) => {
     setConfirmRule(event.target.checked as boolean);
     formik.setFieldValue("confirmRule", event.target.checked);
+  }
+
+  const handleConfirmMarketing = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setConfirmMarketing(event.target.checked as boolean);
+    formik.setFieldValue("confirmMarketing", event.target.checked);
   }
 
   return (
@@ -248,6 +258,10 @@ export default function Register() {
       <div className="flex flex-col">
         <FormControlLabel required control={<Checkbox onChange={handleConfirmRule} />} label="회칙 및 유의사항을 읽었습니다." />
         <Link href="https://gamromboard.notion.site/290766405fa14166bcd829f3afa8a9ba?pvs=4" target="_blank">회칙 확인</Link>
+      </div>
+
+      <div className="flex flex-col mt-2">
+        <FormControlLabel control={<Checkbox checked={confirmMarketing} onChange={handleConfirmMarketing} />} label="지원관련 문자받기" />
       </div>
 
       <Button variant="contained" type="submit" disabled={isRegisterProceeding}>회원가입 완료하기</Button>

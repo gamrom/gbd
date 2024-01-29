@@ -9,9 +9,25 @@ import {
 } from "@material-tailwind/react";
 import { useRemainJoinTime } from "../hooks/useRemainJoinTime";
 import Link from "next/link";
+import { auth } from "../../firebase";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function JoinPage() {
   const { canJoin, countdown } = useRemainJoinTime();
+
+  const router = useRouter();
+
+  useEffect(() => {
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        router.push('/join')
+      } else {
+        router.push("/login")
+      }
+    })
+  }, [])
+
 
   return (
     <div>
