@@ -57,7 +57,7 @@ export const fetcher = ({
 
 
 //회원가입
-export const postSignUp = ({ email, name, gender, phone, referrer_path, uid, birth }: { email: string, name: string, gender: string, phone: string, referrer_path: string, uid: string, birth: any }) => {
+export const postSignUp = ({ email, name, gender, phone, referrer_path, uid, birth, confirmMarketing }: { email: string, name: string, gender: string, phone: string, referrer_path: string, uid: string, birth: any, confirmMarketing: boolean }) => {
   return AuthAPI.post(`/users/sign_up`, {
     email: email,
     name: name,
@@ -66,6 +66,7 @@ export const postSignUp = ({ email, name, gender, phone, referrer_path, uid, bir
     referrer_path: referrer_path,
     uid: uid,
     birth: birth,
+    is_marketing: confirmMarketing,
   });
 };
 
@@ -189,11 +190,12 @@ export const getMe = () => {
   )
 }
 
-export const patchUser = ({ uid, birth, name }: any) => {
+export const patchUser = ({ uid, birth, name, isMarketing }: any) => {
   return (
     AuthAPI.patch(`/admin/users/${uid}`, {
       birth: birth,
       name: name,
+      is_marketing: isMarketing,
     })
   )
 }

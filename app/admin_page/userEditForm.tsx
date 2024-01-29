@@ -9,22 +9,25 @@ import { patchUser } from "../api";
 export const UserEditForm = ({ user, close }: { user: any, close: any }) => {
   const [birth, setBirth] = useState<Dayjs>(dayjs());
   const [name, setName] = useState<string>("");
+  const [isMarketing, setIsMarketing] = useState<boolean>(false);
 
   useEffect(() => {
     if (user) {
       setName(user.name);
       setBirth(dayjs(user.birth));
+      setIsMarketing(user.is_marketing);
     }
   }, [user])
-  
+
   const handleSubmit = () => {
     const pData = {
       name: name,
-      birth: birth
+      birth: birth,
+      isMarketing: isMarketing,
     }
 
     if (pData.name !== "" && pData.birth !== null) {
-      patchUser({ uid: user.uid, name: name, birth: dayjs(birth).format("YYYY-MM-DD") }).then((res) => {
+      patchUser({ uid: user.uid, name: name, birth: dayjs(birth).format("YYYY-MM-DD"), isMarketing: isMarketing }).then((res) => {
         alert("수정되었습니다. 페이지가 새로고침됩니다.")
         window.location.reload();
         close();
@@ -50,6 +53,8 @@ export const UserEditForm = ({ user, close }: { user: any, close: any }) => {
             onChange={(e) => setBirth(
               dayjs(e.target.value)
             )} />
+          <div>마케팅 수신 동의</div>
+          <input type="checkbox" checked={isMarketing} onChange={() => setIsMarketing(!isMarketing)} />
           <button type="button" onClick={() => handleSubmit()}>확인</button>
         </div>
       </Box>

@@ -13,6 +13,15 @@ import Swal from "sweetalert2";
 
 export default function Login() {
   const router = useRouter();
+
+  useEffect(() => {
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        router.push('/join')
+      }
+    })
+  }, [])
+
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -24,7 +33,7 @@ export default function Login() {
         .then((userCredential: any) => {
           // Signed in
           //메인페이지로 이동
-          window.location.href = "/";
+          window.location.href = "/join";
         })
         .catch((error: any) => {
           if (error.code === "auth/too-many-requests") {
