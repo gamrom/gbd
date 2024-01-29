@@ -224,6 +224,7 @@ export const CalendarComponent = () => {
                   <div className="flex space-x-4 w-full">
                     <div>{dayjs(event.start_time.replace(/-/g, "/")).format('YY/MM/DD')}</div>
                     <div>{event.current_members_count}/{event.max_members_count}</div>
+                    <div>{event.location}</div>
                   </div>
                   <div className="shrink-0">{event.owner_name}</div>
                 </div>
