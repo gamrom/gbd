@@ -44,7 +44,8 @@ export default function JoinPage() {
             아래 계좌로 입금하시면 지원 완료 됩니다!
           </Typography>
           <Typography variant="h6" color="blue-gray">
-            카카오뱅크 3333-03-5130993 (예금주 : 김은식(감롬의보드게임동아리))
+            카카오뱅크 3333-03-5130993 (예금주 : 김은식(감롬의보드게임동아리)) <br />
+            45,000원 (3개월 활동)
           </Typography>
           <Typography variant="h6" color="blue-gray">
             <br />지원 전 회칙을 반드시 확인해주세요. <br />
