@@ -76,9 +76,11 @@ export default function Login() {
         <Button disabled={formik.isSubmitting} type="submit" variant="gradient" color="blue" className="border-none cursor-pointer mt-4">
           로그인
         </Button>
-        <Button color="orange" variant="filled" className="text-center mt-4 border-none">
-          <Link href="/register" className="w-full no-underline text-black">회원가입</Link>
-        </Button>
+        <Link href="/register" className="w-full no-underline text-black">
+          <Button color="orange" variant="filled" className="text-center mt-4 border-none w-full">
+            회원가입
+          </Button>
+        </Link>
         <div className="mt-4 mx-auto font-bold text-[#FF0000]">회원만 감보동에 지원하실 수 있습니다.</div>
       </div>
     </form>

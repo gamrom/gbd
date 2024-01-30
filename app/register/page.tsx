@@ -79,7 +79,7 @@ export default function Register() {
     }),
     onSubmit: (values) => {
       const today = dayjs();
-      const minBirth = today.subtract(35, 'year');
+      const minBirth = today.subtract(36, 'year');
       const maxBirth = today.subtract(20, 'year');
       if (birth === null || birth < minBirth.toDate() || birth > maxBirth.toDate()) {
         swal.fire({
