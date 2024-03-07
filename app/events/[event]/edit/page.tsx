@@ -73,8 +73,8 @@ export default function PatchEvent({ params }: { params: { event: string } }) {
         title: event.title,
         location: event.location,
         description: event.description,
-        start_time: event.start_time,
-        end_time: event.end_time,
+        start_time: timeState.startTime,
+        end_time: timeState.endTime,
         max_members_count: event.max_members_count,
         uid: event.uid,
         event_id: params.event
