@@ -126,8 +126,6 @@ export const CalendarComponent = () => {
     }
   }, [queryPickDate])
 
-  console.log(pickDate)
-
   function ServerDay(props: PickersDayProps<Dayjs> & { callendarEvents?: number[] }) {
     const { callendarEvents = [], day, outsideCurrentMonth, ...other } = props;
 
@@ -209,9 +207,8 @@ export const CalendarComponent = () => {
           window.history.pushState({}, "", `?pickDate=${dayjs(newValue).format('YYYY-MM-DD')}`);
         }}
         onMonthChange={(newValue) => {
-          if (toggleFilter === "monthAll") {
-            setPickDate(newValue)
-          }
+          setPickDate(newValue)
+          setToggleFilter("monthAll")
         }}
         renderLoading={() => <DayCalendarSkeleton />} />
 
