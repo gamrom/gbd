@@ -9,11 +9,3 @@ async function getEvents() {
   console.log(data)
 }
 
-export default function TestPage() {
-  const events = getEvents();
-  return (
-    <div>
-      테스트 페이지입니다.
-    </div>
-  )
-}

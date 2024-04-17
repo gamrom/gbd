@@ -174,18 +174,16 @@ export const CalendarComponent = () => {
       {
         currentUser && currentUser.data.role !== "guest" && (
           <div className="flex items-center justify-center">
-
-            <Button
-              variant="gradient"
-              className="mt-4 mx-auto text-center border-none"
-              color="blue"
-              type="button"
-            >
-              <Link className="w-full text-white no-underline" href={`/events/create?pickDate=${pickDate}`}>
+            <Link className="w-full text-white no-underline text-center" href={`/events/create?pickDate=${pickDate}`}>
+              <Button
+                variant="gradient"
+                className="mt-4 mx-auto text-center border-none"
+                color="blue"
+                type="button"
+              >
                 번개 생성
-              </Link>
-            </Button>
-
+              </Button>
+            </Link>
           </div>
         )
       }
