@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import {
   Card,
   CardHeader,
@@ -18,13 +18,16 @@ export default function BoardgameToolsPage() {
             마이티 계산기
           </Typography>
           <Typography>
-            쉽게 사용 가능한 마이티 계산기입니다.
-            점수 계산식은 들어가면 오른쪽 상단에 있습니다.
+            쉽게 사용 가능한 마이티 계산기입니다. 점수 계산식은 들어가면 오른쪽
+            상단에 있습니다.
           </Typography>
         </CardBody>
         <CardFooter className="pt-0">
-          <Link href="/boardgame_tools/mighty">
-            <Button>바로가기</Button>
+          <Link
+            href="/boardgame_tools/mighty"
+            className="text-white decoration-none no-underline"
+          >
+            <Button className="cursor-pointer">바로가기</Button>
           </Link>
         </CardFooter>
       </Card>
@@ -39,13 +42,14 @@ export default function BoardgameToolsPage() {
           </Typography>
         </CardBody>
         <CardFooter className="pt-0">
-          <Link href="/boardgame_tools/streams">
-            <Button>바로가기</Button>
+          <Link
+            href="/boardgame_tools/streams"
+            className="text-white decoration-none no-underline"
+          >
+            <Button className="cursor-pointer">바로가기</Button>
           </Link>
         </CardFooter>
       </Card>
-
-
     </div>
-  )
+  );
 }
