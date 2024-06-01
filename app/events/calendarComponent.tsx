@@ -208,7 +208,7 @@ export const CalendarComponent = ({
           >
             <Button
               variant="gradient"
-              className="mt-4 mx-auto text-center border-none"
+              className="mt-4 mx-auto text-center border-none cursor-pointer"
               color="blue"
               type="button"
             >
