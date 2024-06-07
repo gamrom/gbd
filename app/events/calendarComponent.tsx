@@ -203,7 +203,7 @@ export const CalendarComponent = ({
       {currentUser && currentUser.data.role !== "guest" && (
         <div className="flex items-center justify-center">
           <Link
-            className="w-full text-white no-underline text-center"
+            className="text-white no-underline text-center"
             href={`/events/create?pickDate=${pickDate}`}
           >
             <Button
@@ -254,9 +254,8 @@ export const CalendarComponent = ({
                 href={`/events/${event.id}`}
                 className="no-underline text-black"
               >
-                <Button
-                  color={`${event.current_members_count >= event.max_members_count ? "red" : "green"}`}
-                  className={`w-full border-none hover:cursor-pointer hover:font-bold hover:opacity-100 opacity-90 drop-shadow py-2 px-4 flex flex-col justify-between mt-2 text-sm rounded-[5px] `}
+                <button
+                  className={`w-full border-none hover:cursor-pointer hover:font-bold hover:opacity-100 opacity-90 drop-shadow py-2 px-4 flex flex-col justify-between mt-2 text-sm rounded-[5px] text-white ${event.current_members_count >= event.max_members_count ? "bg-[#E7355C]" : "bg-[#2A8840]"} `}
                 >
                   <div className="flex justify-between w-full">
                     <div className="flex space-x-4 w-full">
@@ -273,7 +272,7 @@ export const CalendarComponent = ({
                     <div className="shrink-0">{event.owner_name}</div>
                   </div>
                   <div className="truncate">{event.title}</div>
-                </Button>
+                </button>
               </Link>
             );
           })}
