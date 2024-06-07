@@ -203,7 +203,7 @@ export const CalendarComponent = ({
       {currentUser && currentUser.data.role !== "guest" && (
         <div className="flex items-center justify-center">
           <Link
-            className="w-full text-white no-underline text-center"
+            className="text-white no-underline text-center"
             href={`/events/create?pickDate=${pickDate}`}
           >
             <Button
