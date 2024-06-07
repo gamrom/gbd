@@ -12,8 +12,6 @@ export const UserEditForm = ({ user, close }: { user: any; close: any }) => {
   const [isMarketing, setIsMarketing] = useState<boolean>(false);
   const [phone, setPhone] = useState<string>("");
 
-  console.log(user);
-
   useEffect(() => {
     if (user) {
       setName(user.name);
@@ -22,8 +20,6 @@ export const UserEditForm = ({ user, close }: { user: any; close: any }) => {
       setPhone(user.phone);
     }
   }, [user]);
-
-  console.log(phone);
 
   const handleSubmit = () => {
     const pData = {
