@@ -47,15 +47,16 @@ export default function JoinPage() {
               카카오뱅크 3333-03-5130993 (예금주 : 김은식(감롬의보드게임동아리)){" "}
               <br />
               45,000원 (3개월 활동)
+              <br />* 불합격 되실 경우 가입하신 전화번호로 안내드리며, 회비는
+              돌려드립니다.
             </Typography>
             <Typography variant="h6" color="blue-gray">
               <br />
               지원 전 회칙을 반드시 확인해주세요. <br />
             </Typography>
             <Typography variant="h6" color="blue-gray">
-              * 가입승인은 매달 마지막날 ~ 다음달 1일에 이루어집니다. <br />
+              * 결과발표 및 가입승인은 매달 1일에 이루어집니다. <br />
               * 가입 완료되신분들은 카톡방에 초대해드리고 있습니다. <br />
-              * 아지트 포화 등의 이유로 가입에 제한이 있을 수 있습니다. <br />
               * 추가 문의사항은 인스타그램으로 부탁드립니다. <br />
               <Link href="https://www.instagram.com/gamrom.board.club/">
                 인스타그램 바로가기
@@ -80,7 +81,7 @@ export default function JoinPage() {
             <Typography variant="h6" color="blue-gray">
               * 매달 마지막 14일 동안 지원이 가능합니다. <br />* 회원가입 해주신
               분들에게 매달 말 가입안내 문자드리고 있습니다. <br />
-              * 추가 문의사항은 인스타그램으로 부탁드립니다. <br />
+              * 추가 문의사항은 아래 전화번호로 부탁드립니다. <br />
               010-3660-9722 (회장 감롬)
             </Typography>
           </CardBody>
