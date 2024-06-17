@@ -57,9 +57,10 @@ export default function JoinPage() {
             <Typography variant="h6" color="blue-gray">
               * 결과발표 및 가입승인은 매달 1일에 이루어집니다. <br />
               * 가입 완료되신분들은 카톡방에 초대해드리고 있습니다. <br />
-              * 추가 문의사항은 인스타그램으로 부탁드립니다. <br />
+              * 추가 문의사항은 아래 전화번호로 부탁드립니다. <br />
+              010-3660-9722 (회장 감롬)
               <Link href="https://www.instagram.com/gamrom.board.club/">
-                인스타그램 바로가기
+                인스타그램에서 활동사진 보기
               </Link>
             </Typography>
           </CardBody>
@@ -84,6 +85,10 @@ export default function JoinPage() {
               * 추가 문의사항은 아래 전화번호로 부탁드립니다. <br />
               010-3660-9722 (회장 감롬)
             </Typography>
+
+            <Link href="https://www.instagram.com/gamrom.board.club/">
+              인스타그램에서 활동사진 보기
+            </Link>
           </CardBody>
         )}
       </Card>
