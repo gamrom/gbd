@@ -1,18 +1,11 @@
+"use client";
+
 import React from "react";
-import onlylogo from "../public/onlylogo.png";
-import MenuIcon from "@mui/icons-material/Menu";
-// import {
-//   Navbar as MTNavbar,
-//   Collapse,
-//   Button,
-//   IconButton,
-//   Typography,
-// } from "@material-tailwind/react";
-import Image from "next/image";
 import { useEffect, useState } from "react";
-import { useGetCurrentUser } from "./hooks/useGetCurrentUser";
-import Swal from "sweetalert2";
-import { auth } from "../firebase";
+// import { useGetCurrentUser } from "./hooks/useGetCurrentUser";
+import { useGetCurrentUser } from "../hooks/useGetCurrentUser";
+// import { auth } from "../firebase";
+import { auth } from "../../firebase";
 // import Link from "next/link";
 import {
   Navbar,
@@ -25,7 +18,7 @@ import {
   Link,
   Button,
 } from "@nextui-org/react";
-import { AlertModal } from "./_components/Modal";
+import { AlertModal } from "./Modal";
 
 const menuItems = [
   {
@@ -107,7 +100,7 @@ const menuItems = [
 //   );
 // };
 
-export function NavbarComponent() {
+export const MainNavbar = ({ currentUser }: any) => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const [isLogin, setIsLogin] = useState<boolean>(false);
   const [isLogoutConfirmOpen, setIsLogoutConfirmOpen] =
@@ -119,7 +112,7 @@ export function NavbarComponent() {
     });
   };
 
-  const { data: currentUser, isLoading: isLoading } = useGetCurrentUser();
+  // const { data: currentUser, isLoading: isLoading } = useGetCurrentUser();
 
   // const [open, setOpen] = React.useState(false);
   // const [isScrolling, setIsScrolling] = React.useState(false);
@@ -290,6 +283,7 @@ export function NavbarComponent() {
         isBordered
         shouldHideOnScroll
         onMenuOpenChange={setIsMenuOpen}
+        isBlurred={false}
       >
         <NavbarContent className="sm:hidden" justify="start">
           <NavbarMenuToggle />
@@ -300,7 +294,6 @@ export function NavbarComponent() {
             {/* <AcmeLogo /> */}
             <p className="font-bold text-inherit">감롬의 보드게임 동아리</p>
           </NavbarBrand>
-          <Button color="primary">로그인</Button>
         </NavbarContent>
 
         <NavbarContent className="hidden sm:flex gap-4" justify="center">
@@ -308,8 +301,6 @@ export function NavbarComponent() {
             {/* <AcmeLogo /> */}
             <p className="font-bold text-inherit">감롬의 보드게임 동아리</p>
           </NavbarBrand>
-
-          <Button color="primary">로그인</Button>
 
           {menuItems.map((item, index) => (
             <NavbarMenuItem key={`${item}-${index}`}>
@@ -330,32 +321,22 @@ export function NavbarComponent() {
             <Link href="/login">로그인</Link>
           </NavbarItem>
           <NavbarItem>
-            {!isLoading &&
-              (!currentUser ? (
-                <div className="items-center gap-2 lg:flex">
-                  <Link
-                    href="/login"
-
-                    // onClick={() => setOpen(false)}
-                  >
-                    <Button
-                      color="danger"
-                      className="border-none cursor-pointer"
-                    >
-                      로그인
-                    </Button>
-                  </Link>
-                </div>
-              ) : (
-                <div className="items-center gap-2 lg:flex">
-                  <Button
-                    onClick={() => setIsLogoutConfirmOpen(true)}
-                    color="warning"
-                  >
-                    로그아웃
-                  </Button>
-                </div>
-              ))}
+            {!currentUser ? (
+              <div className="items-center gap-2 lg:flex">
+                <Link href="/login">
+                  <Button color="default">로그인</Button>
+                </Link>
+              </div>
+            ) : (
+              <div className="items-center gap-2 lg:flex">
+                <Button
+                  onClick={() => setIsLogoutConfirmOpen(true)}
+                  color="warning"
+                >
+                  로그아웃
+                </Button>
+              </div>
+            )}
           </NavbarItem>
         </NavbarContent>
 
@@ -383,6 +364,4 @@ export function NavbarComponent() {
       />
     </>
   );
-}
-
-export default Navbar;
+};
