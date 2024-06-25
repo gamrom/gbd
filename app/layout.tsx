@@ -1,24 +1,23 @@
-'use client'
+"use client";
 
-import { Inter } from 'next/font/google'
+import { Inter } from "next/font/google";
 import { Roboto } from "next/font/google";
 
+import "./globals.css";
 
-import './globals.css'
-
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
-import { Footer } from './footer'
-import 'dayjs/locale/ko'
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { Footer } from "./footer";
+import "dayjs/locale/ko";
 
 // import { Analytics } from '@vercel/analytics/react';
-import { GoogleTagManager } from '@next/third-parties/google'
-import { SpeedInsights } from "@vercel/speed-insights/next"
+import { GoogleTagManager } from "@next/third-parties/google";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { ThemeProvider } from "@material-tailwind/react";
-import { Navbar } from './navbar'
+import { Navbar } from "./navbar";
+import { NextUIProvider } from "@nextui-org/react";
 
-
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ["latin"] });
 
 const roboto = Roboto({
   subsets: ["latin"],
@@ -29,15 +28,15 @@ const roboto = Roboto({
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <ThemeProvider>
-      <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='ko'>
-        <html lang="ko" id="root">
+      <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ko">
+        <html lang="ko" id="root" className="dark">
           <head>
             <link rel="icon" href="/favicon.ico" sizes="any" />
-            
+
             <title>감롬의보드게임동아리</title>
             <meta name="description" content="감보동 사이트입니다." />
 
@@ -45,27 +44,33 @@ export default function RootLayout({
             <meta property="og:type" content="website" />
             <meta property="og:title" content="감롬의보드게임동아리" />
             <meta property="og:description" content="" />
-            <meta property="og:image" content="https://opengraph.b-cdn.net/production/documents/e11d93e3-ddd4-4b19-a19a-14592b5cb9ea.png?token=JBsz2BlhZcfuovakmojI0n6WZjcnnWJmCGWTxg4e0dY&height=400&width=800&expires=33240121561" />
-
+            <meta
+              property="og:image"
+              content="https://opengraph.b-cdn.net/production/documents/e11d93e3-ddd4-4b19-a19a-14592b5cb9ea.png?token=JBsz2BlhZcfuovakmojI0n6WZjcnnWJmCGWTxg4e0dY&height=400&width=800&expires=33240121561"
+            />
 
             <meta name="twitter:card" content="summary_large_image" />
             <meta property="twitter:domain" content="gambodong.com" />
             <meta property="twitter:url" content="https://www.gambodong.com/" />
             <meta name="twitter:title" content="감롬의보드게임동아리" />
             <meta name="twitter:description" content="" />
-            <meta name="twitter:image" content="https://opengraph.b-cdn.net/production/documents/e11d93e3-ddd4-4b19-a19a-14592b5cb9ea.png?token=JBsz2BlhZcfuovakmojI0n6WZjcnnWJmCGWTxg4e0dY&height=400&width=800&expires=33240121561" />
-
+            <meta
+              name="twitter:image"
+              content="https://opengraph.b-cdn.net/production/documents/e11d93e3-ddd4-4b19-a19a-14592b5cb9ea.png?token=JBsz2BlhZcfuovakmojI0n6WZjcnnWJmCGWTxg4e0dY&height=400&width=800&expires=33240121561"
+            />
           </head>
           <body className={`${roboto.className}`}>
-            <Navbar />
-            {children}
-            <Footer />
-            <SpeedInsights />
+            <NextUIProvider>
+              <Navbar />
+              {children}
+              <Footer />
+              <SpeedInsights />
+            </NextUIProvider>
             {/* <Analytics /> */}
             <GoogleTagManager gtmId="GTM-TQ8SGL5W" />
           </body>
         </html>
       </LocalizationProvider>
     </ThemeProvider>
-  )
+  );
 }
