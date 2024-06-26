@@ -1,5 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import admin from "../../../firebase_admin";
+import { customInitApp } from "@/lib/firebase-admin-config";
+
+customInitApp();
 
 export default async function handler(
   req: NextApiRequest,

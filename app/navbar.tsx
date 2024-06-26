@@ -12,7 +12,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useGetCurrentUser } from "./hooks/useGetCurrentUser";
 import Swal from "sweetalert2";
-import { auth } from "../firebase";
+import { auth } from "@/lib/firebase-config";
 // import Link from "next/link";
 import {
   Navbar,

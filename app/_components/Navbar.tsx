@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 // import { useGetCurrentUser } from "./hooks/useGetCurrentUser";
 import { useGetCurrentUser } from "../hooks/useGetCurrentUser";
 // import { auth } from "../firebase";
-import { auth } from "../../firebase";
+// import { auth } from "../../firebase";
 // import Link from "next/link";
 import {
   Navbar,
@@ -106,11 +106,14 @@ export const MainNavbar = ({ currentUser }: any) => {
   const [isLogoutConfirmOpen, setIsLogoutConfirmOpen] =
     useState<boolean>(false);
 
-  const signOut = () => {
-    auth.signOut().then(() => {
-      setIsLogoutConfirmOpen(false);
-    });
-  };
+  // const { data, isLoading } = useGetCurrentUser();
+  // console.log(data);
+
+  // const signOut = () => {
+  //   auth.signOut().then(() => {
+  //     setIsLogoutConfirmOpen(false);
+  //   });
+  // };
 
   // const { data: currentUser, isLoading: isLoading } = useGetCurrentUser();
 
@@ -356,12 +359,12 @@ export const MainNavbar = ({ currentUser }: any) => {
         </NavbarMenu>
       </Navbar>
 
-      <AlertModal
+      {/* <AlertModal
         isOpen={isLogoutConfirmOpen}
         onOpenChange={setIsLogoutConfirmOpen}
-        onConfirm={signOut}
+        // onConfirm={signOut}
         bodyText="로그아웃 하시겠습니까?"
-      />
+      /> */}
     </>
   );
 };

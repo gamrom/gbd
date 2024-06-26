@@ -4,7 +4,7 @@ import { TextField } from "@mui/material";
 import { Button } from "@material-tailwind/react";
 import Link from "next/link";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../firebase";
+import { auth } from "@/lib/firebase-config";
 import { useFormik } from "formik";
 import React from "react";
 import { useRouter } from "next/navigation";
@@ -14,13 +14,13 @@ import Swal from "sweetalert2";
 export default function Login() {
   const router = useRouter();
 
-  useEffect(() => {
-    auth.onAuthStateChanged((user) => {
-      if (user) {
-        router.push("/join");
-      }
-    });
-  }, []);
+  // useEffect(() => {
+  //   auth.onAuthStateChanged((user) => {
+  //     if (user) {
+  //       router.push("/join");
+  //     }
+  //   });
+  // }, []);
 
   const formik = useFormik({
     initialValues: {

@@ -1,6 +1,8 @@
 import { MainNavbar } from "@/app/_components/Navbar";
 import { fetcher } from "@/app/_utils/fetcher";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
+// import { auth } from "../../firebase";
+// import fbAdmin from "../../firebase_admin";
 
 // import { checkToastObject } from "@/utils/checkToastObject";
 
@@ -20,7 +22,14 @@ export const MainLayout = async ({
   children: React.ReactNode;
 }) => {
   const currentUser = await getCurrentUser();
+
   console.log(currentUser);
+
+  // auth.onAuthStateChanged((user) => {
+  //   console.log(user);
+  // });
+  // console.log(cookies().get("Authorization"));
+
   return (
     <>
       <MainNavbar currentUser={currentUser} />

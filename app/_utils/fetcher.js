@@ -1,5 +1,3 @@
-import { auth } from "@/firebase";
-
 const baseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 export const fetchOptions = (cookies) => {

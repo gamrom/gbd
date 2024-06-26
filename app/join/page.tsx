@@ -9,7 +9,7 @@ import {
 } from "@material-tailwind/react";
 import { useRemainJoinTime } from "../hooks/useRemainJoinTime";
 import Link from "next/link";
-import { auth } from "../../firebase";
+import { auth } from "@/lib/firebase-config";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 
