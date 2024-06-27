@@ -1,6 +1,5 @@
 "use client";
 
-import { Inter } from "next/font/google";
 import { Roboto } from "next/font/google";
 
 import "./globals.css";
@@ -16,8 +15,9 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 // import { ThemeProvider } from "@material-tailwind/react";
 import { NavbarComponent } from "./navbar";
 import { NextUIProvider } from "@nextui-org/react";
+import localFont from "next/font/local";
 
-const inter = Inter({ subsets: ["latin"] });
+// Font files can be colocated inside of `pages`
 
 const roboto = Roboto({
   subsets: ["latin"],
@@ -33,7 +33,7 @@ export default function RootLayout({
   return (
     // <ThemeProvider>
     <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ko">
-      <html lang="ko" id="root" className="light">
+      <html lang="ko" id="root" className="light font-[Pretendard]">
         <head>
           <link rel="icon" href="/favicon.ico" sizes="any" />
 
@@ -59,7 +59,7 @@ export default function RootLayout({
             content="https://opengraph.b-cdn.net/production/documents/e11d93e3-ddd4-4b19-a19a-14592b5cb9ea.png?token=JBsz2BlhZcfuovakmojI0n6WZjcnnWJmCGWTxg4e0dY&height=400&width=800&expires=33240121561"
           />
         </head>
-        <body className={`${roboto.className}`}>
+        <body className={roboto.className}>
           <NextUIProvider>
             {children}
             <Footer />

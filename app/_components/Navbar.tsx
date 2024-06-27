@@ -281,7 +281,6 @@ export const MainNavbar = () => {
       <Navbar
         disableAnimation
         isBordered
-        shouldHideOnScroll
         onMenuOpenChange={setIsMenuOpen}
         isBlurred={false}
       >
