@@ -1,9 +1,13 @@
 "use client";
 
 import { TextField } from "@mui/material";
-import { Button } from "@nextui-org/react";
+import { Button, Checkbox } from "@nextui-org/react";
 import Link from "next/link";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import {
+  signInWithEmailAndPassword,
+  browserLocalPersistence,
+  browserSessionPersistence,
+} from "firebase/auth";
 import { auth } from "../../firebase";
 import { useFormik } from "formik";
 import React from "react";
@@ -13,6 +17,7 @@ import Swal from "sweetalert2";
 
 export const Content = () => {
   const router = useRouter();
+  const [autoLoginChecked, setAutoLoginChecked] = React.useState(false);
 
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
@@ -29,6 +34,11 @@ export const Content = () => {
     },
     onSubmit: (values, { setSubmitting }) => {
       setSubmitting(true);
+      if (autoLoginChecked) {
+      }
+      auth.setPersistence(
+        autoLoginChecked ? browserLocalPersistence : browserSessionPersistence
+      );
       signInWithEmailAndPassword(auth, values.email, values.pw)
         .then((userCredential: any) => {
           window.location.href = "/join";
@@ -78,25 +88,36 @@ export const Content = () => {
           variant="outlined"
           className="mt-4"
         />
-        <div
-          onClick={() =>
-            Swal.fire({
-              icon: "success",
-              title: "아이디를 잊으셨나요?",
-              text: "아이디를 잊으셨다면, 회장에게 문의해주세요. 아이디는 이메일 형식입니다!",
-              showConfirmButton: true,
-            })
-          }
-          className="mt-4 ml-auto text-xs text-right cursor-pointer w-fit"
-        >
-          아이디를 잊으셨나요?
+        <div className="flex items-center justify-between">
+          <Checkbox
+            isSelected={autoLoginChecked}
+            onChange={(e) => setAutoLoginChecked(e.target.checked)}
+            color="primary"
+          >
+            자동 로그인
+          </Checkbox>
+          <div className="flex flex-col">
+            <div
+              onClick={() =>
+                Swal.fire({
+                  icon: "success",
+                  title: "아이디를 잊으셨나요?",
+                  text: "아이디를 잊으셨다면, 회장에게 문의해주세요. 아이디는 이메일 형식입니다!",
+                  showConfirmButton: true,
+                })
+              }
+              className="mt-4 ml-auto text-xs text-right cursor-pointer w-fit"
+            >
+              아이디를 잊으셨나요?
+            </div>
+            <Link
+              href="/find_pw"
+              className="text-xs ml-auto text-right mt-[2px] no-underline cursor-pointer text-black w-fit"
+            >
+              비밀번호를 잊으셨나요?
+            </Link>
+          </div>
         </div>
-        <Link
-          href="/find_pw"
-          className="text-xs ml-auto text-right mt-[2px] no-underline cursor-pointer text-black w-fit"
-        >
-          비밀번호를 잊으셨나요?
-        </Link>
         <Button
           disabled={formik.isSubmitting}
           type="submit"
