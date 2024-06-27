@@ -100,7 +100,7 @@ const menuItems = [
 //   );
 // };
 
-export const MainNavbar = ({ currentUser }: any) => {
+export const MainNavbar = () => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const [isLogin, setIsLogin] = useState<boolean>(false);
   const [isLogoutConfirmOpen, setIsLogoutConfirmOpen] =
@@ -112,7 +112,7 @@ export const MainNavbar = ({ currentUser }: any) => {
     });
   };
 
-  // const { data: currentUser, isLoading: isLoading } = useGetCurrentUser();
+  const { data: currentUser, isLoading: isLoading } = useGetCurrentUser();
 
   // const [open, setOpen] = React.useState(false);
   // const [isScrolling, setIsScrolling] = React.useState(false);
@@ -317,9 +317,6 @@ export const MainNavbar = ({ currentUser }: any) => {
         </NavbarContent>
 
         <NavbarContent justify="end">
-          <NavbarItem className="hidden lg:flex">
-            <Link href="/login">로그인</Link>
-          </NavbarItem>
           <NavbarItem>
             {!currentUser ? (
               <div className="items-center gap-2 lg:flex">
