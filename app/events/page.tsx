@@ -1,4 +1,4 @@
-import { CalendarComponent } from "./calendarComponent";
+import { Content } from "./Content";
 
 async function getEvents() {
   const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/events`);
@@ -11,6 +11,5 @@ async function getEvents() {
 
 export default async function Events() {
   const events = await getEvents();
-
-  return <CalendarComponent eventData={events} />;
+  return <Content eventData={events} />;
 }
