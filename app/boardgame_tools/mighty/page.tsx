@@ -1,15 +1,17 @@
 "use client";
-import { Button } from "@mui/material";
+import {
+  Button,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+} from "@nextui-org/react";
 import { useFormik } from "formik";
 import { useEffect, useState } from "react";
-import Box from "@mui/system/Box";
-import ToggleButton from "@mui/material/ToggleButton";
-import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
-import Slider from "@mui/material/Slider";
+import { Box, ToggleButton, ToggleButtonGroup, Slider } from "@mui/material";
 import * as Yup from "yup";
 import Swal from "sweetalert2";
-import Modal from "@mui/material/Modal";
-import { modalStyle } from "../../style";
+
 import { useSessionStorage } from "react-use";
 import { auth } from "../../../firebase";
 import { useRouter } from "next/navigation";
@@ -456,12 +458,11 @@ export default function MightyPage() {
 
   return (
     <div>
-      <div className="flex flex-col mt-[50px]">
+      <div className="flex flex-col">
         * 창을 닫으면 모든 정보가 사라집니다
         <div className="flex justify-between mt-4">
           <Button
-            variant="contained"
-            color="error"
+            color="danger"
             onClick={() => {
               Swal.fire({
                 title: "정말로 초기화 하시겠습니까?",
@@ -488,8 +489,8 @@ export default function MightyPage() {
             리셋
           </Button>
           <Button
-            variant="contained"
-            color="info"
+            color="secondary"
+            className="text-white"
             onClick={() => setIsModalOpen(true)}
           >
             계산법
@@ -570,12 +571,7 @@ export default function MightyPage() {
             >
               {p5}
             </Box>
-            <Button
-              type="button"
-              variant="outlined"
-              color="primary"
-              onClick={() => setUserEditMode(true)}
-            >
+            <Button color="primary" onClick={() => setUserEditMode(true)}>
               수정
             </Button>
           </div>
@@ -615,7 +611,7 @@ export default function MightyPage() {
                 onChange={nameFormik.handleChange}
                 type="text"
               />
-              <Button type="submit" variant="outlined" color="primary">
+              <Button type="submit" color="primary">
                 확인
               </Button>
             </form>
@@ -658,7 +654,7 @@ export default function MightyPage() {
                 </ToggleButtonGroup>
               </div>
               {calFormik.touched.king && calFormik.errors.king ? (
-                <div className="text-red-500 text-sm">
+                <div className="text-sm text-red-500">
                   {calFormik.errors.king}
                 </div>
               ) : null}
@@ -697,7 +693,7 @@ export default function MightyPage() {
                 </ToggleButtonGroup>
               </div>
               {calFormik.touched.friend && calFormik.errors.friend ? (
-                <div className="text-red-500 text-sm">
+                <div className="text-sm text-red-500">
                   {calFormik.errors.friend}
                 </div>
               ) : null}
@@ -754,13 +750,13 @@ export default function MightyPage() {
                 노기루다
               </ToggleButton>
 
-              <Button type="submit" variant="contained" className="w-full mt-2">
+              <Button type="submit" className="w-full mt-2">
                 확인
               </Button>
             </form>
 
             <div className="flex flex-col mt-8">
-              <div className="grid grid-cols-7 w-full">
+              <div className="grid w-full grid-cols-7">
                 <div className="flex items-center justify-center font-bold">
                   라운드
                 </div>
@@ -802,7 +798,7 @@ export default function MightyPage() {
                 <div></div>
               </div>
 
-              <div className="my-2 grid grid-cols-7 w-full">
+              <div className="grid w-full grid-cols-7 my-2">
                 <div className="flex items-center justify-center font-bold">
                   총합
                 </div>
@@ -913,7 +909,7 @@ export default function MightyPage() {
                   return (
                     <div
                       key={`round_${index}`}
-                      className="grid grid-cols-7 w-full"
+                      className="grid w-full grid-cols-7"
                     >
                       <div className="flex items-center justify-center font-bold">
                         {index + 1}
@@ -973,21 +969,25 @@ export default function MightyPage() {
         }
       </div>
 
-      <Modal open={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        <Box sx={modalStyle}>
-          <div className="flex flex-col space-y-4">
-            <div className="mb-2 font-bold">기준점수 계산법</div>
-            <div>* 여당이 이겼을 때</div>
-            <div>(이긴점수 - 건점수) + (건점수 - 13) * 2</div>
-            <div>* 야당이 이겼을 때</div>
-            <div>건점수 - 이긴점수</div>
-            <div>노기루다, 노프렌드 시 각각 두 배</div>
-
-            <Button color="error" onClick={() => setIsModalOpen(false)}>
-              닫기
-            </Button>
-          </div>
-        </Box>
+      <Modal isOpen={isModalOpen} onOpenChange={setIsModalOpen}>
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">
+                기준점수 계산법
+              </ModalHeader>
+              <ModalBody>
+                <div className="flex flex-col space-y-4">
+                  <div>* 여당이 이겼을 때</div>
+                  <div>(이긴점수 - 건점수) + (건점수 - 13) * 2</div>
+                  <div>* 야당이 이겼을 때</div>
+                  <div>건점수 - 이긴점수</div>
+                  <div>노기루다, 노프렌드 시 각각 두 배</div>
+                </div>
+              </ModalBody>
+            </>
+          )}
+        </ModalContent>
       </Modal>
     </div>
   );

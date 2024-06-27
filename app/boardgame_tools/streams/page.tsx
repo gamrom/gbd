@@ -4,7 +4,7 @@ import { Card, Typography, Button, Chip } from "@material-tailwind/react";
 import { useEffect } from "react";
 import { useSessionStorage } from "react-use";
 import _ from "lodash";
-import { pbkdf2 } from "crypto";
+
 import { useRouter } from "next/navigation";
 import { useGetCurrentUser } from "../../hooks/useGetCurrentUser";
 import { auth } from "../../../firebase";
@@ -382,19 +382,19 @@ export default function StreamsPage() {
         스트림스 뽑기 시뮬레이터
       </span>
       <span className="mb-4">* 창을 닫으면 모든 정보가 사라집니다</span>
-      <Card className="h-full w-full overflow-scroll">
-        <table className="w-full min-w-max table-auto text-left">
+      <Card className="w-full h-full overflow-scroll">
+        <table className="w-full text-left table-auto min-w-max">
           <thead>
             <tr>
               {TABLE_HEAD1.map((head) => (
                 <th
                   key={head}
-                  className="border-b border-blue-gray-100 bg-blue-gray-50 p-4"
+                  className="p-4 border-b border-blue-gray-100 bg-blue-gray-50"
                 >
                   <Typography
                     variant="small"
                     color="blue-gray"
-                    className="font-normal leading-none opacity-70 text-center"
+                    className="font-normal leading-none text-center opacity-70"
                   >
                     {head}
                   </Typography>
@@ -417,19 +417,19 @@ export default function StreamsPage() {
           </tbody>
         </table>
       </Card>
-      <Card className="h-full w-full overflow-scroll mt-2">
-        <table className="w-full min-w-max table-auto text-left">
+      <Card className="w-full h-full mt-2 overflow-scroll">
+        <table className="w-full text-left table-auto min-w-max">
           <thead>
             <tr>
               {TABLE_HEAD2.map((head) => (
                 <th
                   key={head}
-                  className="border-b border-blue-gray-100 bg-blue-gray-50 p-4"
+                  className="p-4 border-b border-blue-gray-100 bg-blue-gray-50"
                 >
                   <Typography
                     variant="small"
                     color="blue-gray"
-                    className="font-normal leading-none opacity-70 text-center"
+                    className="font-normal leading-none text-center opacity-70"
                   >
                     {head}
                   </Typography>
@@ -453,7 +453,7 @@ export default function StreamsPage() {
         </table>
       </Card>
 
-      <div className="mx-auto gap-4 flex justify-center">
+      <div className="flex justify-center gap-4 mx-auto">
         <Button className="w-[100px] my-4" onClick={onClickPick}>
           뽑기
         </Button>
@@ -474,7 +474,7 @@ export default function StreamsPage() {
       <div className="mx-auto text-[50px] font-bold mt-4 mb-2">
         {_.last(pickNums)}
       </div>
-      <div className="mx-auto mb-4 grid grid-cols-10 gap-2">
+      <div className="grid grid-cols-10 gap-2 mx-auto mb-4">
         {_.reverse(_.initial(pickNums)).map((num, index) => {
           return (
             <span className="text-center" key={`numpick_${index}`}>
@@ -484,7 +484,7 @@ export default function StreamsPage() {
         })}
       </div>
 
-      <div className="grid grid-cols-5 lg:grid-cols-10 gap-2">
+      <div className="grid grid-cols-5 gap-2 lg:grid-cols-10">
         {leftNums.map((num: PickNum, index: number) => {
           return (
             <Chip

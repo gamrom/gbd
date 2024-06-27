@@ -170,16 +170,12 @@ export const getEventAttendances = ({
   return AuthAPI.get(`/events/${eventId}/attendances`);
 };
 
-export const getEvents = () => {
-  return AuthAPI.get(`/events`);
-};
-
-export const getCurrentMonthEvents = ({
+export const getEvents = ({
   year,
   month,
 }: {
-  year: string;
-  month: string;
+  year?: string;
+  month?: string;
 }) => {
   return AuthAPI.get(`/events`, {
     params: {

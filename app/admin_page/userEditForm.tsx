@@ -1,10 +1,11 @@
 import { Box, Button } from "@mui/material";
 import { modalStyle } from "../style";
-import { LoadingComp } from "../loadingComp";
+
 import { useEffect, useState } from "react";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs, { Dayjs } from "dayjs";
 import { patchUser } from "../api";
+import { LoadingComp } from "@/app/_components/LoadingComp";
 
 export const UserEditForm = ({ user, close }: { user: any; close: any }) => {
   const [birth, setBirth] = useState<Dayjs>(dayjs());

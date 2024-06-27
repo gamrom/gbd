@@ -7,12 +7,12 @@ export const useRemainJoinTime = () => {
   const [countdown, setCountdown] = useState("");
   useEffect(() => {
     const today = dayjs();
-    const last7th = dayjs().endOf("month").subtract(14, "day");
+    const last14th = dayjs().endOf("month").subtract(14, "day");
 
-    if (today.isBefore(last7th)) {
+    if (today.isBefore(last14th)) {
       setCanJoin(false);
       const timer = setInterval(() => {
-        const remainingTime = last7th.diff(dayjs(), "second");
+        const remainingTime = last14th.diff(dayjs(), "second");
 
         if (remainingTime <= 0) {
           clearInterval(timer);

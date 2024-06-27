@@ -1,5 +1,5 @@
 import { Content } from "./Content";
 
-export default function NoticesPage() {
+export default function Events() {
   return <Content />;
 }
