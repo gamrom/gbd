@@ -3,22 +3,23 @@
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 
-import { Button, Card, CardBody, Link } from "@nextui-org/react";
+import { Button, Card, CardBody, Link, Chip, Divider } from "@nextui-org/react";
 import { EventProps } from "@/types";
 import { EventButtonGroups } from "./EventButtonGroups";
 import { EventCalendar } from "./Calendar";
 import { useRouter, useSearchParams } from "next/navigation";
-import { getEvents } from "../api";
+import { getApplyEvent, getEvents } from "../api";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import "dayjs/locale/ko";
 import { useGetCurrentUser } from "../hooks/useGetCurrentUser";
+import { LoadingComp } from "@/app/_components/LoadingComp";
 dayjs.locale("ko");
 dayjs.extend(isSameOrBefore);
 dayjs.extend(isSameOrAfter);
 
 export const Content = ({ eventData }: { eventData: EventProps[] }) => {
-  const { data: currentUser } = useGetCurrentUser();
+  const { data: currentUser, isLoading: isLoading } = useGetCurrentUser();
   const router = useRouter();
   const searchParams = useSearchParams();
   const [events, setEvents] = useState<EventProps[]>(eventData);
@@ -72,9 +73,16 @@ export const Content = ({ eventData }: { eventData: EventProps[] }) => {
           setEventCards(filter2);
         });
       }
+
+      if (filter.toggle === "alreadyJoin") {
+        getApplyEvent().then((res) => {
+          setEventCards(res.data);
+        });
+      }
     }
   }, [filter]);
   //
+
   useEffect(() => {
     setFilter({
       pickDate: searchParams.get("pickDate") || dayjs().format("YYYY-MM-DD"),
@@ -82,39 +90,43 @@ export const Content = ({ eventData }: { eventData: EventProps[] }) => {
     });
   }, [searchParams]);
 
+  if (isLoading) return <LoadingComp />;
+
   return (
-    <div className="grid grid-cols-1 px-4 lg:grid-cols-2 max-w-[1024px] mx-auto mt-[30px] gap-8">
+    <div className="grid grid-cols-1 gap-8 px-4 lg:grid-cols-2">
       <div className="flex flex-col">
+        {currentUser && (
+          <Link
+            className="mb-4"
+            href={
+              filter.toggle === "pickDay"
+                ? `/events/create?pickDate=${filter.pickDate}`
+                : "/events/create"
+            }
+          >
+            <Button
+              size="lg"
+              color="secondary"
+              className="text-white"
+              variant="shadow"
+            >
+              번개 생성
+            </Button>
+          </Link>
+        )}
         <EventCalendar filter={filter} events={events} />
       </div>
 
       <div>
-        <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
-          {currentUser && (
-            <Link
-              href={
-                filter.toggle === "pickDay"
-                  ? `/events/create?pickDate=${filter.pickDate}`
-                  : "/events/create"
-              }
-            >
-              <Button
-                size="lg"
-                color="secondary"
-                className="text-white"
-                variant="shadow"
-              >
-                번개 생성
-              </Button>
-            </Link>
-          )}
-          <div className="flex gap-2 px-4 py-2 h-fit w-fit bg-default">
+        <div className="flex flex-wrap items-center justify-between w-full gap-2 mb-4">
+          <div className="flex px-4 py-2 w-min h-fit bg-default">
             <Button
               radius="none"
               className={`${filter.toggle === "monthAll" ? "bg-white" : ""}`}
               onClick={() =>
                 router.push(
-                  `/events/?pickDate=${filter.pickDate}&toggle=monthAll`
+                  `/events/?pickDate=${filter.pickDate}&toggle=monthAll`,
+                  { scroll: false }
                 )
               }
             >
@@ -126,11 +138,26 @@ export const Content = ({ eventData }: { eventData: EventProps[] }) => {
                 className={`${filter.toggle === "canJoin" ? "bg-white" : ""}`}
                 onClick={() =>
                   router.push(
-                    `/events/?pickDate=${filter.pickDate}&toggle=canJoin`
+                    `/events/?pickDate=${filter.pickDate}&toggle=canJoin`,
+                    { scroll: false }
                   )
                 }
               >
-                참가 가능한 모든 번개
+                참가 가능한 번개
+              </Button>
+            )}
+            {currentUser && (
+              <Button
+                radius="none"
+                className={`${filter.toggle === "alreadyJoin" ? "bg-white" : ""}`}
+                onClick={() =>
+                  router.push(
+                    `/events/?pickDate=${filter.pickDate}&toggle=alreadyJoin`,
+                    { scroll: false }
+                  )
+                }
+              >
+                참가 중인 번개
               </Button>
             )}
           </div>

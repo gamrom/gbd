@@ -6,16 +6,15 @@ import "./globals.css";
 
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { Footer } from "./footer";
+
 import "dayjs/locale/ko";
 
 // import { Analytics } from '@vercel/analytics/react';
 import { GoogleTagManager } from "@next/third-parties/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 // import { ThemeProvider } from "@material-tailwind/react";
-import { NavbarComponent } from "./navbar";
+
 import { NextUIProvider } from "@nextui-org/react";
-import localFont from "next/font/local";
 
 // Font files can be colocated inside of `pages`
 
@@ -62,7 +61,6 @@ export default function RootLayout({
         <body className={roboto.className}>
           <NextUIProvider>
             {children}
-            <Footer />
             <SpeedInsights />
           </NextUIProvider>
           {/* <Analytics /> */}

@@ -1,6 +1,3 @@
-// import { Typography } from "@material-tailwind/react";
-// import { Card, CardBody } from "@material-tailwind/react";
-// import Link from "next/link";
 "use client";
 import {
   Link,
@@ -13,7 +10,6 @@ import {
 } from "@nextui-org/react";
 // import Image from "next/image";
 import ArrowCircleDownIcon from "@mui/icons-material/ArrowCircleDown";
-import { ComponentProps } from "react";
 
 const IntroduceCard = ({
   title,
@@ -50,8 +46,9 @@ export const Content = () => {
         <div className="grid min-h-screen px-8">
           <div className="container relative z-10 grid mx-auto my-auto text-center place-items-center">
             <div className="gradient-text font-bold flex-col flex items-center justify-center gap-2 text-white text-[24px] lg:text-[40px]">
-              <div>서울대입구 보드게임 동아리</div>
-              <div>보드게임 뉴비/러버 모집 중</div>
+              <div>#서울대입구 </div>
+              <div>#보드게임 동아리</div>
+              <div>#보드게임 뉴비/러버 모집 중</div>
             </div>
             <Link href="/join" className="mt-4">
               <Button

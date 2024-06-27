@@ -1,11 +1,13 @@
+import { MainLayout } from "../_components/MainLayout";
+
 export default function ContentSizeLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
-    <div className="max-w-[650px] mx-auto px-4 min-h-screen mt-[150px]">
+    <MainLayout style="max-w-[1024px] mx-auto mt-[30px] px-4">
       {children}
-    </div>
-  )
+    </MainLayout>
+  );
 }

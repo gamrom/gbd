@@ -2,26 +2,29 @@
 import * as React from "react";
 import PropTypes from "prop-types";
 import { alpha } from "@mui/material/styles";
-import Box from "@mui/material/Box";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TablePagination from "@mui/material/TablePagination";
-import TableRow from "@mui/material/TableRow";
-import TableSortLabel from "@mui/material/TableSortLabel";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import Paper from "@mui/material/Paper";
-import Checkbox from "@mui/material/Checkbox";
-import Tooltip from "@mui/material/Tooltip";
-import { visuallyHidden } from "@mui/utils";
+import {
+  Box,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TablePagination,
+  TableRow,
+  TableSortLabel,
+  Toolbar,
+  Typography,
+  Paper,
+  Checkbox,
+  Tooltip,
+  visuallyHidden,
+  Modal,
+} from "@mui/material";
+import { Button } from "@nextui-org/react";
+
 import { useEffect, useState } from "react";
 import { getUsers, patchRole, deleteUser } from "../api";
-import Button from "@mui/material/Button";
 import { parse } from "json2csv";
-import Modal from "@mui/material/Modal";
 import { UserEditForm } from "./userEditForm";
 import dayjs from "dayjs";
 import { useGetCurrentUser } from "../hooks/useGetCurrentUser";
@@ -150,11 +153,6 @@ function EnhancedTableHead(props) {
               onClick={createSortHandler(headCell.id)}
             >
               {headCell.label}
-              {orderBy === headCell.id ? (
-                <Box component="span" sx={visuallyHidden}>
-                  {order === "desc" ? "sorted descending" : "sorted ascending"}
-                </Box>
-              ) : null}
             </TableSortLabel>
           </TableCell>
         ))}
@@ -247,7 +245,6 @@ function EnhancedTableToolbar(props) {
           </select>
           <Tooltip title="Edit">
             <Button
-              variant="contained"
               color="primary"
               onClick={() => handleClickEditRole()}
               className="shrink-0"
@@ -265,7 +262,7 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function EnhancedTable() {
+export const Content = () => {
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("role");
   const [selected, setSelected] = React.useState([]);
@@ -427,7 +424,6 @@ export default function EnhancedTable() {
                     {currentUser && currentUser.data.role === "admin" && (
                       <TableCell className="shrink-0">
                         <Button
-                          variant="contained"
                           color="primary"
                           type="button"
                           onClick={(e) => handleEditUser({ e: e, data: row })}
@@ -436,8 +432,7 @@ export default function EnhancedTable() {
                         </Button>
                         <Button
                           className="ml-2"
-                          variant="contained"
-                          color="error"
+                          color="danger"
                           type="button"
                           onClick={(e) => {
                             e.preventDefault();
@@ -521,7 +516,7 @@ export default function EnhancedTable() {
         />
       </Paper>
 
-      <Button variant="contained" color="primary" onClick={downloadCSV}>
+      <Button color="primary" onClick={downloadCSV}>
         액셀 다운로드
       </Button>
 
@@ -532,4 +527,4 @@ export default function EnhancedTable() {
       </Modal>
     </Box>
   );
-}
+};

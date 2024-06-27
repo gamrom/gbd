@@ -1,7 +1,8 @@
 import { MainNavbar } from "@/app/_components/Navbar";
-import { fetcher } from "@/app/_utils/fetcher";
-import { cookies } from "next/headers";
-import { auth } from "../../firebase";
+import { MainFooter } from "@/app/_components/Footer";
+// import { fetcher } from "@/app/_utils/fetcher";
+// import { cookies } from "next/headers";
+// import { auth } from "../../firebase";
 
 // import { checkToastObject } from "@/utils/checkToastObject";
 
@@ -29,14 +30,25 @@ const getCurrentUser = async () => {
   // const res = await fetcher("/me", cookies());
 };
 
-export const MainLayout = ({ children }: { children: React.ReactNode }) => {
+export const MainLayout = ({
+  children,
+  style,
+}: {
+  children: React.ReactNode;
+  style?: string;
+}) => {
   // const currentUser = await getCurrentUser();
   // console.log(currentUser);
   return (
     <>
       {/* <MainNavbar currentUser={currentUser} /> */}
       <MainNavbar />
-      {children}
+      <div className="flex flex-col justify-between min-h-screen">
+        <div className="w-full">
+          <div className={style}>{children}</div>
+        </div>
+        <MainFooter />
+      </div>
     </>
   );
 };

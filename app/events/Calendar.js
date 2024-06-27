@@ -39,11 +39,13 @@ export const EventCalendar = ({ filter, events }) => {
       onActiveStartDateChange={({ activeStartDate }) => {
         router.push(
           `/events?pickDate=${dayjs(activeStartDate).format("YYYY-MM-DD")}&toggle=monthAll`,
+          { scroll: false },
         );
       }}
       onClickDay={(date) => {
         router.push(
           `/events?pickDate=${dayjs(date).format("YYYY-MM-DD")}&toggle=pickDay`,
+          { scroll: false },
         );
       }}
     />
