@@ -248,7 +248,7 @@ export const Content = ({ params }: { params: { event: string } }) => {
       </CardFooter>
 
       <Modal isOpen={isModalOpen} onOpenChange={setIsModalOpen}>
-        <ModalContent>
+        <ModalContent className="pb-4">
           <ModalHeader>
             <div className="font-bold">참가자 목록</div>
           </ModalHeader>
