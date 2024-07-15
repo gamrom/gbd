@@ -3,7 +3,16 @@
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 
-import { Button, Card, CardBody, Link, Chip, Divider } from "@nextui-org/react";
+import {
+  Button,
+  Card,
+  CardBody,
+  Link,
+  Chip,
+  Divider,
+  Tabs,
+  Tab,
+} from "@nextui-org/react";
 import { EventProps } from "@/types";
 import { EventButtonGroups } from "./EventButtonGroups";
 import { EventCalendar } from "./Calendar";
@@ -25,10 +34,33 @@ export const Content = ({ eventData }: { eventData: EventProps[] }) => {
   const [events, setEvents] = useState<EventProps[]>(eventData);
   const [eventCards, setEventCards] = useState<EventProps[]>(eventData);
 
+  const [selected, setSelected] = useState<string>("monthAll");
+  console.log(selected);
+
   const [filter, setFilter] = useState({
     pickDate: dayjs().format("YYYY-MM-DD"), //"YYYY-MM-DD" string
     toggle: "monthAll", //monthAll, canJoin, alreadyJoin, pickDay
   });
+
+  useEffect(() => {
+    if (selected === "monthAll") {
+      router.push(`/events/?pickDate=${filter.pickDate}&toggle=monthAll`, {
+        scroll: false,
+      });
+    }
+
+    if (selected === "canJoin") {
+      router.push(`/events/?pickDate=${filter.pickDate}&toggle=canJoin`, {
+        scroll: false,
+      });
+    }
+
+    if (selected === "alreadyJoin") {
+      router.push(`/events/?pickDate=${filter.pickDate}&toggle=alreadyJoin`, {
+        scroll: false,
+      });
+    }
+  }, [selected]);
 
   useEffect(() => {
     if (filter.toggle === "pickDay") {
@@ -116,60 +148,49 @@ export const Content = ({ eventData }: { eventData: EventProps[] }) => {
         )}
         <EventCalendar filter={filter} events={events} />
       </div>
-
+      {/* isDisabled */}
       <div>
-        <div className="flex flex-wrap items-center justify-between w-full gap-2 mb-4">
-          <div className="flex px-4 py-2 w-min h-fit bg-default">
-            <Button
-              radius="none"
-              className={`${filter.toggle === "monthAll" ? "bg-white" : ""}`}
-              onClick={() =>
-                router.push(
-                  `/events/?pickDate=${filter.pickDate}&toggle=monthAll`,
-                  { scroll: false }
-                )
-              }
-            >
-              이번 달 모든 번개
-            </Button>
-            {currentUser && (
-              <Button
-                radius="none"
-                className={`${filter.toggle === "canJoin" ? "bg-white" : ""}`}
-                onClick={() =>
-                  router.push(
-                    `/events/?pickDate=${filter.pickDate}&toggle=canJoin`,
-                    { scroll: false }
-                  )
-                }
-              >
-                참가 가능한 번개
-              </Button>
+        <Tabs
+          selectedKey={selected}
+          onSelectionChange={(key: any) => setSelected(key)}
+        >
+          <Tab key="monthAll" title="이번 달 모든 번개">
+            {eventCards.length !== 0 ? (
+              <EventButtonGroups events={eventCards} />
+            ) : (
+              <Card>
+                <CardBody>번개가 아직 없습니다.</CardBody>
+              </Card>
             )}
-            {currentUser && (
-              <Button
-                radius="none"
-                className={`${filter.toggle === "alreadyJoin" ? "bg-white" : ""}`}
-                onClick={() =>
-                  router.push(
-                    `/events/?pickDate=${filter.pickDate}&toggle=alreadyJoin`,
-                    { scroll: false }
-                  )
-                }
-              >
-                참가 중인 번개
-              </Button>
-            )}
-          </div>
-        </div>
+          </Tab>
 
-        {eventCards.length !== 0 ? (
-          <EventButtonGroups events={eventCards} />
-        ) : (
-          <Card>
-            <CardBody>번개가 아직 없습니다.</CardBody>
-          </Card>
-        )}
+          <Tab
+            isDisabled={!currentUser || currentUser?.data.role === "guest"}
+            key="canJoin"
+            title="참가 가능한 번개"
+          >
+            {eventCards.length !== 0 ? (
+              <EventButtonGroups events={eventCards} />
+            ) : (
+              <Card>
+                <CardBody>번개가 아직 없습니다.</CardBody>
+              </Card>
+            )}
+          </Tab>
+          <Tab
+            isDisabled={!currentUser || currentUser?.data.role === "guest"}
+            key="alreadyJoin"
+            title="참가 중인 번개"
+          >
+            {eventCards.length !== 0 ? (
+              <EventButtonGroups events={eventCards} />
+            ) : (
+              <Card>
+                <CardBody>번개가 아직 없습니다.</CardBody>
+              </Card>
+            )}
+          </Tab>
+        </Tabs>
       </div>
     </div>
   );

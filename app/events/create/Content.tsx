@@ -22,9 +22,11 @@ export const Content = () => {
   const { data: currentUser, isLoading: isLoading } = useGetCurrentUser();
 
   const [activeUsers, setActiveUsers] = useState<any>([]);
+
   useEffect(() => {
     getActiveUsers().then((res) => {
-      setActiveUsers(res.data);
+      const s = res.data.sort((a: any, b: any) => (a.name > b.name ? 1 : -1));
+      setActiveUsers(s);
     });
   }, []);
 
