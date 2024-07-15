@@ -28,6 +28,7 @@ import { parse } from "json2csv";
 import { UserEditForm } from "./userEditForm";
 import dayjs from "dayjs";
 import { useGetCurrentUser } from "../hooks/useGetCurrentUser";
+import { useRouter } from "next/navigation";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -268,6 +269,7 @@ export const Content = () => {
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(200);
+  const router = useRouter();
 
   const [rows, setRows] = React.useState([]);
 
@@ -369,6 +371,10 @@ export const Content = () => {
   };
 
   const modalClose = () => setIsModalOpen(false);
+
+  if (!currentUser || currentUser.data.role !== "admin") {
+    router.push("/login");
+  }
 
   return (
     <Box
