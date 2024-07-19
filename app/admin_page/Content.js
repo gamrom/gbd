@@ -372,12 +372,6 @@ export const Content = () => {
 
   const modalClose = () => setIsModalOpen(false);
 
-  if (typeof window !== "undefined") {
-    if (!currentUser || currentUser.data.role !== "admin") {
-      router.push("/login");
-    }
-  }
-
   return (
     <Box
       sx={{
