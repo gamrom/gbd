@@ -77,6 +77,7 @@ export const Content = () => {
           label="아이디"
           variant="outlined"
         />
+        <div className="mt-4"></div>
         <TextField
           InputLabelProps={{ shrink: true }}
           id="pw"
