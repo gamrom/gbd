@@ -6,9 +6,10 @@ import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
+import MenuItem from "@mui/material/MenuItem";
 import Swal from "sweetalert2";
 import Link from "next/link";
-import NativeSelect from "@mui/material/NativeSelect";
+import Select from "@mui/material/Select";
 import { LoadingComp } from "@/app/_components/LoadingComp";
 import { DatePickerComp } from "./DatePickerComp";
 import { useGetCurrentUser } from "@/app/hooks/useGetCurrentUser";
@@ -40,6 +41,8 @@ export const Content = ({ params }: { params: { event: string } }) => {
       setIsLoading(false);
     });
   }, []);
+
+  console.log(event.owner_uid);
 
   useEffect(() => {
     getActiveUsers().then((res: any) => {
@@ -84,7 +87,7 @@ export const Content = ({ params }: { params: { event: string } }) => {
         start_time: timeState.startTime,
         end_time: timeState.endTime,
         max_members_count: event.max_members_count,
-        uid: event.uid,
+        uid: event.owner_id,
         event_id: params.event,
       })
         .then((res: any) => {
@@ -106,7 +109,7 @@ export const Content = ({ params }: { params: { event: string } }) => {
             text: "일정이 수정되었습니다.",
             confirmButtonText: "확인",
           }).then(() => {
-            location.href = `/events/${params.event}`;
+            // location.href = `/events/${params.event}`;
           });
         })
         .catch((error) => {
@@ -116,7 +119,10 @@ export const Content = ({ params }: { params: { event: string } }) => {
   };
 
   useEffect(() => {
-    if (currentUser && currentUser.data.role !== ("manager" || "admin")) {
+    if (
+      currentUser &&
+      (currentUser.data.role !== "manager" || currentUser.data.role !== "admin")
+    ) {
       setEvent({
         ...event,
         uid: currentUser.data.uid,
@@ -151,33 +157,27 @@ export const Content = ({ params }: { params: { event: string } }) => {
         currentUser.data.role === "manager" ? (
           <Box sx={{ minWidth: 120 }}>
             <FormControl fullWidth>
-              <InputLabel shrink htmlFor="owner_uid" variant="standard">
-                벙주
-              </InputLabel>
+              <InputLabel>벙주</InputLabel>
 
-              <NativeSelect
-                name="uid"
-                value={event.uid}
+              <Select
+                name="owner_uid"
+                value={event.owner_uid}
+                label="벙주"
                 onChange={(e) => {
-                  setEvent({ ...event, uid: e.target.value });
-                }}
-                inputProps={{
-                  name: "uid",
-                  id: "owner_uid",
+                  setEvent({
+                    ...event,
+                    owner_uid: e.target.value,
+                  });
                 }}
               >
                 {activeUsers.map((user: any) => {
-                  return user.uid === event.owner_uid ? (
-                    <option key={user.uid} value={user.uid} selected>
+                  return (
+                    <MenuItem key={user.uid} value={user.uid}>
                       {user.name}
-                    </option>
-                  ) : (
-                    <option key={user.uid} value={user.uid}>
-                      {user.name}
-                    </option>
+                    </MenuItem>
                   );
                 })}
-              </NativeSelect>
+              </Select>
             </FormControl>
           </Box>
         ) : (

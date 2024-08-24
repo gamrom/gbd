@@ -42,7 +42,10 @@ export const Content = () => {
   });
 
   useEffect(() => {
-    if (currentUser && currentUser.data.role !== ("manager" || "admin")) {
+    if (
+      currentUser &&
+      (currentUser.data.role !== "manager" || currentUser.data.role !== "admin")
+    ) {
       setFormState({
         ...formState,
         uid: currentUser.data.uid,

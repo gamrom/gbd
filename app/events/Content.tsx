@@ -153,6 +153,7 @@ export const Content = ({ eventData }: { eventData: EventProps[] }) => {
         <Tabs
           selectedKey={selected}
           onSelectionChange={(key: any) => setSelected(key)}
+          className="event-tabs"
         >
           <Tab key="monthAll" title="이번 달 모든 번개">
             {eventCards.length !== 0 ? (
