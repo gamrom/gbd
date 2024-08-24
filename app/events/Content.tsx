@@ -35,7 +35,6 @@ export const Content = ({ eventData }: { eventData: EventProps[] }) => {
   const [eventCards, setEventCards] = useState<EventProps[]>(eventData);
 
   const [selected, setSelected] = useState<string>("monthAll");
-  console.log(selected);
 
   const [filter, setFilter] = useState({
     pickDate: dayjs().format("YYYY-MM-DD"), //"YYYY-MM-DD" string

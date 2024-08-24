@@ -42,8 +42,6 @@ export const Content = ({ params }: { params: { event: string } }) => {
     });
   }, []);
 
-  console.log(event.owner_uid);
-
   useEffect(() => {
     getActiveUsers().then((res: any) => {
       setActiveUsers(res.data);
