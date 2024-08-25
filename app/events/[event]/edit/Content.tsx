@@ -85,7 +85,7 @@ export const Content = ({ params }: { params: { event: string } }) => {
         start_time: timeState.startTime,
         end_time: timeState.endTime,
         max_members_count: event.max_members_count,
-        uid: event.owner_id,
+        owner_uid: event.owner_uid,
         event_id: params.event,
       })
         .then((res: any) => {
@@ -107,7 +107,7 @@ export const Content = ({ params }: { params: { event: string } }) => {
             text: "일정이 수정되었습니다.",
             confirmButtonText: "확인",
           }).then(() => {
-            // location.href = `/events/${params.event}`;
+            location.href = `/events/${params.event}`;
           });
         })
         .catch((error) => {
@@ -168,13 +168,18 @@ export const Content = ({ params }: { params: { event: string } }) => {
                   });
                 }}
               >
-                {activeUsers.map((user: any) => {
-                  return (
-                    <MenuItem key={user.uid} value={user.uid}>
-                      {user.name}
-                    </MenuItem>
-                  );
-                })}
+                {activeUsers
+                  .sort(
+                    //name
+                    (a: any, b: any) => a.name.localeCompare(b.name)
+                  )
+                  .map((user: any) => {
+                    return (
+                      <MenuItem key={user.uid} value={user.uid}>
+                        {user.name}
+                      </MenuItem>
+                    );
+                  })}
               </Select>
             </FormControl>
           </Box>

@@ -124,7 +124,7 @@ export const patchEvent = ({
   start_time,
   end_time,
   max_members_count,
-  uid,
+  owner_uid,
 }: {
   event_id: string;
   title: string;
@@ -133,7 +133,7 @@ export const patchEvent = ({
   start_time: any;
   end_time: any;
   max_members_count: number;
-  uid: string;
+  owner_uid: string;
 }) => {
   return AuthAPI.patch(`/events/${event_id}`, {
     title: title,
@@ -142,7 +142,7 @@ export const patchEvent = ({
     start_time: start_time,
     end_time: end_time,
     max_members_count: max_members_count,
-    uid: uid,
+    owner_uid: owner_uid,
   });
 };
 

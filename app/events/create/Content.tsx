@@ -171,13 +171,18 @@ export const Content = () => {
                   });
                 }}
               >
-                {activeUsers.map((user: any) => {
-                  return (
-                    <MenuItem key={user.uid} value={user.uid}>
-                      {user.name}
-                    </MenuItem>
-                  );
-                })}
+                {activeUsers
+                  .sort(
+                    //name
+                    (a: any, b: any) => a.name.localeCompare(b.name)
+                  )
+                  .map((user: any) => {
+                    return (
+                      <MenuItem key={user.uid} value={user.uid}>
+                        {user.name}
+                      </MenuItem>
+                    );
+                  })}
               </Select>
             </FormControl>
           </Box>
