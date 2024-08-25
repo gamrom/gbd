@@ -85,7 +85,7 @@ export const Content = ({ params }: { params: { event: string } }) => {
         start_time: timeState.startTime,
         end_time: timeState.endTime,
         max_members_count: event.max_members_count,
-        uid: event.owner_id,
+        owner_uid: event.owner_uid,
         event_id: params.event,
       })
         .then((res: any) => {
