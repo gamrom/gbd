@@ -23,8 +23,6 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 export const Content = () => {
-  const { canJoin, countdown } = useRemainJoinTime();
-
   const router = useRouter();
 
   useEffect(() => {
@@ -37,7 +35,7 @@ export const Content = () => {
     });
   }, []);
 
-  return canJoin ? (
+  return (
     <Card>
       <CardBody className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         <Image
@@ -87,36 +85,6 @@ export const Content = () => {
             </Link>
           </div>
         </div>
-      </CardBody>
-    </Card>
-  ) : (
-    <Card>
-      <CardBody>
-        <div className="mb-2">아직 지원기간이 아닙니다 😅</div>
-        <div className="mb-2">
-          지원기간 까지 <br />
-          {countdown}
-        </div>
-        <div className="mb-2">
-          <br />
-          회원가입하시면 지원기간에 문자드려요!
-          <br />
-          <Link href="/register">회원가입하기</Link>
-        </div>
-        <div>
-          * 매달 마지막 14일 동안 지원이 가능합니다. <br />* 회원가입 해주신
-          분들에게 매달 말 가입안내 문자드리고 있습니다. <br />
-          * 추가 문의사항은 아래 전화번호로 부탁드립니다. <br />
-          010-3660-9722 (회장 감롬)
-        </div>
-
-        <Link
-          target="_blank"
-          className="w-fit"
-          href="https://www.instagram.com/gamrom.board.club/"
-        >
-          인스타그램에서 활동사진 보기
-        </Link>
       </CardBody>
     </Card>
   );
