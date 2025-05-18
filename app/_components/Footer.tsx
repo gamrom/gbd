@@ -54,6 +54,20 @@ export const MainFooter = () => {
                   운영진 송호민{" "}
                 </span>
               </li>
+
+                 <li>
+                <span className="text-gray-700 transition hover:opacity-75">
+                  {" "}
+                  운영진 현지민{" "}
+                </span>
+              </li>
+
+                 <li>
+                <span className="text-gray-700 transition hover:opacity-75">
+                  {" "}
+                  운영진 민재현{" "}
+                </span>
+              </li>
             </ul>
           </div>
 

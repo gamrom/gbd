@@ -49,6 +49,8 @@ export const Content = () => {
               <div>#서울대입구 </div>
               <div>#보드게임 동아리</div>
               <div>#보드게임 뉴비/러버 모집 중</div>
+              <div>#매주 첫째 주 토요일 → 뉴비번개</div>
+              <div>#매주 둘째 주 토요일 → 테마번개</div>
             </div>
             <Link href="/join" className="mt-4">
               <Button

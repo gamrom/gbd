@@ -268,7 +268,7 @@ export const Content = () => {
   const [orderBy, setOrderBy] = React.useState("role");
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(200);
+  const [rowsPerPage, setRowsPerPage] = React.useState(400);
   const router = useRouter();
 
   const [rows, setRows] = React.useState([]);
@@ -508,7 +508,7 @@ export const Content = () => {
           </Table>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[200]}
+          rowsPerPageOptions={[400]}
           component="div"
           count={rows.length}
           rowsPerPage={rowsPerPage}

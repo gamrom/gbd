@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
 import dayjs from "dayjs";
 
 import {
@@ -15,7 +16,12 @@ import {
 } from "@nextui-org/react";
 import { EventProps } from "@/types";
 import { EventButtonGroups } from "./EventButtonGroups";
-import { EventCalendar } from "./Calendar";
+
+// Import EventCalendar dynamically with SSR disabled to prevent hydration errors
+const EventCalendar = dynamic(
+  () => import("./Calendar").then((mod) => mod.EventCalendar),
+  { ssr: false }
+);
 import { useRouter, useSearchParams } from "next/navigation";
 import { getApplyEvent, getEvents } from "../api";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
@@ -33,6 +39,7 @@ export const Content = ({ eventData }: { eventData: EventProps[] }) => {
   const searchParams = useSearchParams();
   const [events, setEvents] = useState<EventProps[]>(eventData);
   const [eventCards, setEventCards] = useState<EventProps[]>(eventData);
+  const [isMounted, setIsMounted] = useState(false);
 
   const [selected, setSelected] = useState<string>("monthAll");
 
@@ -64,11 +71,18 @@ export const Content = ({ eventData }: { eventData: EventProps[] }) => {
   useEffect(() => {
     if (filter.toggle === "pickDay") {
       const filteredData = events.filter((event) => {
-        const startTime = dayjs(event.start_time);
-        const endTime = dayjs(event.end_time);
+        // Use the same date parsing approach as in Calendar.js for consistency
+        const calendarDate = dayjs(filter.pickDate).startOf('day');
+        const startTime = event.start_time ? dayjs(event.start_time.replace(/-/g, "/")).startOf('day') : null;
+        const endTime = event.end_time ? dayjs(event.end_time.replace(/-/g, "/")).startOf('day') : null;
+        
+        // Skip invalid dates
+        if (!startTime || !endTime) return false;
+        
+        // Check if the event's date range contains the selected date
         return (
-          dayjs(filter.pickDate).isSameOrAfter(startTime, "day") &&
-          dayjs(filter.pickDate).isSameOrBefore(endTime, "day")
+          startTime.isSameOrBefore(calendarDate, "day") &&
+          endTime.isSameOrAfter(calendarDate, "day")
         );
       });
 
@@ -121,7 +135,12 @@ export const Content = ({ eventData }: { eventData: EventProps[] }) => {
     });
   }, [searchParams]);
 
-  if (isLoading) return <LoadingComp />;
+  // Only show calendar after component has mounted on client
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (isLoading || !events) return <LoadingComp />;
 
   return (
     <div className="grid grid-cols-1 gap-8 px-4 lg:grid-cols-2">
@@ -145,7 +164,7 @@ export const Content = ({ eventData }: { eventData: EventProps[] }) => {
             </Button>
           </Link>
         )}
-        <EventCalendar filter={filter} events={events} />
+        {isMounted && <EventCalendar filter={filter} events={events} />}
       </div>
       {/* isDisabled */}
       <div>

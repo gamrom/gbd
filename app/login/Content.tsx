@@ -12,20 +12,13 @@ import { auth } from "../../firebase";
 import { useFormik } from "formik";
 import React from "react";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 import Swal from "sweetalert2";
+import { getMe } from "../api";
 
 export const Content = () => {
   const router = useRouter();
+  
   const [autoLoginChecked, setAutoLoginChecked] = React.useState(false);
-
-  useEffect(() => {
-    auth.onAuthStateChanged((user) => {
-      if (user) {
-        router.push("/join");
-      }
-    });
-  }, []);
 
   const formik = useFormik({
     initialValues: {
@@ -34,14 +27,16 @@ export const Content = () => {
     },
     onSubmit: (values, { setSubmitting }) => {
       setSubmitting(true);
-      if (autoLoginChecked) {
-      }
       auth.setPersistence(
         autoLoginChecked ? browserLocalPersistence : browserSessionPersistence
       );
       signInWithEmailAndPassword(auth, values.email, values.pw)
         .then((userCredential: any) => {
-          window.location.href = "/join";
+          
+         getMe().then((res) => {
+          res.data.role === "guest" ? router.push("/join") : router.push("/events");
+         })
+          
         })
         .catch((error: any) => {
           if (error.code === "auth/too-many-requests") {
@@ -66,7 +61,7 @@ export const Content = () => {
   });
 
   return (
-    <form onSubmit={formik.handleSubmit}>
+    <form onSubmit={formik.handleSubmit} autoComplete="off">
       <div className="flex flex-col mx-auto mt-[100px] max-w-[360px]">
         <TextField
           InputLabelProps={{ shrink: true }}
@@ -76,6 +71,9 @@ export const Content = () => {
           onChange={formik.handleChange}
           label="아이디"
           variant="outlined"
+          autoComplete="off"
+          inputProps={{ autoComplete: 'new-email' }}
+          placeholder="아이디는 이메일형식입니다"
         />
         <div className="mt-4"></div>
         <TextField
@@ -88,6 +86,9 @@ export const Content = () => {
           label="비밀번호"
           variant="outlined"
           className="mt-4"
+          autoComplete="off"
+          inputProps={{ autoComplete: 'new-password' }}
+          placeholder="비밀번호를 입력해주세요"
         />
         <div className="flex items-center justify-between">
           <Checkbox

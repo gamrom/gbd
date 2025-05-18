@@ -61,10 +61,10 @@ const menuItemsStrict = [
     name: "회원 관리",
     href: "/admin_page",
   },
-  {
-    name: "정모 생성기",
-    href: "/schedule_generator",
-  },
+  // {
+  //   name: "정모 생성기",
+  //   href: "/schedule_generator",
+  // },
 ];
 
 export const MainNavbar = () => {
