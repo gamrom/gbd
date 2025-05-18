@@ -191,6 +191,7 @@ export const Content = () => {
     <form
       onSubmit={formik.handleSubmit}
       className="space-y-4 flex flex-col mx-auto max-w-[360px]"
+      autoComplete="off"
     >
       <TextField
         InputLabelProps={{ shrink: true }}
@@ -201,6 +202,7 @@ export const Content = () => {
         id="email"
         label="이메일(아이디)"
         variant="outlined"
+        inputProps={{ autoComplete: 'new-email' }}
       />
       <div className="text-xs text-[#999999]">
         이메일을 이용하여 비밀번호를 찾을 수 있으니, 실제 존재하는 메일을
@@ -222,6 +224,7 @@ export const Content = () => {
         variant="outlined"
         type="password"
         placeholder="최소 8자 이상"
+        inputProps={{ autoComplete: 'new-password' }}
       />
       {formik.touched.pw && formik.errors.pw ? (
         <div className="!mt-[2px] text-[#FF0000] text-xs">
@@ -238,6 +241,7 @@ export const Content = () => {
         label="비밀번호 확인"
         variant="outlined"
         type="password"
+        inputProps={{ autoComplete: 'new-password' }}
       />
       {formik.touched.pwConfirm && formik.errors.pwConfirm ? (
         <div className="!mt-[2px] text-[#FF0000] text-xs">
@@ -254,6 +258,7 @@ export const Content = () => {
         label="이름"
         variant="outlined"
         placeholder="본명을 입력해주세요."
+        inputProps={{ autoComplete: 'new-name' }}
       />
       {formik.touched.name && formik.errors.name ? (
         <div className="!mt-[2px] text-[#FF0000] text-xs">
@@ -314,6 +319,7 @@ export const Content = () => {
         label="휴대폰 번호"
         variant="outlined"
         placeholder="숫자만 입력해주세요 ex)00011116666"
+        inputProps={{ autoComplete: 'new-phone' }}
       />
       {formik.touched.phone && formik.errors.phone ? (
         <div className="!mt-[2px] text-[#FF0000] text-xs">

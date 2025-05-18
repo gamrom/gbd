@@ -16,12 +16,24 @@ export const EventCalendar = ({ filter, events }) => {
     <Calendar
       tileContent={({ date, view }) => {
         //check how many events in this date
+        if (!events || events.length === 0) return null;
+        
+        // Convert the Calendar date object to dayjs with consistent formatting
+        const calendarDate = dayjs(new Date(date.getFullYear(), date.getMonth(), date.getDate())).startOf('day');
+        
         const eventCount = events.filter((event) => {
-          const startTime = dayjs(event.start_time);
-          const endTime = dayjs(event.end_time);
+          // Ensure consistent date parsing by explicitly formatting dates
+          const startTime = event.start_time ? dayjs(event.start_time.replace(/-/g, "/")).startOf('day') : null;
+          const endTime = event.end_time ? dayjs(event.end_time.replace(/-/g, "/")).startOf('day') : null;
+          
+          // Skip invalid dates
+          if (!startTime || !endTime) return false;
+          
+          // Check if the event's date range contains the calendar date
+          // (i.e., the event is happening on this calendar date)
           return (
-            dayjs(date).isSameOrAfter(startTime, "day") &&
-            dayjs(date).isSameOrBefore(endTime, "day")
+            startTime.isSameOrBefore(calendarDate, "day") &&
+            endTime.isSameOrAfter(calendarDate, "day")
           );
         }).length;
         if (eventCount === 0) return null;

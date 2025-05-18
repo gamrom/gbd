@@ -4,6 +4,15 @@ export const noticeLists: Array<{
   content: string;
   canAccess: boolean;
 }> = [
+   {
+    id: 7,
+    title: "동아리 정모",
+    content:
+      "매주 첫째주 토요일, 뉴비 번개가 있어요. 처음 오는 부원들도 적응하기 쉽게 운영진이 매번 아주 재밌는 보드게임을 준비합니다! \n\n매주 두번째 토요일, 테마 번개가 있어요. 각종 장르, 테마, 난이도에 따라 새롭고 다양한 게임을 할 수 있는 기회!",
+    canAccess: true,
+  },
+  
+
   {
     id: 1,
     title: "아지트 이용방법",
