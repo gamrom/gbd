@@ -66,7 +66,7 @@ export const Content = () => {
 
           <Link
             className="w-fit"
-            href="https://gamromboard.notion.site/290766405fa14166bcd829f3afa8a9ba?pvs=4"
+            href="https://gamromboard.notion.site/290766405fa14166bcd829f3afa8a9ba"
           >
             회칙 보러가기
           </Link>
