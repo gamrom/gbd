@@ -359,7 +359,7 @@ export const Content = () => {
           label="회칙 및 유의사항을 읽었습니다."
         />
         <Link
-          href="https://gamromboard.notion.site/290766405fa14166bcd829f3afa8a9ba?pvs=4"
+          href="https://gamromboard.notion.site/290766405fa14166bcd829f3afa8a9ba"
           target="_blank"
         >
           회칙 확인

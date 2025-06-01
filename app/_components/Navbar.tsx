@@ -36,7 +36,7 @@ const menuItemsAll = [
   },
   {
     name: "회칙",
-    href: "https://gamromboard.notion.site/290766405fa14166bcd829f3afa8a9ba?pvs=4",
+    href: "https://gamromboard.notion.site/290766405fa14166bcd829f3afa8a9ba",
   },
 ];
 
@@ -55,7 +55,7 @@ const menuItemsStrict = [
   },
   {
     name: "회칙",
-    href: "https://gamromboard.notion.site/290766405fa14166bcd829f3afa8a9ba?pvs=4",
+    href: "https://gamromboard.notion.site/290766405fa14166bcd829f3afa8a9ba",
   },
   {
     name: "회원 관리",
