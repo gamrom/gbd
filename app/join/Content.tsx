@@ -70,11 +70,7 @@ export const Content = () => {
 
           <Link
             className="w-fit"
-<<<<<<< HEAD
             href={RULE_LINK}
-=======
-            href="https://gamromboard.notion.site/290766405fa14166bcd829f3afa8a9ba"
->>>>>>> 4cf8c88ed903fed22c40b58dfa88e0e346a82b9f
           >
             회칙 보러가기
           </Link>
