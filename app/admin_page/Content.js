@@ -111,6 +111,18 @@ const headCells = [
     disablePadding: false,
     label: "이메일",
   },
+  {
+    id: "created_at",
+    numeric: false,
+    disablePadding: false,
+    label: "가입일자",
+  },
+  {
+    id: "referrer_path",
+    numeric: false,
+    disablePadding: false,
+    label: "유입경로",
+  },
 ];
 
 function EnhancedTableHead(props) {
@@ -172,7 +184,7 @@ EnhancedTableHead.propTypes = {
 };
 
 function EnhancedTableToolbar(props) {
-  const { numSelected, selected } = props;
+  const { numSelected, selected, searchQuery, onSearchChange } = props;
   const [selectedRole, setSelectedRole] = useState("");
 
   const handleClickEditRole = () => {
@@ -212,25 +224,51 @@ function EnhancedTableToolbar(props) {
         }),
       }}
     >
-      {numSelected > 0 ? (
-        <Typography
-          sx={{ flex: "1 1 100%" }}
-          color="inherit"
-          variant="subtitle1"
-          component="div"
-        >
-          {numSelected} 선택됨
-        </Typography>
-      ) : (
-        <Typography
-          sx={{ flex: "1 1 100%" }}
-          variant="h6"
-          id="tableTitle"
-          component="div"
-        >
-          회원관리
-        </Typography>
-      )}
+      <Box sx={{ display: "flex", width: "100%", alignItems: "center" }}>
+        {numSelected > 0 ? (
+          <Typography
+            sx={{ flex: "1 1 100%" }}
+            color="inherit"
+            variant="subtitle1"
+            component="div"
+          >
+            {numSelected} 선택됨
+          </Typography>
+        ) : (
+          <Typography
+            sx={{ flex: "1 1 100%" }}
+            variant="h6"
+            id="tableTitle"
+            component="div"
+          >
+            회원관리
+          </Typography>
+        )}
+
+        {numSelected > 0 && (
+          <Tooltip title="Delete">
+            <Button color="primary" onClick={handleClickEditRole}>
+              권한 변경
+            </Button>
+          </Tooltip>
+        )}
+      </Box>
+      
+      <Box sx={{ width: "100%", mt: 1 }}>
+        <input
+          type="text"
+          value={searchQuery}
+          onChange={onSearchChange}
+          placeholder="검색어를 입력하세요"
+          style={{
+            width: "100%",
+            padding: "8px 12px",
+            border: "1px solid #ccc",
+            borderRadius: "4px",
+            fontSize: "14px"
+          }}
+        />
+      </Box>
 
       {numSelected > 0 && (
         <>
@@ -261,6 +299,8 @@ function EnhancedTableToolbar(props) {
 
 EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
+  searchQuery: PropTypes.string.isRequired,
+  onSearchChange: PropTypes.func.isRequired,
 };
 
 export const Content = () => {
@@ -269,7 +309,7 @@ export const Content = () => {
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(400);
-  const router = useRouter();
+  const [searchQuery, setSearchQuery] = React.useState("");
 
   const [rows, setRows] = React.useState([]);
 
@@ -323,13 +363,38 @@ export const Content = () => {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+    setPage(0); // Reset to first page when searching
+  };
+
+  // Filter rows based on search query
+  const filteredRows = React.useMemo(() => {
+    if (!searchQuery) return rows;
+    
+    return rows.filter((row) => {
+      const searchLower = searchQuery.toLowerCase();
+      // Search in all relevant fields
+      return (
+        (row.role && row.role.toLowerCase().includes(searchLower)) ||
+        (row.name && row.name.toLowerCase().includes(searchLower)) ||
+        (row.email && row.email.toLowerCase().includes(searchLower)) ||
+        (row.phone && row.phone.toLowerCase().includes(searchLower)) ||
+        (row.gender && row.gender.toLowerCase().includes(searchLower)) ||
+        (row.birth && dayjs(row.birth).format("YY-MM-DD").includes(searchLower)) ||
+        (row.created_at && dayjs(row.created_at).format("YY-MM-DD").includes(searchLower)) ||
+        (row.referrer_path && row.referrer_path.toLowerCase().includes(searchLower))
+      );
+    });
+  }, [rows, searchQuery]);
+
   const visibleRows = React.useMemo(
     () =>
-      stableSort(rows, getComparator(order, orderBy)).slice(
+      stableSort(filteredRows, getComparator(order, orderBy)).slice(
         page * rowsPerPage,
         page * rowsPerPage + rowsPerPage,
       ),
-    [order, orderBy, page, rowsPerPage, rows],
+    [order, orderBy, page, rowsPerPage, filteredRows],
   );
 
   const { data: currentUser, loading } = useGetCurrentUser();
@@ -385,6 +450,8 @@ export const Content = () => {
         <EnhancedTableToolbar
           numSelected={selected.length}
           selected={selected}
+          searchQuery={searchQuery}
+          onSearchChange={handleSearchChange}
         />
         <TableContainer>
           <Table sx={{ minWidth: 900 }} aria-labelledby="tableTitle">
@@ -492,6 +559,8 @@ export const Content = () => {
                     </TableCell>
                     <TableCell>{row.phone}</TableCell>
                     <TableCell>{row.email}</TableCell>
+                    <TableCell>{dayjs(row.created_at).format("YY-MM-DD")}</TableCell>
+                    <TableCell>{row.referrer_path || "-"}</TableCell>
                   </TableRow>
                 );
               })}
@@ -510,7 +579,7 @@ export const Content = () => {
         <TablePagination
           rowsPerPageOptions={[400]}
           component="div"
-          count={rows.length}
+          count={filteredRows.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}

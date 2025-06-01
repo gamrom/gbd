@@ -10,6 +10,7 @@ import {
 } from "@nextui-org/react";
 // import Image from "next/image";
 import ArrowCircleDownIcon from "@mui/icons-material/ArrowCircleDown";
+import { INSTAGRAM } from "../constants";
 
 const IntroduceCard = ({
   title,
@@ -67,7 +68,7 @@ export const Content = () => {
             </div>
             <div className="flex gap-8">
               <a
-                href="https://www.instagram.com/gamrom.board.club"
+                href={INSTAGRAM}  
                 rel="noreferrer"
                 target="_blank"
                 className="text-gray-700 transition hover:opacity-75"
