@@ -109,6 +109,7 @@ export const Content = () => {
                 "YY-MM-DD HH:mm"
               )}  \n최대인원: ${res.data.max_members_count} \n바로가기 : https://www.gambodong.com/events/${res.data.id}
             `,
+              isAlarm: isPushAlarm,
             });
           }
           Swal.fire({
