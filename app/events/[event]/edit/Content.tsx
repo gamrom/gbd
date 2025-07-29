@@ -89,19 +89,18 @@ export const Content = ({ params }: { params: { event: string } }) => {
         event_id: params.event,
       })
         .then((res: any) => {
-          if (isPushAlarm) {
-            pushDiscord({
-              text: `------------------------------\n번개가 수정되었습니다. \n제목: ${res.data.title} \n장소: ${res.data.location} \n벙주: ${res.data.owner_name} \n설명: ${res.data.description} \n시작시간: ${dayjs(
-                res.data.start_time
-              ).format("YY-MM-DD HH:mm")} \n종료시간: ${dayjs(
-                res.data.end_time
-              ).format(
-                "YY-MM-DD HH:mm"
-              )}  \n최대인원: ${res.data.max_members_count} \n바로가기 : https://www.gambodong.com/events/${res.data.id}
+          pushDiscord({
+            text: `------------------------------\n번개가 수정되었습니다. \n제목: ${res.data.title} \n장소: ${res.data.location} \n벙주: ${res.data.owner_name} \n설명: ${res.data.description} \n시작시간: ${dayjs(
+              res.data.start_time
+            ).format("YY-MM-DD HH:mm")} \n종료시간: ${dayjs(
+              res.data.end_time
+            ).format(
+              "YY-MM-DD HH:mm"
+            )}  \n최대인원: ${res.data.max_members_count} \n바로가기 : https://www.gambodong.com/events/${res.data.id}
             `,
-              isAlarm: isPushAlarm,
-            });
-          }
+            isAlarm: isPushAlarm,
+          });
+
           Swal.fire({
             icon: "success",
             title: "수정 완료",
