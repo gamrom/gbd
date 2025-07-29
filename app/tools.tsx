@@ -38,9 +38,11 @@ export const roleText = (role: string): string => {
 export const pushDiscord = ({
   text,
   isActivateWorkingHour = true,
+  isAlarm = true,
 }: {
   text: string;
   isActivateWorkingHour?: boolean;
+  isAlarm?: boolean;
 }) => {
   function isWorkingHour() {
     if (!isActivateWorkingHour) return true;
@@ -55,7 +57,9 @@ export const pushDiscord = ({
     }
   }
 
+  // Public webhook - activates only when isWorkingHour and isAlarm are both true
   isWorkingHour() &&
+    isAlarm &&
     process.env.NEXT_PUBLIC_DISCORD_WEBHOOK_URL &&
     axios.post(process.env.NEXT_PUBLIC_DISCORD_WEBHOOK_URL, {
       headers: {
@@ -64,6 +68,7 @@ export const pushDiscord = ({
       content: text,
     });
 
+  // Private webhook - always sends regardless of working hours or alarm settings
   process.env.NEXT_PUBLIC_DISCORD_WEBHOOK_URL_PRIVATE &&
     axios.post(process.env.NEXT_PUBLIC_DISCORD_WEBHOOK_URL_PRIVATE, {
       headers: {
