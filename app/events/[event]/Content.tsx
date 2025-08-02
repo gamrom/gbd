@@ -27,10 +27,11 @@ import {
   deleteEvent,
 } from "../../api";
 
-import { elapsedTime } from "@/app/tools";
+import { elapsedTime, pushDiscord } from "@/app/tools";
 import Swal from "sweetalert2";
 import { useGetCurrentUser } from "@/app/hooks/useGetCurrentUser";
 import { LoadingComp } from "@/app/_components/LoadingComp";
+import axios from "axios";
 
 export const Content = ({ params }: { params: { event: string } }) => {
   const [event, setEvent] = useState<any>(null);
@@ -169,6 +170,25 @@ export const Content = ({ params }: { params: { event: string } }) => {
                     cancelButtonText: "취소하기",
                   }).then((result) => {
                     if (result.isConfirmed) {
+                      // 삭제 전에 Discord로 삭제 알림 보내기
+                      process.env.NEXT_PUBLIC_DISCORD_WEBHOOK_URL_PRIVATE &&
+                        axios.post(
+                          process.env.NEXT_PUBLIC_DISCORD_WEBHOOK_URL_PRIVATE,
+                          {
+                            headers: {
+                              "Content-Type": "multipart/form-data",
+                            },
+                            content: `------------------------------\n번개가 삭제되었습니다. \n제목: ${event.title} \n장소: ${event.location} \n벙주: ${event.owner_name} \n설명: ${event.description} \n시작시간: ${dayjs(
+                              event.start_time
+                            ).format("YY-MM-DD HH:mm")} \n종료시간: ${dayjs(
+                              event.end_time
+                            ).format(
+                              "YY-MM-DD HH:mm"
+                            )}  \n최대인원: ${event.max_members_count}
+            `,
+                          }
+                        );
+
                       deleteEvent({ eventId: params.event }).then(() => {
                         Swal.fire({
                           title: "삭제되었습니다.",
